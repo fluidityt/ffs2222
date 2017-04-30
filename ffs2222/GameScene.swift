@@ -7,7 +7,7 @@ import SpriteKit
 // FIXME: Why does the screen squash after you lose and replay??
 
 // ************************************************************* //
-func killNode(_ node: SKNode) {
+fileprivate func killNode(_ node: SKNode) {
   node.physicsBody = nil
   node.removeAllChildren()
   node.removeAllActions()
@@ -20,17 +20,17 @@ var score = 0 // Too lazy to make an init for other scenes...
 
 func randy(_ num: Int) -> Int { return Int(arc4random_uniform(UInt32(num)))+1 }
 
-func setMasks(pb: SKPhysicsBody, cat: UInt32, cont: UInt32, col: UInt32) {
-    pb.categoryBitMask = cat
-    pb.contactTestBitMask = cont
-    pb.collisionBitMask = col
+fileprivate func setMasks(pb: SKPhysicsBody, cat: UInt32, cont: UInt32, col: UInt32) {
+  pb.categoryBitMask = cat
+  pb.contactTestBitMask = cont
+  pb.collisionBitMask = col
 }
 // ************************************************************* //
 
 //
 // MARK: - GameScene init and stuff:
 //
-public class GameScene: SKScene, SKPhysicsContactDelegate {
+class GameScene: SKScene, SKPhysicsContactDelegate {
   
   enum Category {
     static let
@@ -41,7 +41,7 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
     line  =   UInt32 (8),
     death =   UInt32 (16)
   }
-
+  
   /// Props:
   var
   difficultyBoxNum = 4,
@@ -56,7 +56,8 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
   private lazy var spawn: Spawn = Spawn(gsi: self)
   
   private func selfInit() {
-    view!.frame = CGRect(x: 0, y: 0, width: 350, height: 350)
+    //view!.frame = CGRect(x: 0, y: 0, width: 350, height: 350)
+    scaleMode = .aspectFit
     anchorPoint = CGPoint(x: 0.5, y: 0.5)
     physicsWorld.contactDelegate = self
     physicsWorld.gravity = CGVector(dx: 0, dy: -0.25)
@@ -163,7 +164,7 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
     self.run(action!, withKey: "spawner")
   }
   
-  public override func didMove(to view: SKView) {
+  override func didMove(to view: SKView) {
     print("Welcome to Sprite Attack! Can you beat 100?")
     
     selfInit()
@@ -189,7 +190,7 @@ extension GameScene {
     static var hitThisFrame = false // Used to keep player alive when hit 2 black at same time.
   }
   
-  public override func update(_ currentTime: TimeInterval) {
+  override func update(_ currentTime: TimeInterval) {
     gs.hitThisFrame = false
     
     if (player?.position.y)! < frame.midY {
@@ -241,9 +242,9 @@ extension GameScene {
       if let b = contact.bodyB.node { killNode(b) }
     }
   }
-
-  public func didBegin(_ contact: SKPhysicsContact) {
-
+  
+  func didBegin(_ contact: SKPhysicsContact) {
+    
     let contactedCategories = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
     
     switch contactedCategories {
@@ -255,16 +256,16 @@ extension GameScene {
     }
   }
   
-  public override func didSimulatePhysics() {
+  override func didSimulatePhysics() {
     if gs.hitThisFrame { gs.hits += 1 }
     if gs.hits >= 2    {
       gs.hits = 0 // FIXME: Reset for next game since this is not an instance variable... what?
       view!.presentScene(FailScene(size: size))
     }
   }
-
+  
   /// Difficulty:
-  public override func didFinishUpdate() {
+  override func didFinishUpdate() {
     
     func upDifficulty() {
       print("difficulty up!")
@@ -281,19 +282,19 @@ extension GameScene {
     case 10: if !gs.waiting { upDifficulty() }
     case 20: if  gs.waiting { upDifficulty() }
     case 30: if !gs.waiting { upDifficulty() }
-    //case 40: if  gs.waiting { upDifficulty() }
-/*    case 50: if !gs.waiting { upDifficulty() }
-    case 60: if  gs.waiting { upDifficulty() }
-    case 70: if !gs.waiting { upDifficulty() }
-    case 80: if  gs.waiting { upDifficulty() }
-    case 90: if !gs.waiting { upDifficulty() }
-   case 100: view!.presentScene(WinScene(size: size))*/
+      //case 40: if  gs.waiting { upDifficulty() }
+      /*    case 50: if !gs.waiting { upDifficulty() }
+       case 60: if  gs.waiting { upDifficulty() }
+       case 70: if !gs.waiting { upDifficulty() }
+       case 80: if  gs.waiting { upDifficulty() }
+       case 90: if !gs.waiting { upDifficulty() }
+       case 100: view!.presentScene(WinScene(size: size))*/
     default: ()
     }
   }
-}
+};
 
-class TouchPad: SKSpriteNode {
+final class TouchPad: SKSpriteNode {
   
   private var playerInstance: Stuff
   
@@ -318,10 +319,9 @@ class TouchPad: SKSpriteNode {
     playerInstance.position.x += dx
     playerInstance.position.y += dy
   }
-}
+};
 
-
-class Stuff: SKSpriteNode {
+final class Stuff: SKSpriteNode {
   
   init(color: SKColor, size: CGSize) {
     super.init(texture: nil, color: color, size: size)
@@ -337,30 +337,28 @@ class Stuff: SKSpriteNode {
   
 }
 
-public class WinScene: SKScene {
-  public override func didMove(to view: SKView) {
-    //resetView()
+class WinScene: SKScene {
+  override func didMove(to view: SKView) {
+    scaleMode = .aspectFit
     anchorPoint = CGPoint(x: 0.5, y: 0.5)
     addChild(SKLabelNode(text: "YOU WON! PLAY AGAIN"))
     score = 0
-    
   }
-  public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+  
+  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     view!.presentScene(GameScene(size: size))
   }
   
 };
 
-public class FailScene: SKScene {
-  public override func didMove(to view: SKView) {
-
+class FailScene: SKScene {
+  override func didMove(to view: SKView) {
+    scaleMode = .aspectFit
     anchorPoint = CGPoint(x: 0.5, y: 0.5)
     addChild(SKLabelNode(text: "score: \(score)!    PLAY AGAIN"))
     score = 0
   }
-  public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     view!.presentScene(GameScene(size: size))
   }
 };
-
-
