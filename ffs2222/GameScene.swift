@@ -3,6 +3,13 @@ import SpriteKit
 /// TODO: Recycle or kill old nodes.
 /// TODO: Game mode... TWO yellow boxes??
 
+func killNode(_ node: SKNode) {
+  node.physicsBody = nil
+  node.removeAllChildren()
+  node.removeAllActions()
+  node.removeFromParent()
+}
+
 public func randy(_ num: Int) -> Int { return Int(arc4random_uniform(UInt32(num)))+1 }
 
 enum Category {
@@ -50,26 +57,27 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
   
   private func spawnYellowNode() {
     
-    let yellowNode = Stuff(color: .blue, size: size30)
-    yellowNode.position.x += 35
     let newPB = SKPhysicsBody(rectangleOf: size30)
     newPB.categoryBitMask =    Category.yellow
     newPB.contactTestBitMask = Category.black
     newPB.collisionBitMask   = Category.zero
     newPB.affectedByGravity  = false
     
+    let yellowNode = Stuff(color: .blue, size: size30)
+    yellowNode.position.x += 35
+    yellowNode.position.y = frame.minY + 35
     yellowNode.physicsBody = newPB
     addChild(yellowNode)
   }
   
   private func spawnBlackNode(pos: CGPoint)  {
     
-    let blackNode = SKSpriteNode(color: .white, size: size30)
     let newPB = SKPhysicsBody(rectangleOf: size30)
     newPB.categoryBitMask = Category.black
-    newPB.contactTestBitMask = Category.yellow
+    newPB.contactTestBitMask = Category.yellow | Category.death
     newPB.collisionBitMask   = Category.zero
     
+    let blackNode = SKSpriteNode(color: .white, size: size30)
     blackNode.name     = "black"
     blackNode.position = pos
     blackNode.physicsBody = newPB
@@ -78,19 +86,20 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
   
   private func spawnScanline(pos: CGPoint) {
     
-    let lineNode = SKSpriteNode(color: .clear, size: CGSize(width: frame.width, height: 1))
     let newPB = SKPhysicsBody(rectangleOf: lineNode.size)
     newPB.categoryBitMask = Category.line
-    newPB.contactTestBitMask = Category.yellow
+    newPB.contactTestBitMask = Category.yellow | Category.death
     newPB.collisionBitMask  = Category.zero
     
+    let lineNode = SKSpriteNode(color: .green, size: CGSize(width: frame.width, height: 1))
     lineNode.physicsBody = newPB
     lineNode.position = pos
     addChild(lineNode)
   }
   
   private func spawnDeathLine() {
-    let lineNode = SKSpriteNode(color: .clear, size: CGSize(width: frame.width, height: 1))
+    let lineNode = SKSpriteNode(color: .clear, size: CGSize(width: frame.width + 1000,
+                                                            height: 2))
     let newPB = SKPhysicsBody(rectangleOf: lineNode.size)
     newPB.affectedByGravity = false
     newPB.categoryBitMask = Category.death
@@ -101,6 +110,7 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
     lineNode.position.y = frame.minY - size30.height
     addChild(lineNode)
   }
+  
   
   func createLineOfBlackBoxes() {
     
@@ -132,6 +142,7 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
     spawnYellowNode()
     createLineOfBlackBoxes()
     spawnDeathLine()
+
     updateAction()
     gs.hits = -500
     score = 1
@@ -140,15 +151,18 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
 }
 
 //
-// MARK: - Physics and stuff:
+// MARK: - Game Loop:
 //
 extension GameScene {
   struct gs {
-    static var waiting = false
-    static var hits = 0
-    static var hitThisFrame = false
+    static var waiting = false      // Used for score increase at end of loop.
+    static var hits = 0             // Player HP.
+    static var hitThisFrame = false // Used to keep player alive when hit 2 black at same time.
   }
   
+  public override func update(_ currentTime: TimeInterval) {
+    gs.hitThisFrame = false
+  }
   
   private func doBlackAndYellow(contact: SKPhysicsContact) {
     
@@ -169,24 +183,32 @@ extension GameScene {
   }
   
   private func doYellowAndLine(contact: SKPhysicsContact) {
-      score += 1
-      print(score)
-      
-      if contact.bodyA.categoryBitMask == Category.line {
-        contact.bodyA.node!.physicsBody = nil
-      } else { contact.bodyB.node!.physicsBody = nil }
+    score += 1
+    print(score)
+    
+    if contact.bodyA.categoryBitMask == Category.line {
+      if let a = contact.bodyA.node { killNode(a) }
+    } else {
+      if let b = contact.bodyB.node { killNode(b) }
+    }
   }
   
   private func doDeathAndBlack(contact: SKPhysicsContact) {
     if contact.bodyA.categoryBitMask == Category.black {
-      contact.bodyA.node!.removeFromParent()
-    } else { contact.bodyB.node!.removeFromParent() }
+      if let a = contact.bodyA.node { killNode(a) }
+    } else {
+      if let b = contact.bodyB.node { killNode(b) }
+    }
   }
   
-  public override func update(_ currentTime: TimeInterval) {
-    gs.hitThisFrame = false
+  private func doDeathAndLine(contact: SKPhysicsContact) {
+    if contact.bodyA.categoryBitMask == Category.line {
+      if let a = contact.bodyA.node { killNode(a) }
+    } else {
+      if let b = contact.bodyB.node { killNode(b) }
+    }
   }
-  
+
   public func didBegin(_ contact: SKPhysicsContact) {
 
     let contactedCategories = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
@@ -195,6 +217,7 @@ extension GameScene {
     case Category.black  | Category.yellow: doBlackAndYellow(contact: contact)
     case Category.yellow | Category.line:   doYellowAndLine (contact: contact)
     case Category.black  | Category.death:  doDeathAndBlack (contact: contact)
+    case Category.line   | Category.death:  doDeathAndLine (contact: contact)
     default: ()
     }
   }
@@ -206,7 +229,6 @@ extension GameScene {
       view!.presentScene(FailScene(size: size))
     }
   }
-  
 
   public override func didFinishUpdate() {
     
@@ -229,12 +251,12 @@ extension GameScene {
     case 20: if  gs.waiting { upDifficulty() }
     case 30: if !gs.waiting { upDifficulty() }
     case 40: if  gs.waiting { upDifficulty() }
-    case 50: if !gs.waiting { upDifficulty() }
+/*    case 50: if !gs.waiting { upDifficulty() }
     case 60: if  gs.waiting { upDifficulty() }
     case 70: if !gs.waiting { upDifficulty() }
     case 80: if  gs.waiting { upDifficulty() }
     case 90: if !gs.waiting { upDifficulty() }
-   // case 100: view!.presentScene(WinScene(size: size))
+   case 100: view!.presentScene(WinScene(size: size))*/
     default: ()
     }
   }
