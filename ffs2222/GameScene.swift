@@ -46,7 +46,7 @@ struct UD {
   }
 };
 
-fileprivate func setMasks(pb: SKPhysicsBody, cat: UInt32, cont: UInt32, col: UInt32) {
+func setMasks(pb: SKPhysicsBody, cat: UInt32, cont: UInt32, col: UInt32) {
   pb.categoryBitMask = cat
   pb.contactTestBitMask = cont
   pb.collisionBitMask = col
@@ -394,3 +394,5 @@ class FailScene: SKScene {
     view!.presentScene(GameScene(size: size))
   }
 };
+
+

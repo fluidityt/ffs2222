@@ -2,12 +2,6 @@
 import SpriteKit
 import PlaygroundSupport
 
-enum Category {
-  static let
-  zero =    UInt32 (0),    yellow =  UInt32 (1),    black =   UInt32 (2),
-  three =   UInt32 (4),    line  =   UInt32 (8),    death =   UInt32 (16)
-};
-
 let size = CGSize(width: 600, height: 500)
 let view = SKView(frame: CGRect(x: 0, y: 0, width: size.width, height: size.height))
 let scene = GameScene(size: size)
@@ -16,13 +10,19 @@ let scene = GameScene(size: size)
 PlaygroundPage.current.liveView = view
 view.presentScene(scene)
 
-fileprivate func setMasks(pb: SKPhysicsBody, cat: UInt32, cont: UInt32, col: UInt32) {
+public func setMasks(pb: SKPhysicsBody, cat: UInt32, cont: UInt32, col: UInt32) {
   pb.categoryBitMask = cat
   pb.contactTestBitMask = cont
   pb.collisionBitMask = col
 }
 
-class GameScene: SKScene {
+class GameScene2: SKScene {
+  enum Category {
+    static let
+    zero =    UInt32 (0),    yellow =  UInt32 (1),    black =   UInt32 (2),
+    three =   UInt32 (4),    line  =   UInt32 (8),    death =   UInt32 (16)
+  };
+  
   lazy var numBoxesX: Int = Int(self.frame.size.width / 30)
   lazy var numBoxesY: Int = Int(self.frame.size.height / 30)
   lazy var startingPoint: CGPoint = CGPoint(x: (self.frame.minX + 15),
