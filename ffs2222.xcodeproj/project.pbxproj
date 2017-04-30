@@ -31,6 +31,7 @@
 
 /* Begin PBXFileReference section */
 		4D3C18041EB5A656009A727C /* GameScene (loop).swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "GameScene (loop).swift"; sourceTree = "<group>"; };
+		4DF5AB9A1EB5D18E005A340A /* open animation.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "open animation.playground"; sourceTree = "<group>"; };
 		4DFA46971EB177C2008E5847 /* ffs2222.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ffs2222.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DFA469A1EB177C3008E5847 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4DFA469C1EB177C3008E5847 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -104,6 +105,7 @@
 			children = (
 				4DFA46B51EB177C3008E5847 /* ffs2222Tests.swift */,
 				4DFA46B71EB177C3008E5847 /* Info.plist */,
+				4DF5AB9A1EB5D18E005A340A /* open animation.playground */,
 			);
 			path = ffs2222Tests;
 			sourceTree = "<group>";

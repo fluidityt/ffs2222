@@ -44,7 +44,7 @@ struct UD {
       userDefaults.setValue(0, forKey: Keys.highscore)
     }
   }
-}
+};
 
 fileprivate func setMasks(pb: SKPhysicsBody, cat: UInt32, cont: UInt32, col: UInt32) {
   pb.categoryBitMask = cat
@@ -60,54 +60,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   
   enum Category {
     static let
-    zero =    UInt32 (0),
-    yellow =  UInt32 (1),
-    black =   UInt32 (2),
-    three =   UInt32 (4),
-    line  =   UInt32 (8),
-    death =   UInt32 (16)
-  }
-  
-  /// Props:
-  var
-  difficultyBoxNum = 4,
-  difficultyBoxSpeed = Double(1),
-  difficultyBoxSize = CGFloat(1.5),
-  action: SKAction?
-  
-  var player: Stuff?
-  
-  lazy var size30: CGSize = CGSize(width: 30, height: 30)
-  
-  private lazy var spawn: Spawn = Spawn(gsi: self)
-  
-  private func selfInit() {
-    //view!.frame = CGRect(x: 0, y: 0, width: 350, height: 350)
-    scaleMode = .aspectFit
-    anchorPoint = CGPoint(x: 0.5, y: 0.5)
-    physicsWorld.contactDelegate = self
-    physicsWorld.gravity = CGVector(dx: 0, dy: -0.25)
-    
-    let starterLabel = SKLabelNode(text: "DODGE FALLING BOXES!! Win at 50!!")
-    let starterNode = SKSpriteNode()
-    starterNode.size = starterLabel.frame.size
-    starterNode.physicsBody = SKPhysicsBody(rectangleOf: starterNode.size)
-    starterNode.addChild(starterLabel)
-    starterNode.position.y -= 50
-    
-    addChild(starterNode)
-  }
-  
-  func updateAction() {
-    
-    removeAction(forKey: "spawner")
-    let wait     = SKAction.wait(forDuration: difficultyBoxSpeed)
-    let run      = SKAction.run { self.spawn.lineOfBlackBoxes() }
-    let sequence = SKAction.sequence([wait, run])
-    self.action  = SKAction.repeatForever(sequence)
-    
-    self.run(action!, withKey: "spawner")
-  }
+    zero =    UInt32 (0),    yellow =  UInt32 (1),    black =   UInt32 (2),
+    three =   UInt32 (4),    line  =   UInt32 (8),    death =   UInt32 (16)
+  };
   
   /// Static funcs to spawn stuff:
   struct Spawn {
@@ -188,6 +143,47 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       
       scanline(pos: CGPoint(x: 0, y: yVal))
     }
+  };
+  
+  /// Props:
+  var
+  difficultyBoxNum = 4,
+  difficultyBoxSpeed = Double(1),
+  difficultyBoxSize = CGFloat(1.5),
+  action: SKAction?
+  
+  var player: Stuff?
+  
+  lazy var size30: CGSize = CGSize(width: 30, height: 30)
+  
+  private lazy var spawn: Spawn = Spawn(gsi: self)
+  
+  private func selfInit() {
+    //view!.frame = CGRect(x: 0, y: 0, width: 350, height: 350)
+    scaleMode = .aspectFit
+    anchorPoint = CGPoint(x: 0.5, y: 0.5)
+    physicsWorld.contactDelegate = self
+    physicsWorld.gravity = CGVector(dx: 0, dy: -0.25)
+    
+    let starterLabel = SKLabelNode(text: "DODGE FALLING BOXES!! Win at 50!!")
+    let starterNode = SKSpriteNode()
+    starterNode.size = starterLabel.frame.size
+    starterNode.physicsBody = SKPhysicsBody(rectangleOf: starterNode.size)
+    starterNode.addChild(starterLabel)
+    starterNode.position.y -= 50
+    
+    addChild(starterNode)
+  }
+  
+  func updateAction() {
+    
+    removeAction(forKey: "spawner")
+    let wait     = SKAction.wait(forDuration: difficultyBoxSpeed)
+    let run      = SKAction.run { self.spawn.lineOfBlackBoxes() }
+    let sequence = SKAction.sequence([wait, run])
+    self.action  = SKAction.repeatForever(sequence)
+    
+    self.run(action!, withKey: "spawner")
   }
   
   override func didMove(to view: SKView) {

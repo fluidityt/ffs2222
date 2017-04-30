@@ -9,7 +9,7 @@
 
 // TODO: Fairness algo
 // TODO: Options screen
-// TODO: Animations
+// TODO: Eye animations
 // TODO: GameCenter
 
 import SpriteKit
