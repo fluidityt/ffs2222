@@ -6,9 +6,9 @@
 //  Copyright © 2017 justin fluidity. All rights reserved.
 //
 
-import UIKit
 import SpriteKit
-import GameplayKit
+
+// FIXME: memory leak? 600+ nodes...
 
 class GameViewController: UIViewController {
 
@@ -16,14 +16,16 @@ class GameViewController: UIViewController {
         super.viewDidLoad()
         
         if let view = self.view as! SKView? {
-            // Load the SKScene from 'GameScene.sks'
-          let scene = GameScene(size: view.frame.size)
-
-                // Set the scale mode to scale to fit the window
-            scene.scaleMode = .aspectFill
           
-                // Present the scene
-              view.presentScene(scene)
+          view.frame = CGRect(x: 0, y: 0, width: 600, height: 500)
+          // Load the SKScene from 'GameScene.sks'
+          let scene = GameScene(size: CGSize(width: 600, height: 600))
+
+          // Set the scale mode to scale to fit the window
+            scene.scaleMode = .aspectFit
+          
+          // Present the scene
+            view.presentScene(scene)
           
             
             view.ignoresSiblingOrder = true

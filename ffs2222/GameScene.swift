@@ -3,13 +3,6 @@ import SpriteKit
 /// TODO: Recycle or kill old nodes.
 /// TODO: Game mode... TWO yellow boxes??
 
-
-func formula(size: CGSize, factor: Int = 10000) -> CGSize {
-  let d = Int(size.width * size.height)
-  let c = d / factor
-  return CGSize(width: c, height: c)
-}
-
 public func randy(_ num: Int) -> Int { return Int(arc4random_uniform(UInt32(num)))+1 }
 
 enum Category {
@@ -36,9 +29,11 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
   action: SKAction?
   
   
-  lazy var size30: CGSize = formula(size: self.frame.size)
+  lazy var size30: CGSize = CGSize(width: 30, height: 30)
+  // formula(size: self.frame.size)
   
   private func selfInit() {
+    view!.frame = CGRect(x: 0, y: 0, width: 350, height: 350)
     anchorPoint = CGPoint(x: 0.5, y: 0.5)
     physicsWorld.contactDelegate = self
     physicsWorld.gravity = CGVector(dx: 0, dy: -0.25)
@@ -138,7 +133,8 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
     createLineOfBlackBoxes()
     spawnDeathLine()
     updateAction()
-
+    gs.hits = -500
+    score = 1
     // OMFG what have I become??
   }
 }
@@ -215,6 +211,7 @@ extension GameScene {
   public override func didFinishUpdate() {
     
     func upDifficulty() {
+      if score > 49 { return }
       
       print("difficulty up!")
       difficultyBoxNum += 1
@@ -223,6 +220,7 @@ extension GameScene {
       
       if gs.waiting { gs.waiting = false }
       else { gs.waiting = true }
+      
     }
     
     switch score {
@@ -236,7 +234,7 @@ extension GameScene {
     case 70: if !gs.waiting { upDifficulty() }
     case 80: if  gs.waiting { upDifficulty() }
     case 90: if !gs.waiting { upDifficulty() }
-    case 100: view!.presentScene(WinScene(size: size))
+   // case 100: view!.presentScene(WinScene(size: size))
     default: ()
     }
   }
@@ -265,6 +263,8 @@ public class WinScene: SKScene {
     anchorPoint = CGPoint(x: 0.5, y: 0.5)
     addChild(SKLabelNode(text: "YOU WON! PLAY AGAIN"))
     score = 0
+    
+    view.frame = CGRect(x: 0, y: 0, width: 350, height: 350)
   }
   public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     view!.presentScene(GameScene(size: size))
@@ -274,6 +274,7 @@ public class WinScene: SKScene {
 
 public class FailScene: SKScene {
   public override func didMove(to view: SKView) {
+    view.frame = CGRect(x: 0, y: 0, width: 350, height: 350)
     anchorPoint = CGPoint(x: 0.5, y: 0.5)
     addChild(SKLabelNode(text: "score: \(score)!    PLAY AGAIN"))
     score = 0
