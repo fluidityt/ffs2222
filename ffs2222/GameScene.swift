@@ -1,12 +1,7 @@
 import SpriteKit
 
-/// DESIGN: Have boxes laugh at you once you die...
-/// TODO: Recycle or kill old nodes.
-/// TODO: Game mode... TWO yellow boxes??
-
-// FIXME: Why does the screen squash after you lose and replay??
-
 // ************************************************************* //
+
 fileprivate func killNode(_ node: SKNode) {
   node.physicsBody = nil
   node.removeAllChildren()
@@ -17,8 +12,39 @@ fileprivate func killNode(_ node: SKNode) {
 // Globals:
 var gview = SKView()
 var score = 0 // Too lazy to make an init for other scenes...
+var highscore: Int = 0
+
 
 func randy(_ num: Int) -> Int { return Int(arc4random_uniform(UInt32(num)))+1 }
+
+struct UD {
+  
+  static let userDefaults = UserDefaults.standard
+  
+  struct Keys {
+    static let highscore = "highschore"
+  }
+  
+  static func saveHighScore() {
+    
+    guard let oldHS = userDefaults.value(forKey: Keys.highscore) as? Int else { print("bad key"); return }
+    if score > oldHS {
+      userDefaults.setValue(score, forKey: Keys.highscore)
+      print("saved high score!")
+    }
+  }
+  static func loadHighScore() {
+    guard let value = userDefaults.value(forKey: Keys.highscore) else { print("no hs in UD"); return }
+    guard let hs = value as? Int else { print("value was not Int"); return }
+    highscore = hs
+    print("loaded high score!")
+  }
+  static func initUserDefaults() {
+    if userDefaults.value(forKey: Keys.highscore) == nil {
+      userDefaults.setValue(0, forKey: Keys.highscore)
+    }
+  }
+}
 
 fileprivate func setMasks(pb: SKPhysicsBody, cat: UInt32, cont: UInt32, col: UInt32) {
   pb.categoryBitMask = cat
@@ -72,8 +98,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     addChild(starterNode)
   }
   
+  func updateAction() {
+    
+    removeAction(forKey: "spawner")
+    let wait     = SKAction.wait(forDuration: difficultyBoxSpeed)
+    let run      = SKAction.run { self.spawn.lineOfBlackBoxes() }
+    let sequence = SKAction.sequence([wait, run])
+    self.action  = SKAction.repeatForever(sequence)
+    
+    self.run(action!, withKey: "spawner")
+  }
+  
   /// Static funcs to spawn stuff:
-  private struct Spawn {
+  struct Spawn {
     
     private typealias C = Category
     
@@ -153,29 +190,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
   }
   
-  func updateAction() {
-    
-    removeAction(forKey: "spawner")
-    let wait     = SKAction.wait(forDuration: difficultyBoxSpeed)
-    let run      = SKAction.run { self.spawn.lineOfBlackBoxes() }
-    let sequence = SKAction.sequence([wait, run])
-    self.action  = SKAction.repeatForever(sequence)
-    
-    self.run(action!, withKey: "spawner")
-  }
-  
   override func didMove(to view: SKView) {
-    print("Welcome to Sprite Attack! Can you beat 100?")
+    
+    UD.initUserDefaults()
+    UD.loadHighScore()
+    
+    print("Welcome to Sprite Attack! Your HS is \(highscore)")
     
     selfInit()
     spawn.yellowNode()
     spawn.lineOfBlackBoxes()
     spawn.deathLine()
     spawn.touchPad()
-    
+  
     updateAction()
     //gs.hits = -500
-    score = 1
+    score = 0
     // OMFG what have I become??
   }
 }
@@ -245,6 +275,8 @@ extension GameScene {
   
   func didBegin(_ contact: SKPhysicsContact) {
     
+    defer { UD.saveHighScore() }
+    
     let contactedCategories = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
     
     switch contactedCategories {
@@ -294,6 +326,9 @@ extension GameScene {
   }
 };
 
+//
+// MARK: - Other classes:
+//
 final class TouchPad: SKSpriteNode {
   
   private var playerInstance: Stuff
@@ -355,7 +390,8 @@ class FailScene: SKScene {
   override func didMove(to view: SKView) {
     scaleMode = .aspectFit
     anchorPoint = CGPoint(x: 0.5, y: 0.5)
-    addChild(SKLabelNode(text: "score: \(score)!    PLAY AGAIN"))
+    addChild(SKLabelNode(text: "score: \(score)! | highscore: \(highscore) |   PLAY AGAIN"))
+    
     score = 0
   }
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
