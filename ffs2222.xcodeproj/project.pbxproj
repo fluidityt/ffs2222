@@ -65,6 +65,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4DF5AB9B1EB5EC28005A340A /* junk */ = {
+			isa = PBXGroup;
+			children = (
+				4DFA469A1EB177C3008E5847 /* AppDelegate.swift */,
+				4DFA469C1EB177C3008E5847 /* GameScene.sks */,
+				4DFA469E1EB177C3008E5847 /* Actions.sks */,
+				4DFA46A41EB177C3008E5847 /* Main.storyboard */,
+				4DFA46A91EB177C3008E5847 /* LaunchScreen.storyboard */,
+				4DFA46AC1EB177C3008E5847 /* Info.plist */,
+			);
+			name = junk;
+			sourceTree = "<group>";
+		};
 		4DFA468E1EB177C2008E5847 = {
 			isa = PBXGroup;
 			children = (
@@ -86,16 +99,11 @@
 		4DFA46991EB177C2008E5847 /* ffs2222 */ = {
 			isa = PBXGroup;
 			children = (
-				4DFA469A1EB177C3008E5847 /* AppDelegate.swift */,
-				4DFA469C1EB177C3008E5847 /* GameScene.sks */,
-				4DFA469E1EB177C3008E5847 /* Actions.sks */,
+				4DF5AB9B1EB5EC28005A340A /* junk */,
+				4DFA46A21EB177C3008E5847 /* GameViewController.swift */,
 				4DFA46A01EB177C3008E5847 /* GameScene.swift */,
 				4D3C18041EB5A656009A727C /* LaunchScene.swift */,
-				4DFA46A21EB177C3008E5847 /* GameViewController.swift */,
-				4DFA46A41EB177C3008E5847 /* Main.storyboard */,
 				4DFA46A71EB177C3008E5847 /* Assets.xcassets */,
-				4DFA46A91EB177C3008E5847 /* LaunchScreen.storyboard */,
-				4DFA46AC1EB177C3008E5847 /* Info.plist */,
 			);
 			path = ffs2222;
 			sourceTree = "<group>";

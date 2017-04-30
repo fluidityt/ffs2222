@@ -6,11 +6,14 @@
 
 // DESIGN: Have boxes laugh at you once you die...
 // DESIGN: Game mode... TWO yellow boxes??
+// DESIGN: Different shapes?
+// DESIGN: Boxes rotate / warp?
 
 // TODO: Fairness algo
 // TODO: Options screen
 // TODO: Eye animations
 // TODO: GameCenter
+// TODO: Options menu
 
 // FIXME: Update yellow box bound constraints
 

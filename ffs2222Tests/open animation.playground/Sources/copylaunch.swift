@@ -3,7 +3,9 @@
 
 import SpriteKit
 
-class LaunchScene: SKScene {
+public class LaunchScene: SKScene {
+  
+  func randy(_ num: Int) -> Int { return Int(arc4random_uniform(UInt32(num)))+1 }
   
   lazy var numBoxesX: Int = Int(self.frame.size.width / 30)
   lazy var numBoxesY: Int = Int(self.frame.size.height / 30)
@@ -45,7 +47,7 @@ class LaunchScene: SKScene {
   func spawnSideLines() {
     
     let sideL = SKSpriteNode(color: .orange, size: CGSize(width: 4,
-                                                        height: frame.size.height * 2))
+                                                          height: frame.size.height * 2))
     let newPB = SKPhysicsBody(rectangleOf: sideL.frame.size)
     newPB.affectedByGravity = false
     newPB.allowsRotation = false
@@ -109,7 +111,7 @@ class LaunchScene: SKScene {
     }
   }
   
-  override func didMove(to view: SKView) {
+ public override func didMove(to view: SKView) {
     anchorPoint = CGPoint(x: 0.5, y: 0.5)
     spawnLabel()
     dropBoxes()
@@ -117,7 +119,7 @@ class LaunchScene: SKScene {
     spawnSideLines()
   }
   
-  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-    view!.presentScene(GameScene(size: size))
+  public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    //view!.presentScene(GameScene(size: size))
   }
 };
