@@ -1,19 +1,9 @@
 //
-//  GameScene (loop).swift
-//  ffs2222
-//
-//  Created by justin fluidity on 4/30/17.
-//  Copyright © 2017 justin fluidity. All rights reserved.
-//
+// LaunchScene.swift
 
 import SpriteKit
 
-class GameScene2: SKScene {
-  enum Category {
-    static let
-    zero =    UInt32 (0),    yellow =  UInt32 (1),    black =   UInt32 (2),
-    three =   UInt32 (4),    line  =   UInt32 (8),    death =   UInt32 (16)
-  };
+class LaunchScene: SKScene {
   
   lazy var numBoxesX: Int = Int(self.frame.size.width / 30)
   lazy var numBoxesY: Int = Int(self.frame.size.height / 30)
@@ -21,8 +11,6 @@ class GameScene2: SKScene {
                                             y: (self.frame.maxY + 15))
   
   let size30 = CGSize(width: 30, height: 30)
-  
-  func randomMass(_ range: Int) -> CGFloat { return (CGFloat(randy(range)) / 100) }
   
   typealias C = Category
   
@@ -33,7 +21,7 @@ class GameScene2: SKScene {
     newPB.velocity.dy -= CGFloat(randy(100))
     blackNode.physicsBody = newPB
     
-
+    
     blackNode.name     = "black"
     blackNode.position = pos
     addChild(blackNode)
@@ -49,7 +37,7 @@ class GameScene2: SKScene {
     newPB.affectedByGravity = false
     newPB.pinned = true
     newPB.allowsRotation = false
-
+    
     
     stopper.physicsBody = newPB
     addChild(stopper)
@@ -57,7 +45,7 @@ class GameScene2: SKScene {
   
   func spawnSideLines() {
     let sideL = SKSpriteNode(color: .orange, size: CGSize(width: 4,
-                                                        height: frame.size.height * 2))
+                                                          height: frame.size.height * 2))
     let newPB = SKPhysicsBody(rectangleOf: sideL.frame.size)
     newPB.affectedByGravity = false
     newPB.allowsRotation = false
@@ -86,16 +74,51 @@ class GameScene2: SKScene {
   }
   
   func dropBoxes() {
-    for i in 1...5 { //numBoxesY {
+    for i in 1...numBoxesY+5 {
       makeHorizontalLine(atY: i)
     }
   }
   
+  func spawnLabel() {
+    do {
+      let label = SKLabelNode(text: "Play!")
+      label.fontColor = .black
+      addChild(label)
+      label.zPosition += 1
+      label.setScale(3)
+    }
+    
+    do {
+      let label = SKLabelNode(text: "Options")
+      label.fontColor = .black
+      addChild(label)
+      label.position.y -= 200
+      label.zPosition += 1
+      label.setScale(3)
+    }
+    
+    do {
+      let label = SKLabelNode(text: "Sprite Attack!")
+      
+      label.fontColor = .yellow
+      addChild(label)
+      label.position.y += 200
+      label.zPosition += 1
+      label.setScale(3.5)
+    }
+    
+    
+  }
+  
   override func didMove(to view: SKView) {
     anchorPoint = CGPoint(x: 0.5, y: 0.5)
-    
+    spawnLabel()
     dropBoxes()
     spawnStopper()
     spawnSideLines()
+  }
+  
+  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    view!.presentScene(GameScene(size: size))
   }
 };

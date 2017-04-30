@@ -12,6 +12,8 @@
 // TODO: Eye animations
 // TODO: GameCenter
 
+// FIXME: Update yellow box bound constraints
+
 import SpriteKit
 
 class GameViewController: UIViewController {
@@ -28,7 +30,7 @@ class GameViewController: UIViewController {
     view.frame = CGRect(x: 0, y: 0, width: mySize.width, height: mySize.height)
     // g.view = view
     
-    let scene = GameScene2(size: CGSize(width: 600, height: 1000))
+    let scene = LaunchScene(size: CGSize(width: 600, height: 1000))
     scene.scaleMode = .aspectFit
     view.presentScene(scene)
   }
