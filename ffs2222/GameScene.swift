@@ -3,6 +3,7 @@ import SpriteKit
 // MARK: - Main:
 class GameScene: SKScene, SKPhysicsContactDelegate {
   
+  /// Bitmasks:
   enum Category {
     static let
     zero =    UInt32 (0),    yellow =  UInt32 (1),    black =   UInt32 (2),
@@ -19,46 +20,46 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 };
 
 // MARK: - Spawner
-extension GameScene {
-  struct Spawner {
+/// Ideally abstract:
+fileprivate  struct Spawner {
     
-    typealias C = Category
+    typealias C = GameScene.Category
     
-    var gsi: GameScene
+    var _gsi: GameScene
     
-    init(gsi: GameScene) { self.gsi = gsi }
+    init(gsi: GameScene) { self._gsi = gsi }
     
     func yellowNode() {
-      let yellowNode = Stuff(color: .blue, size: gsi.size30); do {
-        let newPB = SKPhysicsBody(rectangleOf: gsi.size30); do {
+      let yellowNode = Stuff(color: .blue, size: _gsi.size30); do {
+        let newPB = SKPhysicsBody(rectangleOf: _gsi.size30); do {
           setMasks(pb: newPB, cat: C.yellow, cont: C.black, col: C.zero)
           newPB.affectedByGravity  = false
         }
         yellowNode.physicsBody = newPB
         yellowNode.position.x += 35
-        yellowNode.position.y = gsi.frame.minY + 35
+        yellowNode.position.y = _gsi.frame.minY + 35
       }
       
-      gsi.addChild(yellowNode)
-      gsi.player = yellowNode
+      _gsi.addChild(yellowNode)
+      _gsi.player = yellowNode
     }
     
     func blackNode(pos: CGPoint)  {
       
-      let blackNode = SKSpriteNode(color: .white, size: gsi.size30); do {
-        let newPB = SKPhysicsBody(rectangleOf: gsi.size30)
+      let blackNode = SKSpriteNode(color: .white, size: _gsi.size30); do {
+        let newPB = SKPhysicsBody(rectangleOf: _gsi.size30)
         setMasks(pb: newPB, cat: C.black, cont: C.yellow | C.death, col: C.zero)
         blackNode.physicsBody = newPB
         blackNode.name     = "black"
         blackNode.position = pos
       }
       
-      gsi.addChild(blackNode)
+      _gsi.addChild(blackNode)
     }
     
     func scanline(pos: CGPoint) {
       
-      let lineNode = SKSpriteNode(color: .clear, size: CGSize(width: gsi.frame.width, height: 1)); do {
+      let lineNode = SKSpriteNode(color: .clear, size: CGSize(width: _gsi.frame.width, height: 1)); do {
         let newPB = SKPhysicsBody(rectangleOf: lineNode.size)
         setMasks(pb: newPB, cat: C.line, cont: C.yellow | C.death, col: C.zero)
         
@@ -66,12 +67,12 @@ extension GameScene {
         lineNode.position = pos
       }
       
-      gsi.addChild(lineNode)
+      _gsi.addChild(lineNode)
     }
     
     func deathLine() {
       
-      let lineNode = SKSpriteNode(color: .orange, size: CGSize(width: gsi.frame.width + 1000, height: 2)); do {
+      let lineNode = SKSpriteNode(color: .orange, size: CGSize(width: _gsi.frame.width + 1000, height: 2)); do {
         let newPB = SKPhysicsBody(rectangleOf: lineNode.size); do {
           setMasks(pb: newPB, cat: C.death, cont: C.black, col: C.zero)
           newPB.affectedByGravity = false
@@ -80,30 +81,66 @@ extension GameScene {
         lineNode.physicsBody = newPB
         // lineNode.position.y = frame.minY - size30.height
       }
-      gsi.addChild(lineNode)
+      _gsi.addChild(lineNode)
     }
     
     func touchPad() {
-      let touchPad = TouchPad(player: gsi.player!, scene: gsi)
+      let touchPad = TouchPad(player: _gsi.player!, scene: _gsi)
       touchPad.position.y -= touchPad.size.height / 2
-      gsi.addChild(touchPad)
+      _gsi.addChild(touchPad)
     }
     
     func lineOfBlackBoxes() {
       
-      let yVal = gsi.frame.maxY + (gsi.size30.height/2)
-      let numBoxes = gsi.difficulty.boxNum + randy(6)
+      func randomX() -> CGFloat {
+        let randomX = randy(Int(_gsi.frame.maxX * 2))
+        let xVal = CGFloat(randomX) - _gsi.frame.maxX
+        return xVal
+      }
       
+      let yVal = _gsi.frame.maxY + (_gsi.size30.height/2)
+      let numBoxes = _gsi.difficulty.boxNum + randy(6)
+      
+      // Fairness:
+      
+      let fairRect = CGRect(middle: CGPoint(x: randomX(), y: yVal),
+                            width:  _gsi.size30.width + fairness,
+                            height: _gsi.size30.height)
+    
+      // Oh my god this is awful:
       for _ in 1...numBoxes {
-        let randomX = randy(Int(gsi.frame.maxX * 2))
-        let xVal = CGFloat(randomX) - gsi.frame.maxX
-        blackNode(pos: CGPoint(x: xVal, y: yVal))
+        
+        func getRandomPoint() -> CGPoint { return CGPoint(x: randomX(), y: yVal) }
+      
+        var randomPoint = getRandomPoint()
+    
+        func randomizePoint() { randomPoint = getRandomPoint() }
+        
+        func getRandomRect()  -> CGRect {
+          return CGRect(middle: randomPoint,
+                        width: _gsi.size30.width,
+                        height: _gsi.size30.height)
+        }
+        
+        var randomRect = getRandomRect()
+        
+        while randomRect.intersects(fairRect) {
+          randomizePoint()
+          randomRect = getRandomRect()
+        }
+        
+        /*let shape = SKShapeNode(rect: randomRect); do {
+          shape.fillColor = .cyan
+          shape.physicsBody = SKPhysicsBody(rectangleOf: shape.frame.size)
+          gsi.addChild(shape)
+        }*/
+        
+        blackNode(pos: randomPoint)
       }
       
       scanline(pos: CGPoint(x: 0, y: yVal))
     }
   };
-};
 
 // MARK: - updateAction():
 extension GameScene {
@@ -140,6 +177,14 @@ extension GameScene {
     addChild(starterNode)
   }
   
+  private func devMode() {
+    gs.hits = -5000
+    
+    for _ in 0...devdifficulty {
+      upDifficulty()
+    }
+  }
+  
   override func didMove(to view: SKView) {
     
     UD.initUserDefaults()
@@ -156,18 +201,23 @@ extension GameScene {
     }
     
     updateAction()
-    //gs.hits = -500
+    
+    if devmode { devMode() }
+
     score = 0
     // OMFG what have I become??
   }
-}
+};
 
 // MARK: - Game Loop:
 extension GameScene {
-  private struct gs {
-    static var waiting = false      // Used for score increase at end of loop.
-    static var hits = 0             // Player HP.
-    static var hitThisFrame = false // Used to keep player alive when hit 2 black at same time.
+  
+  /// A bit of extra state just for game loop:
+  struct gs {
+    static var
+    waiting = false,      // Used for score increase at end of loop.
+    hits = 0,      // Player HP.
+    hitThisFrame = false      // Used to keep player alive when hit 2 black at same time.
   }
   
   override func update(_ currentTime: TimeInterval) {
@@ -178,50 +228,54 @@ extension GameScene {
     }
   }
   
-  private func doBlackAndYellow(contact: SKPhysicsContact) {
+  /// Static methods for didBegin():
+  private struct DoContact {
     
-    func assignYellowBlack() ->  (SKPhysicsBody, SKPhysicsBody) {
-      if contact.bodyA.categoryBitMask == Category.yellow {
-        return (contact.bodyA, contact.bodyB)
+    static func blackAndYellow(contact: SKPhysicsContact) {
+      
+      func assignYellowBlack() ->  (SKPhysicsBody, SKPhysicsBody) {
+        if contact.bodyA.categoryBitMask == Category.yellow {
+          return (contact.bodyA, contact.bodyB)
+        } else {
+          return (contact.bodyB, contact.bodyA)
+        }
+      }
+      
+      gs.hitThisFrame = true
+      
+      let (yellowNode, blackNode) = assignYellowBlack()
+      
+      yellowNode.node?.setScale(gsi.difficulty.boxSize)
+      blackNode.node?.removeFromParent()
+    }
+    
+    static func yellowAndLine(contact: SKPhysicsContact) {
+      score += 1
+      print(score)
+      
+      if contact.bodyA.categoryBitMask == Category.line {
+        if let a = contact.bodyA.node { killNode(a) }
       } else {
-        return (contact.bodyB, contact.bodyA)
+        if let b = contact.bodyB.node { killNode(b) }
       }
     }
     
-    gs.hitThisFrame = true
-    
-    let (yellowNode, blackNode) = assignYellowBlack()
-    
-    // yellowNode.node?.setScale(difficultyBoxSize)
-    blackNode.node?.removeFromParent()
-  }
-  
-  private func doYellowAndLine(contact: SKPhysicsContact) {
-    score += 1
-    print(score)
-    
-    if contact.bodyA.categoryBitMask == Category.line {
-      if let a = contact.bodyA.node { killNode(a) }
-    } else {
-      if let b = contact.bodyB.node { killNode(b) }
+    static func deathAndBlack(contact: SKPhysicsContact) {
+      if contact.bodyA.categoryBitMask == Category.black {
+        if let a = contact.bodyA.node { killNode(a) }
+      } else {
+        if let b = contact.bodyB.node { killNode(b) }
+      }
     }
-  }
-  
-  private func doDeathAndBlack(contact: SKPhysicsContact) {
-    if contact.bodyA.categoryBitMask == Category.black {
-      if let a = contact.bodyA.node { killNode(a) }
-    } else {
-      if let b = contact.bodyB.node { killNode(b) }
+    
+    static  func deathAndLine(contact: SKPhysicsContact) {
+      if contact.bodyA.categoryBitMask == Category.line {
+        if let a = contact.bodyA.node { killNode(a) }
+      } else {
+        if let b = contact.bodyB.node { killNode(b) }
+      }
     }
-  }
-  
-  private func doDeathAndLine(contact: SKPhysicsContact) {
-    if contact.bodyA.categoryBitMask == Category.line {
-      if let a = contact.bodyA.node { killNode(a) }
-    } else {
-      if let b = contact.bodyB.node { killNode(b) }
-    }
-  }
+  };
   
   func didBegin(_ contact: SKPhysicsContact) {
     
@@ -230,10 +284,10 @@ extension GameScene {
     let contactedCategories = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
     
     switch contactedCategories {
-    case Category.black  | Category.yellow : doBlackAndYellow(contact: contact)
-    case Category.yellow | Category.line   : doYellowAndLine (contact: contact)
-    case Category.black  | Category.death  : doDeathAndBlack (contact: contact)
-    case Category.line   | Category.death  : doDeathAndLine  (contact: contact)
+    case Category.black  | Category.yellow : DoContact.blackAndYellow(contact: contact)
+    case Category.yellow | Category.line   : DoContact.yellowAndLine (contact: contact)
+    case Category.black  | Category.death  : DoContact.deathAndBlack (contact: contact)
+    case Category.line   | Category.death  : DoContact.deathAndLine  (contact: contact)
     default: ()
     }
   }
@@ -247,17 +301,19 @@ extension GameScene {
   }
   
   /// Difficulty:
+  func upDifficulty() {
+    print("difficulty up!")
+    difficulty.boxNum += 1
+    difficulty.boxSpeed -= 0.1
+    updateAction()
+    
+    if gs.waiting { gs.waiting = false }
+    else { gs.waiting = true }
+  }
+  
   override func didFinishUpdate() {
     
-    func upDifficulty() {
-      print("difficulty up!")
-      difficulty.boxNum += 1
-      difficulty.boxSpeed -= 0.1
-      updateAction()
-      
-      if gs.waiting { gs.waiting = false }
-      else { gs.waiting = true }
-    }
+
     
     switch score {
     // case <#num#>: if  <#excl#>gs.waiting { upDifficulty() }

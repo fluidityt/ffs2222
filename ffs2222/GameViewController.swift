@@ -12,14 +12,19 @@
 // TODO: Options menu
 
 // FIXME: Update yellow box bound constraints
+// FIXME: Random global stuff in DoContact and Spawner
 
 import SpriteKit
 
 // Globals:
 var gview = SKView()
+var gsi   = GameScene()
 var score = 0 // Too lazy to make an init for other scenes...
 var highscore: Int = 0
 
+var devmode = false
+var devdifficulty = 5
+let fairness = CGFloat(15) // 5 points on either side?
 
 class GameViewController: UIViewController {
   
@@ -28,12 +33,13 @@ class GameViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    guard let view = self.view as! SKView? else { fatalError("wtf happened") }
-    view.ignoresSiblingOrder = true
-    view.showsFPS = true
-    view.showsNodeCount = true
-    view.frame = CGRect(x: 0, y: 0, width: mySize.width, height: mySize.height)
-    // g.view = view
+    guard let view = self.view as! SKView? else { fatalError("wtf happened") }; do {
+      view.ignoresSiblingOrder = true
+      view.showsFPS = true
+      view.showsNodeCount = true
+      view.frame = CGRect(x: 0, y: 0, width: mySize.width, height: mySize.height)
+      // g.view = view
+    }
     
     let scene = LaunchScene(size: CGSize(width: 600, height: 1000))
     scene.scaleMode = .aspectFit

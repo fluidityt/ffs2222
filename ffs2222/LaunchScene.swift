@@ -122,6 +122,8 @@ class LaunchScene: SKScene {
   }
   
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-    view!.presentScene(GameScene(size: size))
+    let scene: GameScene = GameScene(size: size)
+    gsi = scene
+    view!.presentScene(scene)
   }
 };

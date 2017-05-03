@@ -18,3 +18,19 @@ func setMasks(pb: SKPhysicsBody, cat: UInt32, cont: UInt32, col: UInt32) {
   pb.contactTestBitMask = cont
   pb.collisionBitMask = col
 }
+
+func beFair() -> CGRect {
+    return CGRect.zero
+}
+
+extension CGRect {
+  
+  init(middle: CGPoint, width: CGFloat, height: CGFloat) {
+    
+    let x = middle.x - (width/2)
+    let y = middle.y - (height/2)
+    
+    self.origin = CGPoint(x: x, y: y)
+    self.size   = CGSize(width: width, height: height)
+  }
+}

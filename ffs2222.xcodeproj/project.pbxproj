@@ -38,6 +38,7 @@
 		4D1991B91EB9D61100B2873B /* UserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		4D1991BB1EB9D72000B2873B /* Utilz.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilz.swift; sourceTree = "<group>"; };
 		4D1991BD1EB9D9EC00B2873B /* Sprites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sprites.swift; sourceTree = "<group>"; };
+		4D1991BF1EB9FF2D00B2873B /* CGRect test.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "CGRect test.playground"; sourceTree = "<group>"; };
 		4D3C18041EB5A656009A727C /* LaunchScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchScene.swift; sourceTree = "<group>"; };
 		4DF5AB9A1EB5D18E005A340A /* open animation.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "open animation.playground"; sourceTree = "<group>"; };
 		4DFA46971EB177C2008E5847 /* ffs2222.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ffs2222.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -125,6 +126,7 @@
 			children = (
 				4DFA46B51EB177C3008E5847 /* ffs2222Tests.swift */,
 				4DFA46B71EB177C3008E5847 /* Info.plist */,
+				4D1991BF1EB9FF2D00B2873B /* CGRect test.playground */,
 				4DF5AB9A1EB5D18E005A340A /* open animation.playground */,
 			);
 			path = ffs2222Tests;
