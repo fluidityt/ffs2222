@@ -1,7 +1,3 @@
-//
-//  GameViewController.swift
-//  ffs2222
-//
 //  Created by justin fluidity on 4/26/17.
 
 // DESIGN: Have boxes laugh at you once you die...
@@ -18,6 +14,12 @@
 // FIXME: Update yellow box bound constraints
 
 import SpriteKit
+
+// Globals:
+var gview = SKView()
+var score = 0 // Too lazy to make an init for other scenes...
+var highscore: Int = 0
+
 
 class GameViewController: UIViewController {
   

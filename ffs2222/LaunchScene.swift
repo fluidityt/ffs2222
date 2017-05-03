@@ -16,13 +16,15 @@ class LaunchScene: SKScene {
   
   func spawnBlackNode(pos: CGPoint)  {
     
-    let blackNode = SKSpriteNode(color: .white, size: size30)
-    let newPB = SKPhysicsBody(rectangleOf: size30)
-    newPB.velocity.dy -= CGFloat(randy(100))
-    blackNode.physicsBody = newPB
+    let blackNode = SKSpriteNode(color: .white, size: size30); do {
+      let newPB = SKPhysicsBody(rectangleOf: size30)
+      newPB.velocity.dy -= CGFloat(randy(100))
+      
+      blackNode.physicsBody = newPB
+      blackNode.name     = "black"
+      blackNode.position = pos
+    }
     
-    blackNode.name     = "black"
-    blackNode.position = pos
     addChild(blackNode)
   }
   
@@ -30,36 +32,38 @@ class LaunchScene: SKScene {
     
     let pos = CGPoint(x: 0, y: self.frame.minY - 15)
     let size = CGSize(width: frame.width, height: 10)
-    let stopper = SKSpriteNode(color: .blue, size: size)
-    stopper.position = pos
     
-    let newPB = SKPhysicsBody(rectangleOf: size)
-    newPB.affectedByGravity = false
-    newPB.pinned = true
-    newPB.allowsRotation = false
+    let stopper = SKSpriteNode(color: .blue, size: size); do {
+      let newPB = SKPhysicsBody(rectangleOf: size); do {
+        newPB.affectedByGravity = false
+        newPB.pinned            = true
+        newPB.allowsRotation    = false
+      }
+      stopper.position    = pos
+      stopper.physicsBody = newPB
+    }
     
-    stopper.physicsBody = newPB
     addChild(stopper)
   }
   
   func spawnSideLines() {
     
-    let sideL = SKSpriteNode(color: .orange, size: CGSize(width: 4,
-                                                        height: frame.size.height * 2))
-    let newPB = SKPhysicsBody(rectangleOf: sideL.frame.size)
-    newPB.affectedByGravity = false
-    newPB.allowsRotation = false
-    newPB.pinned = true
-    sideL.physicsBody = newPB
+    let sideL = SKSpriteNode(color: .orange, size: CGSize(width: 4, height: frame.size.height * 2)); do {
+      let newPB = SKPhysicsBody(rectangleOf: sideL.frame.size); do {
+        
+        newPB.affectedByGravity = false
+        newPB.allowsRotation = false
+        newPB.pinned = true
+      }
+      sideL.physicsBody = newPB
+      sideL.position.x = frame.minX - 2
+      sideL.position.y = frame.maxY
+    }
     
-    let sideR = sideL.copy() as! SKSpriteNode
-    
-    sideL.position.x = frame.minX - 2
-    sideL.position.y = frame.maxY
-    
-    sideR.position.x = frame.maxX + 2
-    sideR.position.y = frame.maxY
-    
+    let sideR = sideL.copy() as! SKSpriteNode; do {
+      sideR.position.x = frame.maxX + 2
+      sideR.position.y = frame.maxY
+    }
     addChild(sideL)
     addChild(sideR)
   }

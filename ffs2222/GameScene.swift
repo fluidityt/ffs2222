@@ -1,61 +1,6 @@
 import SpriteKit
 
-// ************************************************************* //
-
-fileprivate func killNode(_ node: SKNode) {
-  node.physicsBody = nil
-  node.removeAllChildren()
-  node.removeAllActions()
-  node.removeFromParent()
-}
-
-// Globals:
-var gview = SKView()
-var score = 0 // Too lazy to make an init for other scenes...
-var highscore: Int = 0
-
-
-func randy(_ num: Int) -> Int { return Int(arc4random_uniform(UInt32(num)))+1 }
-
-struct UD {
-  
-  static let userDefaults = UserDefaults.standard
-  
-  struct Keys {
-    static let highscore = "highschore"
-  }
-  
-  static func saveHighScore() {
-    
-    guard let oldHS = userDefaults.value(forKey: Keys.highscore) as? Int else { print("bad key"); return }
-    if score > oldHS {
-      userDefaults.setValue(score, forKey: Keys.highscore)
-      print("saved high score!")
-    }
-  }
-  static func loadHighScore() {
-    guard let value = userDefaults.value(forKey: Keys.highscore) else { print("no hs in UD"); return }
-    guard let hs = value as? Int else { print("value was not Int"); return }
-    highscore = hs
-    print("loaded high score!")
-  }
-  static func initUserDefaults() {
-    if userDefaults.value(forKey: Keys.highscore) == nil {
-      userDefaults.setValue(0, forKey: Keys.highscore)
-    }
-  }
-};
-
-func setMasks(pb: SKPhysicsBody, cat: UInt32, cont: UInt32, col: UInt32) {
-  pb.categoryBitMask = cat
-  pb.contactTestBitMask = cont
-  pb.collisionBitMask = col
-}
-// ************************************************************* //
-
-//
-// MARK: - GameScene init and stuff:
-//
+// MARK: - Main:
 class GameScene: SKScene, SKPhysicsContactDelegate {
   
   enum Category {
@@ -64,63 +9,77 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     three =   UInt32 (4),    line  =   UInt32 (8),    death =   UInt32 (16)
   };
   
-  /// Static funcs to spawn stuff:
-  struct Spawn {
+  var
+  difficulty = (boxNum: 4, boxSpeed: 1.0, boxSize: CGFloat(1.5)),
+  action: SKAction?,
+  player: Stuff?
+  
+  lazy var size30: CGSize = CGSize(width: 30, height: 30)
+  
+};
+
+// MARK: - Spawner
+extension GameScene {
+  struct Spawner {
     
-    private typealias C = Category
+    typealias C = Category
     
-    private var gsi: GameScene
+    var gsi: GameScene
     
     init(gsi: GameScene) { self.gsi = gsi }
     
     func yellowNode() {
+      let yellowNode = Stuff(color: .blue, size: gsi.size30); do {
+        let newPB = SKPhysicsBody(rectangleOf: gsi.size30); do {
+          setMasks(pb: newPB, cat: C.yellow, cont: C.black, col: C.zero)
+          newPB.affectedByGravity  = false
+        }
+        yellowNode.physicsBody = newPB
+        yellowNode.position.x += 35
+        yellowNode.position.y = gsi.frame.minY + 35
+      }
       
-      let newPB = SKPhysicsBody(rectangleOf: gsi.size30)
-      setMasks(pb: newPB, cat: C.yellow, cont: C.black, col: C.zero)
-      newPB.affectedByGravity  = false
-      
-      let yellowNode = Stuff(color: .blue, size: gsi.size30)
-      yellowNode.position.x += 35
-      yellowNode.position.y = gsi.frame.minY + 35
-      yellowNode.physicsBody = newPB
       gsi.addChild(yellowNode)
-      
       gsi.player = yellowNode
     }
     
     func blackNode(pos: CGPoint)  {
       
-      let newPB = SKPhysicsBody(rectangleOf: gsi.size30)
-      setMasks(pb: newPB, cat: C.black, cont: C.yellow | C.death, col: C.zero)
+      let blackNode = SKSpriteNode(color: .white, size: gsi.size30); do {
+        let newPB = SKPhysicsBody(rectangleOf: gsi.size30)
+        setMasks(pb: newPB, cat: C.black, cont: C.yellow | C.death, col: C.zero)
+        blackNode.physicsBody = newPB
+        blackNode.name     = "black"
+        blackNode.position = pos
+      }
       
-      let blackNode = SKSpriteNode(color: .white, size: gsi.size30)
-      blackNode.name     = "black"
-      blackNode.position = pos
-      blackNode.physicsBody = newPB
       gsi.addChild(blackNode)
     }
     
     func scanline(pos: CGPoint) {
       
-      let lineNode = SKSpriteNode(color: .clear, size: CGSize(width: gsi.frame.width, height: 1))
-      let newPB = SKPhysicsBody(rectangleOf: lineNode.size)
-      setMasks(pb: newPB, cat: C.line, cont: C.yellow | C.death, col: C.zero)
+      let lineNode = SKSpriteNode(color: .clear, size: CGSize(width: gsi.frame.width, height: 1)); do {
+        let newPB = SKPhysicsBody(rectangleOf: lineNode.size)
+        setMasks(pb: newPB, cat: C.line, cont: C.yellow | C.death, col: C.zero)
+        
+        lineNode.physicsBody = newPB
+        lineNode.position = pos
+      }
       
-      lineNode.physicsBody = newPB
-      lineNode.position = pos
       gsi.addChild(lineNode)
     }
     
     func deathLine() {
       
-      let lineNode = SKSpriteNode(color: .orange, size: CGSize(width: gsi.frame.width + 1000,
-                                                               height: 2))
-      let newPB = SKPhysicsBody(rectangleOf: lineNode.size)
-      newPB.affectedByGravity = false
-      setMasks(pb: newPB, cat: C.death, cont: C.black, col: C.zero)
-      
-      lineNode.physicsBody = newPB
-      // lineNode.position.y = frame.minY - size30.height
+      let lineNode = SKSpriteNode(color: .orange, size: CGSize(width: gsi.frame.width + 1000, height: 2)); do {
+        let newPB = SKPhysicsBody(rectangleOf: lineNode.size); do {
+          setMasks(pb: newPB, cat: C.death, cont: C.black, col: C.zero)
+          newPB.affectedByGravity = false
+        }
+        
+        lineNode.physicsBody = newPB
+        // lineNode.position.y = frame.minY - size30.height
+      }
       gsi.addChild(lineNode)
     }
     
@@ -133,7 +92,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func lineOfBlackBoxes() {
       
       let yVal = gsi.frame.maxY + (gsi.size30.height/2)
-      let numBoxes = gsi.difficultyBoxNum + randy(6)
+      let numBoxes = gsi.difficulty.boxNum + randy(6)
       
       for _ in 1...numBoxes {
         let randomX = randy(Int(gsi.frame.maxX * 2))
@@ -144,19 +103,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
       scanline(pos: CGPoint(x: 0, y: yVal))
     }
   };
-  
-  /// Props:
-  var
-  difficultyBoxNum = 4,
-  difficultyBoxSpeed = Double(1),
-  difficultyBoxSize = CGFloat(1.5),
-  action: SKAction?
-  
-  var player: Stuff?
-  
-  lazy var size30: CGSize = CGSize(width: 30, height: 30)
-  
-  private lazy var spawn: Spawn = Spawn(gsi: self)
+};
+
+// MARK: - updateAction():
+extension GameScene {
+  func updateAction() {
+    
+    removeAction(forKey: "spawner")
+    let wait     = SKAction.wait(forDuration: difficulty.boxSpeed)
+    let run      = SKAction.run { Spawner(gsi: self).lineOfBlackBoxes() }
+    let sequence = SKAction.sequence([wait, run])
+    self.action  = SKAction.repeatForever(sequence)
+    
+    self.run(action!, withKey: "spawner")
+  }
+};
+
+// MARK: - DMV:
+extension GameScene {
   
   private func selfInit() {
     //view!.frame = CGRect(x: 0, y: 0, width: 350, height: 350)
@@ -166,24 +130,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     physicsWorld.gravity = CGVector(dx: 0, dy: -0.25)
     
     let starterLabel = SKLabelNode(text: "DODGE FALLING BOXES!! Win at 50!!")
-    let starterNode = SKSpriteNode()
-    starterNode.size = starterLabel.frame.size
-    starterNode.physicsBody = SKPhysicsBody(rectangleOf: starterNode.size)
-    starterNode.addChild(starterLabel)
-    starterNode.position.y -= 50
+    let starterNode = SKSpriteNode(); do {
+      starterNode.size = starterLabel.frame.size
+      starterNode.physicsBody = SKPhysicsBody(rectangleOf: starterNode.size)
+      starterNode.addChild(starterLabel)
+      starterNode.position.y -= 50
+    }
     
     addChild(starterNode)
-  }
-  
-  func updateAction() {
-    
-    removeAction(forKey: "spawner")
-    let wait     = SKAction.wait(forDuration: difficultyBoxSpeed)
-    let run      = SKAction.run { self.spawn.lineOfBlackBoxes() }
-    let sequence = SKAction.sequence([wait, run])
-    self.action  = SKAction.repeatForever(sequence)
-    
-    self.run(action!, withKey: "spawner")
   }
   
   override func didMove(to view: SKView) {
@@ -194,11 +148,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     print("Welcome to Sprite Attack! Your HS is \(highscore)")
     
     selfInit()
-    spawn.yellowNode()
-    spawn.lineOfBlackBoxes()
-    spawn.deathLine()
-    spawn.touchPad()
-  
+    let spawn = Spawner(gsi: self); do {
+      spawn.yellowNode()
+      spawn.lineOfBlackBoxes()
+      spawn.deathLine()
+      spawn.touchPad()
+    }
+    
     updateAction()
     //gs.hits = -500
     score = 0
@@ -206,11 +162,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   }
 }
 
-//
 // MARK: - Game Loop:
-//
 extension GameScene {
-  struct gs {
+  private struct gs {
     static var waiting = false      // Used for score increase at end of loop.
     static var hits = 0             // Player HP.
     static var hitThisFrame = false // Used to keep player alive when hit 2 black at same time.
@@ -297,8 +251,8 @@ extension GameScene {
     
     func upDifficulty() {
       print("difficulty up!")
-      difficultyBoxNum += 1
-      difficultyBoxSpeed -= 0.1
+      difficulty.boxNum += 1
+      difficulty.boxSpeed -= 0.1
       updateAction()
       
       if gs.waiting { gs.waiting = false }
@@ -321,78 +275,3 @@ extension GameScene {
     }
   }
 };
-
-//
-// MARK: - Other classes:
-//
-final class TouchPad: SKSpriteNode {
-  
-  private var playerInstance: Stuff
-  
-  init(player: Stuff, scene: SKScene) {
-    playerInstance = player
-    
-    let color = SKColor.white
-    let size = CGSize(width: scene.size.width, height: (scene.size.height/2))
-    super.init(texture: nil, color: color, size: size)
-    
-    isUserInteractionEnabled = true
-  }
-  
-  required init?(coder aDecoder: NSCoder) { fatalError() }
-  
-  override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-    let t = touches.first!
-    
-    let dx = (t.location(in: self).x - t.previousLocation(in: self).x)
-    let dy = (t.location(in: self).y - t.previousLocation(in: self).y)
-    
-    playerInstance.position.x += dx
-    playerInstance.position.y += dy
-  }
-};
-
-final class Stuff: SKSpriteNode {
-  
-  init(color: SKColor, size: CGSize) {
-    super.init(texture: nil, color: color, size: size)
-    isUserInteractionEnabled = true
-  }
-  
-  required init?(coder aDecoder: NSCoder) { fatalError() }
-  
-  override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-    position = touches.first!.location(in: self.scene!)
-    
-  }
-  
-}
-
-class WinScene: SKScene {
-  override func didMove(to view: SKView) {
-    scaleMode = .aspectFit
-    anchorPoint = CGPoint(x: 0.5, y: 0.5)
-    addChild(SKLabelNode(text: "YOU WON! PLAY AGAIN"))
-    score = 0
-  }
-  
-  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-    view!.presentScene(GameScene(size: size))
-  }
-  
-};
-
-class FailScene: SKScene {
-  override func didMove(to view: SKView) {
-    scaleMode = .aspectFit
-    anchorPoint = CGPoint(x: 0.5, y: 0.5)
-    addChild(SKLabelNode(text: "score: \(score)! | highscore: \(highscore) |   PLAY AGAIN"))
-    
-    score = 0
-  }
-  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-    view!.presentScene(GameScene(size: size))
-  }
-};
-
-
