@@ -158,16 +158,6 @@ extension GameScene {
     anchorPoint = CGPoint(x: 0.5, y: 0.5)
     physicsWorld.contactDelegate = self
     physicsWorld.gravity = CGVector(dx: 0, dy: -0.25)
-    
-    let starterLabel = SKLabelNode(text: "DODGE FALLING BOXES!! Win at 50!!")
-    let starterNode = SKSpriteNode(); do {
-      starterNode.size = starterLabel.frame.size
-      starterNode.physicsBody = SKPhysicsBody(rectangleOf: starterNode.size)
-      starterNode.addChild(starterLabel)
-      starterNode.position.y -= 50
-    }
-    
-    addChild(starterNode)
   }
   
   private func devMode() {
@@ -180,7 +170,16 @@ extension GameScene {
     }
   }
   
+  private func spawnStuff() {
+    let spawn = Spawner(gsi: self)
+    spawn.yellowNode()
+    spawn.lineOfBlackBoxes()
+    spawn.deathLine()
+    spawn.touchPad()
+  }
+  
   override func didMove(to view: SKView) {
+    // OMFG what have I become??
     
     UD.initUserDefaults()
     UD.loadHighScore()
@@ -188,19 +187,14 @@ extension GameScene {
     print("Welcome to Sprite Attack! Your HS is \(highscore)")
     
     selfInit()
-    let spawn = Spawner(gsi: self); do {
-      spawn.yellowNode()
-      spawn.lineOfBlackBoxes()
-      spawn.deathLine()
-      spawn.touchPad()
-    }
+    
+    spawnStuff()
     
     updateAction()
     
     if devmode { devMode() }
 
     score = 0
-    // OMFG what have I become??
   }
 };
 
@@ -210,17 +204,29 @@ extension GameScene {
   /// A bit of extra state just for game loop:
   struct gs {
     static var
-    waiting = false,      // Used for score increase at end of loop.
-    hits = 0,      // Player HP.
+    waiting      = false,     // Used for score increase at end of loop.
+    hits         = 0,         // Player HP.
     hitThisFrame = false      // Used to keep player alive when hit 2 black at same time.
+  }
+  
+  private func keepPlayerInBounds() {
+    guard let playa = player else { fatalError("issue with player") }
+    
+    let bounds = (bottom: frame.midY + playa.size.height/2,
+                  top:    frame.maxY - playa.size.height/2,
+                  left:   frame.minX + playa.size.width/2,
+                  right:  frame.maxX + playa.size.width/2)
+    
+    if playa.position.y < bounds.bottom { playa.position.y = bounds.bottom }
+    if playa.position.y > bounds.top    { playa.position.y = bounds.top   }
+    if playa.position.x < bounds.left   { playa.position.x = bounds.left   }
+    if playa.position.x > bounds.right  { playa.position.x = bounds.right  }
   }
   
   override func update(_ currentTime: TimeInterval) {
     gs.hitThisFrame = false
     
-    if (player?.position.y)! < frame.midY {
-      player!.position.y = frame.midY
-    }
+    keepPlayerInBounds()
   }
   
   /// Static methods for didBegin():
@@ -231,7 +237,8 @@ extension GameScene {
       func assignYellowBlack() ->  (SKPhysicsBody, SKPhysicsBody) {
         if contact.bodyA.categoryBitMask == Category.yellow {
           return (contact.bodyA, contact.bodyB)
-        } else {
+        }
+        else {
           return (contact.bodyB, contact.bodyA)
         }
       }
@@ -250,7 +257,8 @@ extension GameScene {
       
       if contact.bodyA.categoryBitMask == Category.line {
         if let a = contact.bodyA.node { killNode(a) }
-      } else {
+      }
+      else {
         if let b = contact.bodyB.node { killNode(b) }
       }
     }
@@ -258,7 +266,8 @@ extension GameScene {
     static func deathAndBlack(contact: SKPhysicsContact) {
       if contact.bodyA.categoryBitMask == Category.black {
         if let a = contact.bodyA.node { killNode(a) }
-      } else {
+      }
+      else {
         if let b = contact.bodyB.node { killNode(b) }
       }
     }
@@ -266,7 +275,8 @@ extension GameScene {
     static  func deathAndLine(contact: SKPhysicsContact) {
       if contact.bodyA.categoryBitMask == Category.line {
         if let a = contact.bodyA.node { killNode(a) }
-      } else {
+      }
+      else {
         if let b = contact.bodyB.node { killNode(b) }
       }
     }
@@ -308,20 +318,11 @@ extension GameScene {
   
   override func didFinishUpdate() {
     
-
-    
     switch score {
     // case <#num#>: if  <#excl#>gs.waiting { upDifficulty() }
     case 10: if !gs.waiting { upDifficulty() }
     case 20: if  gs.waiting { upDifficulty() }
     case 30: if !gs.waiting { upDifficulty() }
-      //case 40: if  gs.waiting { upDifficulty() }
-      /*    case 50: if !gs.waiting { upDifficulty() }
-       case 60: if  gs.waiting { upDifficulty() }
-       case 70: if !gs.waiting { upDifficulty() }
-       case 80: if  gs.waiting { upDifficulty() }
-       case 90: if !gs.waiting { upDifficulty() }
-       case 100: view!.presentScene(WinScene(size: size))*/
     default: ()
     }
   }

@@ -9,6 +9,7 @@
 
 // CREV: Random global stuff in DoContact and Spawner
 // CREV: Config file (difficulty / globals)
+// CREV: DoContact in serious need of guards
 
 // TODO: Add devmode to startscreen and options menu
 // TODO: Add fullscreen version
@@ -19,7 +20,6 @@
 // TODO: Options menu
 // TODO: Better game over screen
 
-// FIXME: Update yellow box bound constraints (all sides)
 // FIXME: Highscore on die-screen is broken if you get a new highscore
 // FIXME: Super lag loading screen.
 // FIXME: Horizontal double box hit still kills
