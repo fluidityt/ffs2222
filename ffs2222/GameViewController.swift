@@ -32,6 +32,7 @@ var gview = SKView()
 var gsi   = GameScene()
 var score = 0 // Too lazy to make an init for other scenes...
 var highscore: Int = 0
+var mainmenu: MainMenuScene? = nil
 
 var devmode = false
 var devdifficulty = 0
@@ -52,7 +53,7 @@ class GameViewController: UIViewController {
       // g.view = view
     }
     
-    let scene = LaunchScene(size: CGSize(width: 600, height: 1000))
+    let scene = MainMenuScene(size: CGSize(width: 600, height: 1000))
     scene.scaleMode = .aspectFit
     view.presentScene(scene)
   }

@@ -1,8 +1,9 @@
-//
-// LaunchScene.swift
 
-import SpriteKit
 
+/*
+ 
+ // laggy launch scene!
+ 
 class LaunchScene: SKScene {
   
   lazy var numBoxesX: Int = Int(self.frame.size.width / 30)
@@ -24,7 +25,6 @@ class LaunchScene: SKScene {
       blackNode.name     = "black"
       blackNode.position = pos
     }
-    
     addChild(blackNode)
   }
   
@@ -127,3 +127,4 @@ class LaunchScene: SKScene {
     view!.presentScene(scene)
   }
 };
+*/
