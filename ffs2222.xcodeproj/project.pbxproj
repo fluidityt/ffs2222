@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4D0AC0451EBB49790078DB73 /* OptionScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0AC0441EBB49790078DB73 /* OptionScene.swift */; };
 		4D1991B81EB9D5B500B2873B /* OtherScenes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D1991B71EB9D5B500B2873B /* OtherScenes.swift */; };
 		4D1991BA1EB9D61100B2873B /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D1991B91EB9D61100B2873B /* UserDefaults.swift */; };
 		4D1991BC1EB9D72000B2873B /* Utilz.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D1991BB1EB9D72000B2873B /* Utilz.swift */; };
@@ -35,6 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4D0AC0441EBB49790078DB73 /* OptionScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionScene.swift; sourceTree = "<group>"; };
 		4D1991B71EB9D5B500B2873B /* OtherScenes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OtherScenes.swift; sourceTree = "<group>"; };
 		4D1991B91EB9D61100B2873B /* UserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		4D1991BB1EB9D72000B2873B /* Utilz.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilz.swift; sourceTree = "<group>"; };
@@ -76,9 +78,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4D0AC0481EBB4A3C0078DB73 /* _____________________________ */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "_____________________________";
+			sourceTree = "<group>";
+		};
 		4DF5AB9B1EB5EC28005A340A /* junk */ = {
 			isa = PBXGroup;
 			children = (
+				4DFA46A71EB177C3008E5847 /* Assets.xcassets */,
 				4DFA469A1EB177C3008E5847 /* AppDelegate.swift */,
 				4DFA469C1EB177C3008E5847 /* GameScene.sks */,
 				4DFA469E1EB177C3008E5847 /* Actions.sks */,
@@ -112,14 +122,15 @@
 			isa = PBXGroup;
 			children = (
 				4DF5AB9B1EB5EC28005A340A /* junk */,
-				4DFA46A21EB177C3008E5847 /* GameViewController.swift */,
 				4DFA46A01EB177C3008E5847 /* GameScene.swift */,
 				4D3C18041EB5A656009A727C /* MainMenuScene.swift */,
 				4D1991B71EB9D5B500B2873B /* OtherScenes.swift */,
+				4D0AC0441EBB49790078DB73 /* OptionScene.swift */,
+				4D0AC0481EBB4A3C0078DB73 /* _____________________________ */,
+				4DFA46A21EB177C3008E5847 /* GameViewController.swift */,
 				4D1991B91EB9D61100B2873B /* UserDefaults.swift */,
 				4D1991BD1EB9D9EC00B2873B /* Sprites.swift */,
 				4D1991BB1EB9D72000B2873B /* Utilz.swift */,
-				4DFA46A71EB177C3008E5847 /* Assets.xcassets */,
 			);
 			path = ffs2222;
 			sourceTree = "<group>";
@@ -179,6 +190,9 @@
 		4DFA468F1EB177C2008E5847 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				KnownAssetTags = (
+					New,
+				);
 				LastSwiftUpdateCheck = 0820;
 				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "justin fluidity";
@@ -250,6 +264,7 @@
 				4D1991C11EBAB45B00B2873B /* old launch scene.swift in Sources */,
 				4D1991B81EB9D5B500B2873B /* OtherScenes.swift in Sources */,
 				4DFA469B1EB177C3008E5847 /* AppDelegate.swift in Sources */,
+				4D0AC0451EBB49790078DB73 /* OptionScene.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -336,6 +351,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS[arch=*]" = "-Xfrontend -debug-time-function-bodies";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -392,8 +408,10 @@
 				INFOPLIST_FILE = ffs2222/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				"OTHER_SWIFT_FLAGS[arch=*]" = "-Xfrontend -debug-time-function-bodies -Onone";
 				PRODUCT_BUNDLE_IDENTIFIER = zigg.ffs2222;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -406,6 +424,7 @@
 				INFOPLIST_FILE = ffs2222/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				"OTHER_SWIFT_FLAGS[arch=*]" = "-Xfrontend -debug-time-function-bodies";
 				PRODUCT_BUNDLE_IDENTIFIER = zigg.ffs2222;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;

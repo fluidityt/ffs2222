@@ -4,7 +4,7 @@
 
 import SpriteKit
 
-class WinScene: SKScene {
+final class WinScene: SKScene {
   override func didMove(to view: SKView) {
     scaleMode = .aspectFit
     anchorPoint = CGPoint(x: 0.5, y: 0.5)
@@ -16,7 +16,7 @@ class WinScene: SKScene {
   }
 };
 
-class FailScene: SKScene {
+final class FailScene: SKScene {
   override func didMove(to view: SKView) {
     scaleMode = .aspectFit
     anchorPoint = CGPoint(x: 0.5, y: 0.5)

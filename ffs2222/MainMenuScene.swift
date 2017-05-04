@@ -3,23 +3,7 @@
 
 import SpriteKit
 
-class OptionLabel: SKLabelNode {
-  
-  init(texter: String) {
-    super.init(fontNamed: "Chalkduster")
-    self.text = "Options"
-    isUserInteractionEnabled = true
-  }
-  
-  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-    
-  }
-  
-  required init?(coder aDecoder: NSCoder) { fatalError("") }
-  override init() { super.init() }
-};
-
-class MainMenuScene: SKScene {
+final class MainMenuScene: SKScene {
   
   private final class PlayLabel: SKLabelNode {
     
@@ -35,6 +19,22 @@ class MainMenuScene: SKScene {
       self.scene!.view!.presentScene(scene)
     }
 
+    required init?(coder aDecoder: NSCoder) { fatalError("") }
+    override init() { super.init() }
+  };
+  
+  private final class OptionLabel: SKLabelNode {
+    
+    init(texter: String) {
+      super.init(fontNamed: "Chalkduster")
+      self.text = "Options"
+      isUserInteractionEnabled = true
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+      
+    }
+    
     required init?(coder aDecoder: NSCoder) { fatalError("") }
     override init() { super.init() }
   };
@@ -67,7 +67,7 @@ class MainMenuScene: SKScene {
     
   };
   
-  func spawnLabels() {
+  private func spawnLabels() {
     
     options: do {
       let label = SKLabelNode(text: "Options")
