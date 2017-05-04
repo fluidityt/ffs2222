@@ -6,22 +6,25 @@
 // DESIGN: Boxes rotate / warp?
 // DESIGN: Make whole screen touchable?
 // DESIGN: Increase difficulty
+// DESIGN: Powerups / attacks?
+// DESIGN: Difficulty?
 
 // CREV: Random global stuff in DoContact and Spawner
 // CREV: Config file (difficulty / globals)
 // CREV: DoContact in serious need of guards
 
-// TODO: Add devmode to startscreen and options menu
-// TODO: Add fullscreen version
+// TODO: Add win caption to failscene
 // TODO: Add score label
 // TODO: Options screen
 // TODO: Eye animations
 // TODO: GameCenter
 // TODO: Options menu
-// TODO: Better game over screen
+// TODO: Add fullscreen version
+
+// MAYBE: Add complex devmode to startscreen and options menu
+// MAYBE: Add top 10 HS with names
 
 // FIXME: Highscore on die-screen is broken if you get a new highscore
-// FIXME: Super lag loading screen.
 // FIXME: Horizontal double box hit still kills
 // -----> need to actually delete the whole "box" even if it is 3-4 long etc
 
@@ -44,6 +47,8 @@ class GameViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+  
+    // UD.setHighScore(to: 104)
     
     guard let view = self.view as! SKView? else { fatalError("wtf happened") }; do {
       view.ignoresSiblingOrder = true

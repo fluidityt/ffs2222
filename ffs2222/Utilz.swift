@@ -19,6 +19,13 @@ func setMasks(pb: SKPhysicsBody, cat: UInt32, cont: UInt32, col: UInt32) {
   pb.collisionBitMask = col
 }
 
+func changeFont(labels: [SKLabelNode]) {
+  for label in labels {
+    label.fontName = "Chalkduster"
+  }
+}
+
+
 func beFair() -> CGRect {
     return CGRect.zero
 }
@@ -35,5 +42,11 @@ extension CGRect {
   }
 }
 
-
+extension SKNode {
+  func addChildren(_ nodes: [SKNode]) {
+    for node in nodes {
+      self.addChild(node)
+    }
+  }
+}
 

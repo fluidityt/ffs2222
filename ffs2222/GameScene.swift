@@ -284,7 +284,7 @@ extension GameScene {
   
   func didBegin(_ contact: SKPhysicsContact) {
     
-    defer { UD.saveHighScore() }
+    defer { if !devmode { UD.saveHighScore() } }
     
     let contactedCategories = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
     
