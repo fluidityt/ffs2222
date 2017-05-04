@@ -79,7 +79,7 @@ fileprivate  struct Spawner {
         }
         
         lineNode.physicsBody = newPB
-        // lineNode.position.y = frame.minY - size30.height
+        lineNode.position.y -= 30
       }
       _gsi.addChild(lineNode)
     }
@@ -101,8 +101,7 @@ fileprivate  struct Spawner {
       let yVal = _gsi.frame.maxY + (_gsi.size30.height/2)
       let numBoxes = _gsi.difficulty.boxNum + randy(6)
       
-      // Fairness:
-      
+      let fairness = CGFloat(15) // 5 points on either side?
       let fairRect = CGRect(middle: CGPoint(x: randomX(), y: yVal),
                             width:  _gsi.size30.width + fairness,
                             height: _gsi.size30.height)
@@ -128,12 +127,6 @@ fileprivate  struct Spawner {
           randomizePoint()
           randomRect = getRandomRect()
         }
-        
-        /*let shape = SKShapeNode(rect: randomRect); do {
-          shape.fillColor = .cyan
-          shape.physicsBody = SKPhysicsBody(rectangleOf: shape.frame.size)
-          gsi.addChild(shape)
-        }*/
         
         blackNode(pos: randomPoint)
       }
@@ -180,8 +173,10 @@ extension GameScene {
   private func devMode() {
     gs.hits = -5000
     
-    for _ in 0...devdifficulty {
-      upDifficulty()
+    if devdifficulty > 0 {
+      for _ in 1...devdifficulty {
+        upDifficulty()
+      }
     }
   }
   

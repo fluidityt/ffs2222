@@ -4,15 +4,26 @@
 // DESIGN: Game mode... TWO yellow boxes??
 // DESIGN: Different shapes?
 // DESIGN: Boxes rotate / warp?
+// DESIGN: Make whole screen touchable?
+// DESIGN: Increase difficulty
 
-// TODO: Fairness algo
+// CREV: Random global stuff in DoContact and Spawner
+// CREV: Config file (difficulty / globals)
+
+// TODO: Add devmode to startscreen and options menu
+// TODO: Add fullscreen version
+// TODO: Add score label
 // TODO: Options screen
 // TODO: Eye animations
 // TODO: GameCenter
 // TODO: Options menu
+// TODO: Better game over screen
 
-// FIXME: Update yellow box bound constraints
-// FIXME: Random global stuff in DoContact and Spawner
+// FIXME: Update yellow box bound constraints (all sides)
+// FIXME: Highscore on die-screen is broken if you get a new highscore
+// FIXME: Super lag loading screen.
+// FIXME: Horizontal double box hit still kills
+// -----> need to actually delete the whole "box" even if it is 3-4 long etc
 
 import SpriteKit
 
@@ -23,8 +34,8 @@ var score = 0 // Too lazy to make an init for other scenes...
 var highscore: Int = 0
 
 var devmode = false
-var devdifficulty = 5
-let fairness = CGFloat(15) // 5 points on either side?
+var devdifficulty = 0
+
 
 class GameViewController: UIViewController {
   
