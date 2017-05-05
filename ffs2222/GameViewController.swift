@@ -10,8 +10,8 @@
 // DESIGN: Difficulty?
 // DESIGN: Challenge and cheat mode--show icons next to hiscores
 // DESIGN: Black bar with score label, and joystick underneath?
-// -----------------------------------------------------------------
 
+// -----------------------------------------------------------------
 // BORED: Build a menu class... use tuples for named props? (protocol conform?)
 
 // ------------------------------------------------------------------

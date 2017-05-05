@@ -218,11 +218,7 @@ extension GameScene {
     updateAction()
     
     if devmode { devMode() }
-    if fullmode {
-    //  upDifficulty()
-      //upDifficulty()
-      upDifficulty()
-    }
+    if fullmode { difficulty.boxSpeed -= 0.15 }
     score = 0
   }
 };

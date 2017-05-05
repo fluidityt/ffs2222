@@ -47,13 +47,13 @@ final class Stuff: SKSpriteNode {
   
   init(color: SKColor, size: CGSize) {
     super.init(texture: nil, color: color, size: size)
-    isUserInteractionEnabled = true
+   // isUserInteractionEnabled = true
   }
   
   required init?(coder aDecoder: NSCoder) { fatalError() }
   
   override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-    position = touches.first!.location(in: self.scene!)
+    // position = touches.first!.location(in: self.scene!)
     
   }
 };
