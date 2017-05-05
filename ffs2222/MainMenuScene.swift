@@ -150,13 +150,25 @@ final class MainMenuScene: SKScene {
     
   }
   
+  /// let isplaying = RefBool(false)
+  
   private func makeLabels() {
     addChild(PlayLabel    (texter: ""))
     addChild(DevModeLabel (texter: ""))
     addChild(SpinModeLabel(texter: ""))
     addChild(FadeModeLabel(texter: ""))
     addChild(FullModeLabel(texter: ""))
+    
+    /// addChild(Toggler(labelName: "Play Game", refBool: isplaying))
   }
+  
+  /**
+  override func update(_ currentTime: TimeInterval) {
+    if isplaying.value {
+    isplaying.value = false
+      view!.presentScene(GameScene(size: size))
+    }
+  }*/
   
   // COMPATIBILITY FOR iOS 9:
   private var firstrun = true

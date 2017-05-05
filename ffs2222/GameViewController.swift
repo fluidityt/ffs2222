@@ -23,7 +23,7 @@ class GameViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-  
+    
     // UD.setHighScore(to: 0)
     
     guard let view = self.view as! SKView? else { fatalError("wtf happened") }; do {
