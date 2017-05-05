@@ -22,21 +22,24 @@ final class TouchPad: SKSpriteNode {
       color = .white
       size = CGSize(width: scene.size.width, height: (scene.size.height/2))
     }
-    super.init(texture: nil, color: color, size: size)
     
+    super.init(texture: nil, color: color, size: size)
+    zPosition += 1
     isUserInteractionEnabled = true
   }
   
   required init?(coder aDecoder: NSCoder) { fatalError() }
   
   override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-    let t = touches.first!
-    
-    let dx = (t.location(in: self).x - t.previousLocation(in: self).x)
-    let dy = (t.location(in: self).y - t.previousLocation(in: self).y)
-    
-    playerInstance.position.x += dx
-    playerInstance.position.y += dy
+
+    for t in touches {
+      
+      let dx = (t.location(in: self).x - t.previousLocation(in: self).x)
+      let dy = (t.location(in: self).y - t.previousLocation(in: self).y)
+      
+      playerInstance.position.x += dx
+      playerInstance.position.y += dy
+    }
   }
 };
 

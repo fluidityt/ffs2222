@@ -219,8 +219,8 @@ extension GameScene {
     
     if devmode { devMode() }
     if fullmode {
-      upDifficulty()
-      upDifficulty()
+    //  upDifficulty()
+      //upDifficulty()
       upDifficulty()
     }
     score = 0

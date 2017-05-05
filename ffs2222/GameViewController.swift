@@ -10,32 +10,34 @@
 // DESIGN: Difficulty?
 // DESIGN: Challenge and cheat mode--show icons next to hiscores
 // DESIGN: Black bar with score label, and joystick underneath?
+// -----------------------------------------------------------------
 
 // BORED: Build a menu class... use tuples for named props? (protocol conform?)
 
-// LEARN: Invisible full-screen overlay that receives touches
-
+// ------------------------------------------------------------------
 // CREV: Random global stuff in DoContact and Spawner
 // CREV: Config file (difficulty / globals)
 // CREV: DoContact in serious need of guards
 // CREV: Change mainmenu labels to support util funcs
 
+// ------------------------------------------------------------------
 // TODO: Fast-fall mode (but less blocks)
 // TODO: Add pause feature (with timer)
 // TODO: Auto-pause on home or screen-lock (may need to free assets)
 // TODO: Add win caption to failscene
 // TODO: Add score label
-// TODO: Options screen
+// TODO: GameCenter
+// TODO: Options menu
 // TODO: Eye animations
 // TODO: Death animation
 // TODO: Pulsating animation (color stride)
-// TODO: GameCenter
-// TODO: Options menu
-// TODO: Add fullscreen version
 
+// ------------------------------------------------------------------
 // MAYBE: Add complex devmode to startscreen and options menu
 // MAYBE: Add top 10 HS with names
 
+// ------------------------------------------------------------------
+// FIXME: Conver all touches to for loop
 // FIXME: Highscore on die-screen is broken if you get a new highscore
 // FIXME: Horizontal double box hit still kills
 // -----> need to actually delete the whole "box" even if it is 3-4 long etc

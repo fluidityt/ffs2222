@@ -148,7 +148,7 @@ final class MainMenuScene: SKScene {
     override init() { super.init() }
     required init?(coder aDecoder: NSCoder) { fatalError("") }
     
-  };
+  }
   
   private func makeLabels() {
     addChild(PlayLabel    (texter: ""))
@@ -158,10 +158,18 @@ final class MainMenuScene: SKScene {
     addChild(FullModeLabel(texter: ""))
   }
   
-  override func sceneDidLoad() {
+  // COMPATIBILITY FOR iOS 9:
+  private var firstrun = true
+  
+  override func didMove(to view: SKView) {
+    guard firstrun else { return }
+
     mainmenu = self
     anchorPoint = CGPoint(x: 0.5, y: 0.5)
-    
+    print("hi")
     makeLabels()
+    
+    // COMPATIBILITY IOS 9
+    firstrun = false
   }
 };
