@@ -20,9 +20,7 @@ func setMasks(pb: SKPhysicsBody, cat: UInt32, cont: UInt32, col: UInt32) {
 }
 
 func changeFont(_ labels: [SKLabelNode]) {
-  for label in labels {
-    label.fontName = "Chalkduster"
-  }
+  for label in labels { label.fontName = "Chalkduster" }
 }
 
 /// Top label is [0]
@@ -31,11 +29,6 @@ func offSetLabel(_ labels: [SKLabelNode], by amount: CGFloat = 50) {
     if label == labels[0] { continue } else { counter += 1 }
     label.position.y = labels[0].position.y - (labels[0].frame.height + amount) * counter
   }
-}
-
-
-func beFair() -> CGRect {
-    return CGRect.zero
 }
 
 extension CGRect {

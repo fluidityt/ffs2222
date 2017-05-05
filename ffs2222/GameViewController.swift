@@ -9,13 +9,18 @@
 // DESIGN: Powerups / attacks?
 // DESIGN: Difficulty?
 // DESIGN: Challenge and cheat mode--show icons next to hiscores
+// DESIGN: Black bar with score label, and joystick underneath?
+
+// BORED: Build a menu class... use tuples for named props? (protocol conform?)
+
+// LEARN: Invisible full-screen overlay that receives touches
 
 // CREV: Random global stuff in DoContact and Spawner
 // CREV: Config file (difficulty / globals)
 // CREV: DoContact in serious need of guards
 // CREV: Change mainmenu labels to support util funcs
 
-// TODO: Add options to navigate to main menu (keep mainmenu in memory)
+// TODO: Fast-fall mode (but less blocks)
 // TODO: Add pause feature (with timer)
 // TODO: Auto-pause on home or screen-lock (may need to free assets)
 // TODO: Add win caption to failscene
@@ -49,6 +54,8 @@ var devdifficulty = 0
 var devmode    = false
 var spinning   = false
 var fademode   = false
+var fullmode   = false
+
 
 class GameViewController: UIViewController {
   

@@ -122,11 +122,40 @@ final class MainMenuScene: SKScene {
     
   };
   
+  private final class FullModeLabel: SKLabelNode {
+    
+    func fullModeOff() {
+      fullmode = false
+      self.text = "FullMode Off"
+    }
+    
+    func fullModeOn() {
+      fullmode = true
+      self.text = "FullMode On"
+    }
+    
+    init(texter: String) {
+      super.init(fontNamed: "Chalkduster")
+      self.text = "FullMode Off"
+      isUserInteractionEnabled = true
+      position.y -= 400
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+      if fullmode { fullModeOff() } else { fullModeOn() }
+    }
+    
+    override init() { super.init() }
+    required init?(coder aDecoder: NSCoder) { fatalError("") }
+    
+  };
+  
   private func makeLabels() {
     addChild(PlayLabel    (texter: ""))
     addChild(DevModeLabel (texter: ""))
     addChild(SpinModeLabel(texter: ""))
     addChild(FadeModeLabel(texter: ""))
+    addChild(FullModeLabel(texter: ""))
   }
   
   override func sceneDidLoad() {

@@ -12,8 +12,16 @@ final class TouchPad: SKSpriteNode {
   init(player: Stuff, scene: SKScene) {
     playerInstance = player
     
-    let color = SKColor.white
-    let size = CGSize(width: scene.size.width, height: (scene.size.height/2))
+    let color: SKColor
+    let size: CGSize
+    if fullmode {
+      color = .clear
+      size = gsi.size
+      assert(gsi.size.height > 10)
+    } else {
+      color = .white
+      size = CGSize(width: scene.size.width, height: (scene.size.height/2))
+    }
     super.init(texture: nil, color: color, size: size)
     
     isUserInteractionEnabled = true
