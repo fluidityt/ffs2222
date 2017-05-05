@@ -67,31 +67,72 @@ final class MainMenuScene: SKScene {
     
   };
   
-  private func spawnLabels() {
+  private final class SpinModeLabel: SKLabelNode {
     
-    options: do {
-      let label = SKLabelNode(text: "Options")
-      label.fontColor = .white
-      label.position.y -= 200
-      label.zPosition += 1
-      label.setScale(3)
-      addChild(label)
+    func spinModeOff() {
+      spinning = false
+      self.text = "SpinMode Off"
     }
     
-    sprites: do {
-      let label = SKLabelNode(text: "Sprite Attack!")
-      label.fontColor = .yellow
-      label.position.y += 200
-      label.zPosition += 1
-      label.setScale(3.5)
-      addChild(label)
+    func spinModeOn() {
+      spinning = true
+      self.text = "SpinMode On"
     }
+    
+    init(texter: String) {
+      super.init(fontNamed: "Chalkduster")
+      self.text = "SpinMode Off"
+      isUserInteractionEnabled = true
+      position.y -= 200
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+      if spinning { spinModeOff() } else { spinModeOn() }
+    }
+    
+    override init() { super.init() }
+    required init?(coder aDecoder: NSCoder) { fatalError("") }
+  };
+  
+  private final class FadeModeLabel: SKLabelNode {
+    
+    func fadeModeOff() {
+      fademode = false
+      self.text = "FadeMode Off"
+    }
+    
+    func fadeModeOn() {
+      fademode = true
+      self.text = "FadeMode On"
+    }
+    
+    init(texter: String) {
+      super.init(fontNamed: "Chalkduster")
+      self.text = "FadeMode Off"
+      isUserInteractionEnabled = true
+      position.y -= 300
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+      if fademode { fadeModeOff() } else { fadeModeOn() }
+    }
+    
+    override init() { super.init() }
+    required init?(coder aDecoder: NSCoder) { fatalError("") }
+    
+  };
+  
+  private func makeLabels() {
+    addChild(PlayLabel    (texter: ""))
+    addChild(DevModeLabel (texter: ""))
+    addChild(SpinModeLabel(texter: ""))
+    addChild(FadeModeLabel(texter: ""))
   }
   
-  override func didMove(to view: SKView) {
+  override func sceneDidLoad() {
     mainmenu = self
     anchorPoint = CGPoint(x: 0.5, y: 0.5)
-    addChild(PlayLabel   (texter: ""))
-    addChild(DevModeLabel(texter: ""))
+    
+    makeLabels()
   }
 };

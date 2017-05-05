@@ -37,6 +37,7 @@
 /* Begin PBXFileReference section */
 		4D0AC0441EBB49790078DB73 /* OptionScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionScene.swift; sourceTree = "<group>"; };
 		4D0AC04A1EBB56E70078DB73 /* File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		4D0AC04C1EBC2CA40078DB73 /* TestScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = TestScene.sks; sourceTree = "<group>"; };
 		4D1991B71EB9D5B500B2873B /* FailScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FailScene.swift; sourceTree = "<group>"; };
 		4D1991B91EB9D61100B2873B /* UserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		4D1991BB1EB9D72000B2873B /* Utilz.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilz.swift; sourceTree = "<group>"; };
@@ -147,6 +148,7 @@
 				4DFA46B71EB177C3008E5847 /* Info.plist */,
 				4D1991BF1EB9FF2D00B2873B /* CGRect test.playground */,
 				4DF5AB9A1EB5D18E005A340A /* open animation.playground */,
+				4D0AC04C1EBC2CA40078DB73 /* TestScene.sks */,
 			);
 			path = ffs2222Tests;
 			sourceTree = "<group>";

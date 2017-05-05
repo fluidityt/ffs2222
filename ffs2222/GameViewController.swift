@@ -8,15 +8,22 @@
 // DESIGN: Increase difficulty
 // DESIGN: Powerups / attacks?
 // DESIGN: Difficulty?
+// DESIGN: Challenge and cheat mode--show icons next to hiscores
 
 // CREV: Random global stuff in DoContact and Spawner
 // CREV: Config file (difficulty / globals)
 // CREV: DoContact in serious need of guards
+// CREV: Change mainmenu labels to support util funcs
 
+// TODO: Add options to navigate to main menu (keep mainmenu in memory)
+// TODO: Add pause feature (with timer)
+// TODO: Auto-pause on home or screen-lock (may need to free assets)
 // TODO: Add win caption to failscene
 // TODO: Add score label
 // TODO: Options screen
 // TODO: Eye animations
+// TODO: Death animation
+// TODO: Pulsating animation (color stride)
 // TODO: GameCenter
 // TODO: Options menu
 // TODO: Add fullscreen version
@@ -34,12 +41,14 @@ import SpriteKit
 var gview = SKView()
 var gsi   = GameScene()
 var score = 0 // Too lazy to make an init for other scenes...
+
 var highscore: Int = 0
 var mainmenu: MainMenuScene? = nil
 
-var devmode = false
 var devdifficulty = 0
-
+var devmode    = false
+var spinning   = false
+var fademode   = false
 
 class GameViewController: UIViewController {
   

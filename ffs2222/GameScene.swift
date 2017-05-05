@@ -21,45 +21,65 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
 // MARK: - Spawner
 /// Ideally abstract:
-fileprivate  struct Spawner {
+fileprivate struct Spawner {
     
     typealias C = GameScene.Category
     
-    var _gsi: GameScene
+    private var localgsi: GameScene
     
-    init(gsi: GameScene) { self._gsi = gsi }
+    init(gsi: GameScene) { self.localgsi = gsi }
     
     func yellowNode() {
-      let yellowNode = Stuff(color: .blue, size: _gsi.size30); do {
-        let newPB = SKPhysicsBody(rectangleOf: _gsi.size30); do {
+      let yellowNode = Stuff(color: .blue, size: localgsi.size30); do {
+        let newPB = SKPhysicsBody(rectangleOf: localgsi.size30); do {
           setMasks(pb: newPB, cat: C.yellow, cont: C.black, col: C.zero)
           newPB.affectedByGravity  = false
         }
         yellowNode.physicsBody = newPB
         yellowNode.position.x += 35
-        yellowNode.position.y = _gsi.frame.minY + 35
+        yellowNode.position.y = localgsi.frame.minY + 35
       }
       
-      _gsi.addChild(yellowNode)
-      _gsi.player = yellowNode
+      localgsi.addChild(yellowNode)
+      localgsi.player = yellowNode
     }
     
     func blackNode(pos: CGPoint)  {
       
-      let blackNode = SKSpriteNode(color: .white, size: _gsi.size30); do {
-        let newPB = SKPhysicsBody(rectangleOf: _gsi.size30)
+      let blackNode = SKSpriteNode(color: .white, size: localgsi.size30); do {
+        let newPB = SKPhysicsBody(rectangleOf: localgsi.size30)
         setMasks(pb: newPB, cat: C.black, cont: C.yellow | C.death, col: C.zero)
         blackNode.physicsBody = newPB
         blackNode.name     = "black"
         blackNode.position = pos
+        
+        if fademode {
+          let
+          fin      = SKAction.fadeAlpha(to: 0.10, duration: 0.00),
+          fout1    = SKAction.fadeAlpha(to: 0.25, duration: 1.00),
+          fout2    = SKAction.fadeAlpha(to: 1.00, duration: 0.25),
+          sequence = SKAction.sequence([fin, fout1, fout2]),
+          forever  = SKAction.repeatForever(sequence)
+          
+          blackNode.run(forever)
+        }
+        
+        if spinning {
+          let action: SKAction = {
+            if randy(2) == 1 { return SKAction.rotate(byAngle:  90, duration: 1) }
+            else             { return SKAction.rotate(byAngle: -90, duration: 1) }
+          }()
+          let forever = SKAction.repeatForever(action)
+          blackNode.run(forever)
+        }
       }
       
-      _gsi.addChild(blackNode)
+      localgsi.addChild(blackNode)
     }
     
     func scanline(pos: CGPoint) {
       
-      let lineNode = SKSpriteNode(color: .clear, size: CGSize(width: _gsi.frame.width, height: 1)); do {
+      let lineNode = SKSpriteNode(color: .clear, size: CGSize(width: localgsi.frame.width, height: 1)); do {
         let newPB = SKPhysicsBody(rectangleOf: lineNode.size)
         setMasks(pb: newPB, cat: C.line, cont: C.yellow | C.death, col: C.zero)
         
@@ -67,12 +87,12 @@ fileprivate  struct Spawner {
         lineNode.position = pos
       }
       
-      _gsi.addChild(lineNode)
+      localgsi.addChild(lineNode)
     }
     
     func deathLine() {
       
-      let lineNode = SKSpriteNode(color: .orange, size: CGSize(width: _gsi.frame.width + 1000, height: 2)); do {
+      let lineNode = SKSpriteNode(color: .orange, size: CGSize(width: localgsi.frame.width + 1000, height: 2)); do {
         let newPB = SKPhysicsBody(rectangleOf: lineNode.size); do {
           setMasks(pb: newPB, cat: C.death, cont: C.black, col: C.zero)
           newPB.affectedByGravity = false
@@ -81,30 +101,30 @@ fileprivate  struct Spawner {
         lineNode.physicsBody = newPB
         lineNode.position.y -= 30
       }
-      _gsi.addChild(lineNode)
+      localgsi.addChild(lineNode)
     }
     
     func touchPad() {
-      let touchPad = TouchPad(player: _gsi.player!, scene: _gsi)
+      let touchPad = TouchPad(player: localgsi.player!, scene: localgsi)
       touchPad.position.y -= touchPad.size.height / 2
-      _gsi.addChild(touchPad)
+      localgsi.addChild(touchPad)
     }
     
     func lineOfBlackBoxes() {
       
       func randomX() -> CGFloat {
-        let randomX = randy(Int(_gsi.frame.maxX * 2))
-        let xVal = CGFloat(randomX) - _gsi.frame.maxX
+        let randomX = randy(Int(localgsi.frame.maxX * 2))
+        let xVal = CGFloat(randomX) - localgsi.frame.maxX
         return xVal
       }
       
-      let yVal = _gsi.frame.maxY + (_gsi.size30.height/2)
-      let numBoxes = _gsi.difficulty.boxNum + randy(6)
+      let yVal = localgsi.frame.maxY + (localgsi.size30.height/2)
+      let numBoxes = localgsi.difficulty.boxNum + randy(6)
       
       let fairness = CGFloat(15) // 5 points on either side?
       let fairRect = CGRect(middle: CGPoint(x: randomX(), y: yVal),
-                            width:  _gsi.size30.width + fairness,
-                            height: _gsi.size30.height)
+                            width:  localgsi.size30.width + fairness,
+                            height: localgsi.size30.height)
     
       // Oh my god this is awful:
       for _ in 1...numBoxes {
@@ -117,8 +137,8 @@ fileprivate  struct Spawner {
         
         func getRandomRect()  -> CGRect {
           return CGRect(middle: randomPoint,
-                        width: _gsi.size30.width,
-                        height: _gsi.size30.height)
+                        width: localgsi.size30.width,
+                        height: localgsi.size30.height)
         }
         
         var randomRect = getRandomRect()
@@ -137,14 +157,16 @@ fileprivate  struct Spawner {
 
 // MARK: - updateAction():
 extension GameScene {
+  
   func updateAction() {
     
     removeAction(forKey: "spawner")
+    
     let wait     = SKAction.wait(forDuration: difficulty.boxSpeed)
     let run      = SKAction.run { Spawner(gsi: self).lineOfBlackBoxes() }
     let sequence = SKAction.sequence([wait, run])
-    self.action  = SKAction.repeatForever(sequence)
     
+    self.action  = SKAction.repeatForever(sequence)
     self.run(action!, withKey: "spawner")
   }
 };
@@ -218,7 +240,7 @@ extension GameScene {
                   right:  frame.maxX + playa.size.width/2)
     
     if playa.position.y < bounds.bottom { playa.position.y = bounds.bottom }
-    if playa.position.y > bounds.top    { playa.position.y = bounds.top   }
+    if playa.position.y > bounds.top    { playa.position.y = bounds.top    }
     if playa.position.x < bounds.left   { playa.position.x = bounds.left   }
     if playa.position.x > bounds.right  { playa.position.x = bounds.right  }
   }
@@ -233,7 +255,7 @@ extension GameScene {
   private struct DoContact {
     
     static func blackAndYellow(contact: SKPhysicsContact) {
-      
+
       func assignYellowBlack() ->  (SKPhysicsBody, SKPhysicsBody) {
         if contact.bodyA.categoryBitMask == Category.yellow {
           return (contact.bodyA, contact.bodyB)
@@ -247,7 +269,7 @@ extension GameScene {
       
       let (yellowNode, blackNode) = assignYellowBlack()
       
-      yellowNode.node?.setScale(gsi.difficulty.boxSize)
+      if !devmode { yellowNode.node?.setScale(gsi.difficulty.boxSize) }
       blackNode.node?.removeFromParent()
     }
     

@@ -6,28 +6,60 @@ import SpriteKit
 
 final class FailScene: SKScene {
 
-  private func makeLabels() {
-    let scoreLabel = SKLabelNode(text: "SCORE: \(score)!")
-    let hsLabel    = SKLabelNode(text: "HIGHSCORE: \(highscore)")
-    let playLabel  = SKLabelNode(text: ">>> PLAY AGAIN :D <<<")
-    hsLabel.position.y   -= (scoreLabel.frame.height + 25)
-    playLabel.position.y -= (scoreLabel.frame.height + 25) * 2
+  private final class PlayLabel: SKLabelNode {
+    
+    init(texter: String) {
+      super.init(fontNamed: "Chalkduster")
+      self.text = ">>> PLAY AGAIN :D <<<"
+      isUserInteractionEnabled = true
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+      let scene = GameScene(size: self.scene!.size)
+      gsi = scene
+      self.scene!.view!.presentScene(scene)
+    }
+    
+    required init?(coder aDecoder: NSCoder) { fatalError("") }
+    override init() { super.init() }
+  };
   
-    let labels = [scoreLabel, hsLabel, playLabel]
-    changeFont(labels: labels)
+  private final class MainMenuLabel: SKLabelNode {
+    
+    init(texter: String) {
+      super.init(fontNamed: "Chalkduster")
+      self.text = ">>> MainMenu <<<"
+      isUserInteractionEnabled = true
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+      self.scene!.view!.presentScene(mainmenu!)
+    }
+    
+    required init?(coder aDecoder: NSCoder) { fatalError("") }; override init() { super.init() }
+  };
+  
+  private func makeLabels() {
+    
+    let
+    scoreLabel = SKLabelNode(text: "SCORE: \(score)!"),
+    hsLabel    = SKLabelNode(text: "HIGHSCORE: \(highscore)"),
+    playLabel  = PlayLabel(texter: ""),
+    mmLabel    = MainMenuLabel(texter: "")
+  
+    scoreLabel.position.y += 100
+    
+    let labels = [scoreLabel, hsLabel, playLabel, mmLabel]
+    offSetLabel(labels)
+    changeFont (labels)
     addChildren(labels)
   }
   
   override func didMove(to view: SKView) {
     scaleMode = .aspectFit
     anchorPoint = CGPoint(x: 0.5, y: 0.5)
-    
     makeLabels()
     
     score = 0
-  }
-  
-  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-    view!.presentScene(GameScene(size: size))
   }
 };
