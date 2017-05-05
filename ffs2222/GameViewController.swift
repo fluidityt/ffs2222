@@ -1,47 +1,5 @@
 //  Created by justin fluidity on 4/26/17.
 
-// DESIGN: Have boxes laugh at you once you die...
-// DESIGN: Game mode... TWO yellow boxes??
-// DESIGN: Different shapes?
-// DESIGN: Boxes rotate / warp?
-// DESIGN: Make whole screen touchable?
-// DESIGN: Increase difficulty
-// DESIGN: Powerups / attacks?
-// DESIGN: Difficulty?
-// DESIGN: Challenge and cheat mode--show icons next to hiscores
-// DESIGN: Black bar with score label, and joystick underneath?
-
-// -----------------------------------------------------------------
-// BORED: Build a menu class... use tuples for named props? (protocol conform?)
-
-// ------------------------------------------------------------------
-// CREV: Random global stuff in DoContact and Spawner
-// CREV: Config file (difficulty / globals)
-// CREV: DoContact in serious need of guards
-// CREV: Change mainmenu labels to support util funcs
-
-// ------------------------------------------------------------------
-// TODO: Fast-fall mode (but less blocks)
-// TODO: Add pause feature (with timer)
-// TODO: Auto-pause on home or screen-lock (may need to free assets)
-// TODO: Add win caption to failscene
-// TODO: Add score label
-// TODO: GameCenter
-// TODO: Options menu
-// TODO: Eye animations
-// TODO: Death animation
-// TODO: Pulsating animation (color stride)
-
-// ------------------------------------------------------------------
-// MAYBE: Add complex devmode to startscreen and options menu
-// MAYBE: Add top 10 HS with names
-
-// ------------------------------------------------------------------
-// FIXME: Conver all touches to for loop
-// FIXME: Highscore on die-screen is broken if you get a new highscore
-// FIXME: Horizontal double box hit still kills
-// -----> need to actually delete the whole "box" even if it is 3-4 long etc
-
 import SpriteKit
 
 // Globals:
@@ -66,7 +24,7 @@ class GameViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
   
-    // UD.setHighScore(to: 104)
+    // UD.setHighScore(to: 0)
     
     guard let view = self.view as! SKView? else { fatalError("wtf happened") }; do {
       view.ignoresSiblingOrder = true

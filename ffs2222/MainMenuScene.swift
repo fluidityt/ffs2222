@@ -9,7 +9,7 @@ final class MainMenuScene: SKScene {
     
     init(texter: String) {
       super.init(fontNamed: "Chalkduster")
-      self.text = "PlayGame!"
+      self.text = "Play Game! Best Score: \(highscore)"
       isUserInteractionEnabled = true
     }
 
@@ -164,6 +164,9 @@ final class MainMenuScene: SKScene {
   override func didMove(to view: SKView) {
     guard firstrun else { return }
 
+    UD.initUserDefaults()
+    UD.loadHighScore()
+    
     mainmenu = self
     anchorPoint = CGPoint(x: 0.5, y: 0.5)
     print("hi")

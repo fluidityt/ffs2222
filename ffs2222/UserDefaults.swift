@@ -22,6 +22,7 @@ struct UD {
     
     guard let oldHS = userDefaults.value(forKey: Keys.highscore) as? Int else { print("bad key"); return }
     if score > oldHS {
+      highscore = score
       userDefaults.setValue(score, forKey: Keys.highscore)
       print("saved high score!")
     }

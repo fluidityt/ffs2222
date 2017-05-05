@@ -51,3 +51,11 @@ extension SKNode {
   }
 }
 
+class ReFbool {
+  
+  var value: Bool
+  
+  init(_ value: Bool) {
+    self.value = value
+  }
+}
