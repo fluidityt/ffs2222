@@ -15,7 +15,9 @@ struct g {
   devmode    = RefBool(false),
   spinning   = RefBool(false),
   fademode   = RefBool(false),
-  fullmode   = RefBool(false)
+  fullmode   = RefBool(false),
+  
+  state      = "launch"
 }
 
 // MARK: - Main:
@@ -35,6 +37,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   scoreLabel: SKLabelNode?
   
   lazy var size30: CGSize = CGSize(width: 30, height: 30)
+  lazy var notificationHeight: CGFloat = self.size.height/7
   
 };
 
@@ -45,7 +48,7 @@ fileprivate final class Spawner {
     typealias C = GameScene.Category
   
     private let localGS: GameScene
-    private lazy var notificationHeight: CGFloat = self.localGS.size.height/7
+    private lazy var nh: CGFloat = self.localGS.notificationHeight
   
     init(gsi: GameScene) { localGS = g.gsi }
   
@@ -120,7 +123,7 @@ fileprivate final class Spawner {
         
         lineNode.physicsBody = newPB
         if g.fullmode.value { lineNode.position.y =  (localGS.frame.minY  - localGS.size30.height) }
-        else                { lineNode.position.y -= (localGS.size30.height + notificationHeight) }
+        else                { lineNode.position.y -= (localGS.size30.height + nh) }
         
       }
       localGS.addChild(lineNode)
@@ -130,7 +133,7 @@ fileprivate final class Spawner {
       let touchPad = TouchPad(player: localGS.player!, scene: localGS)
       if g.fullmode.value { }
       else {
-        touchPad.position.y -= (touchPad.size.height / 2) + notificationHeight
+        touchPad.position.y -= (touchPad.size.height / 2) + nh
       }
       localGS.addChild(touchPad)
     }
@@ -143,7 +146,7 @@ fileprivate final class Spawner {
         return xVal
       }
       
-      let yVal = (localGS.frame.maxY + localGS.size30.height/2) - notificationHeight
+      let yVal = (localGS.frame.maxY + localGS.size30.height/2) - nh
       let numBoxes = localGS.difficulty.boxNum + randy(6)
       
       let fairness = CGFloat(15) // 5 points on either side?
@@ -180,7 +183,7 @@ fileprivate final class Spawner {
     }
   
     func scoreLabel() {
-      let background = SKSpriteNode(color: .white, size: CGSize(width: localGS.size.width, height: notificationHeight)); do {
+      let background = SKSpriteNode(color: .white, size: CGSize(width: localGS.size.width, height: nh)); do {
         
         let scoreLabel = SKLabelNode(text: "Score: \(g.score)")
         scoreLabel.fontName = "Chalkduster"
@@ -243,6 +246,7 @@ extension GameScene {
   
   override func didMove(to view: SKView) {
     // OMFG what have I become??
+    g.state = "game"
     
     print("Welcome to Sprite Attack! Your HS is \(g.highscore)")
     

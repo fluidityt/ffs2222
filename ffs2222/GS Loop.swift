@@ -8,25 +8,28 @@ extension GameScene {
     static var
     waiting      = false,     // Used for g.score increase at end of loop.
     hits         = 0,         // Player HP.
-    hitThisFrame = false      // Used to keep player alive when hit 2 black at same time.
+    hitThisFrame = false,     // Used to keep player alive when hit 2 black at same time.
+    paused       = false
   }
   
   private func keepPlayerInBounds() {
     guard let playa = player else { fatalError("issue with player") }
     
+    let nh = notificationHeight
     let bounds = (fullBottom: frame.minY + playa.size.height/2,
                   bottom:     frame.midY + playa.size.height/2,
                   top:        frame.maxY - playa.size.height/2,
                   left:       frame.minX + playa.size.width/2,
-                  right:      frame.maxX + playa.size.width/2)
+                  right:      frame.maxX - playa.size.width/2)
     
     if g.fullmode.value {
       if playa.position.y < bounds.fullBottom { playa.position.y = bounds.fullBottom }
     }
     else {
-      if playa.position.y < bounds.bottom { playa.position.y = bounds.bottom }
+      if playa.position.y < bounds.bottom-nh  { playa.position.y = bounds.bottom-nh  }
     }
-    if playa.position.y > bounds.top    { playa.position.y = bounds.top    }
+    
+    if playa.position.y > bounds.top-nh { playa.position.y = bounds.top-nh }
     if playa.position.x < bounds.left   { playa.position.x = bounds.left   }
     if playa.position.x > bounds.right  { playa.position.x = bounds.right  }
   }
@@ -134,5 +137,24 @@ extension GameScene {
     case 30: if !gs.waiting { upDifficulty() }
     default: ()
     }
+  }
+  
+  
+  func pause() {
+    gs.paused.toggle()
+    
+    if gs.paused {
+      view!.isPaused = true
+      view!.frame = CGRect(middle: CGPoint(x: view!.frame.midX, y: view!.frame.midY),
+                           width: size.width/3, height: size.height/3)
+    } else {
+      view!.isPaused = false
+      view!.frame = CGRect(middle: CGPoint(x: view!.frame.midX, y: view!.frame.midY),
+                           width:  UIWindow().frame.width, height: UIWindow().frame.height)
+    }
+  }
+  
+  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    pause()
   }
 };

@@ -59,6 +59,8 @@ final class MainMenuScene: SKScene {
   override func didMove(to view: SKView) {
     guard firstrun else { return }
     
+    g.state = "menu"
+    
     UD.initUserDefaults()
     //UD.setHighScore(to: 0)
     UD.loadHighScore()

@@ -54,3 +54,11 @@ class Toggler: SKLabelNode {
     super.init()
   }
 };
+
+extension Bool {
+  mutating func toggle() {
+    if self == true {
+      self = false
+      } else { self = true }
+  }
+}
