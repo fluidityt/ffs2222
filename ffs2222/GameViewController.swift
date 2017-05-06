@@ -11,10 +11,10 @@ var highscore: Int = 0
 var mainmenu: MainMenuScene? = nil
 
 var devdifficulty = 0
-var devmode    = false
-var spinning   = false
-var fademode   = false
-var fullmode   = false
+var devmode    = RefBool(false)
+var spinning   = RefBool(false)
+var fademode   = RefBool(false)
+var fullmode   = RefBool(false)
 
 
 class GameViewController: UIViewController {

@@ -53,7 +53,7 @@ fileprivate struct Spawner {
         blackNode.name     = "black"
         blackNode.position = pos
         
-        if fademode {
+        if fademode.value {
           let
           fin      = SKAction.fadeAlpha(to: 0.10, duration: 0.00),
           fout1    = SKAction.fadeAlpha(to: 0.25, duration: 1.00),
@@ -64,7 +64,7 @@ fileprivate struct Spawner {
           blackNode.run(forever)
         }
         
-        if spinning {
+        if spinning.value {
           let action: SKAction = {
             if randy(2) == 1 { return SKAction.rotate(byAngle:  90, duration: 1) }
             else             { return SKAction.rotate(byAngle: -90, duration: 1) }
@@ -99,8 +99,8 @@ fileprivate struct Spawner {
         }
         
         lineNode.physicsBody = newPB
-        if fullmode { lineNode.position.y = (localgsi.frame.minY - localgsi.size30.height) }
-        else        { lineNode.position.y -= localgsi.size30.height }
+        if fullmode.value { lineNode.position.y = (localgsi.frame.minY - localgsi.size30.height) }
+        else              { lineNode.position.y -= localgsi.size30.height }
         
       }
       localgsi.addChild(lineNode)
@@ -108,7 +108,7 @@ fileprivate struct Spawner {
     
     func touchPad() {
       let touchPad = TouchPad(player: localgsi.player!, scene: localgsi)
-      if fullmode { }
+      if fullmode.value { }
       else { touchPad.position.y -= touchPad.size.height / 2 }
       localgsi.addChild(touchPad)
     }
@@ -214,8 +214,8 @@ extension GameScene {
     
     updateAction()
     
-    if devmode { devMode() }
-    if fullmode { difficulty.boxSpeed -= 0.15 }
+    if devmode.value { devMode() }
+    if fullmode.value { difficulty.boxSpeed -= 0.15 }
     score = 0
   }
 };

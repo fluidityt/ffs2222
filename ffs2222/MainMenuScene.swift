@@ -42,12 +42,12 @@ final class MainMenuScene: SKScene {
   private final class DevModeLabel: SKLabelNode {
     
     func devModeOff() {
-      devmode = false
+      devmode.value = false
       self.text = "DevMode Off"
     }
     
     func devModeOn() {
-      devmode = true
+      devmode.value = true
       self.text = "DevMode On"
     }
     
@@ -59,7 +59,7 @@ final class MainMenuScene: SKScene {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-      if devmode { devModeOff() } else { devModeOn() }
+      if devmode.value { devModeOff() } else { devModeOn() }
     }
     
     override init() { super.init() }
@@ -70,12 +70,12 @@ final class MainMenuScene: SKScene {
   private final class SpinModeLabel: SKLabelNode {
     
     func spinModeOff() {
-      spinning = false
+      spinning .value = false
       self.text = "SpinMode Off"
     }
     
     func spinModeOn() {
-      spinning = true
+      spinning.value = true
       self.text = "SpinMode On"
     }
     
@@ -87,7 +87,7 @@ final class MainMenuScene: SKScene {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-      if spinning { spinModeOff() } else { spinModeOn() }
+      if spinning.value { spinModeOff() } else { spinModeOn() }
     }
     
     override init() { super.init() }
@@ -97,12 +97,12 @@ final class MainMenuScene: SKScene {
   private final class FadeModeLabel: SKLabelNode {
     
     func fadeModeOff() {
-      fademode = false
+      fademode.value = false
       self.text = "FadeMode Off"
     }
     
     func fadeModeOn() {
-      fademode = true
+      fademode.value = true
       self.text = "FadeMode On"
     }
     
@@ -114,7 +114,7 @@ final class MainMenuScene: SKScene {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-      if fademode { fadeModeOff() } else { fadeModeOn() }
+      if fademode.value { fadeModeOff() } else { fadeModeOn() }
     }
     
     override init() { super.init() }
@@ -125,12 +125,12 @@ final class MainMenuScene: SKScene {
   private final class FullModeLabel: SKLabelNode {
     
     func fullModeOff() {
-      fullmode = false
+      fullmode.value = false
       self.text = "FullMode Off"
     }
     
     func fullModeOn() {
-      fullmode = true
+      fullmode.value = true
       self.text = "FullMode On"
     }
     
@@ -142,7 +142,7 @@ final class MainMenuScene: SKScene {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-      if fullmode { fullModeOff() } else { fullModeOn() }
+      if fullmode.value { fullModeOff() } else { fullModeOn() }
     }
     
     override init() { super.init() }

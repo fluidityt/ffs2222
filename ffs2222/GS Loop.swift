@@ -20,7 +20,7 @@ extension GameScene {
                   left:       frame.minX + playa.size.width/2,
                   right:      frame.maxX + playa.size.width/2)
     
-    if fullmode {
+    if fullmode.value {
       if playa.position.y < bounds.fullBottom { playa.position.y = bounds.fullBottom }
     }
     else {
@@ -55,7 +55,7 @@ extension GameScene {
       
       let (yellowNode, blackNode) = assignYellowBlack()
       
-      if !devmode { yellowNode.node?.setScale(gsi.difficulty.boxSize) }
+      if !devmode.value { yellowNode.node?.setScale(gsi.difficulty.boxSize) }
       blackNode.node?.removeFromParent()
     } // ... you know what it is
     
@@ -92,7 +92,7 @@ extension GameScene {
   
   func didBegin(_ contact: SKPhysicsContact) {
     
-    defer { if !devmode { UD.saveHighScore() } }
+    defer { if !devmode.value { UD.saveHighScore() } }
     
     let contactedCategories = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
     
