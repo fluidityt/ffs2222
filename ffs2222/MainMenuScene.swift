@@ -9,18 +9,17 @@ final class MainMenuScene: SKScene {
     
     init(texter: String) {
       super.init(fontNamed: "Chalkduster")
-      self.text = "Play Game! Best Score: \(highscore)"
+      self.text = "Play Game! Best Score: \(g.highscore)"
       isUserInteractionEnabled = true
     }
-
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
       let scene = GameScene(size: self.scene!.size)
-      gsi = scene
+      g.gsi = scene
       self.scene!.view!.presentScene(scene)
     }
-
-    required init?(coder aDecoder: NSCoder) { fatalError("") }
-    override init() { super.init() }
+    
+    required init?(coder aDecoder: NSCoder) { fatalError("") }; override init() { super.init() }
   };
   
   private final class OptionLabel: SKLabelNode {
@@ -38,44 +37,30 @@ final class MainMenuScene: SKScene {
     required init?(coder aDecoder: NSCoder) { fatalError("") }
     override init() { super.init() }
   };
-  
 
-  
-  /// let isplaying = RefBool(false)
-  
   private func makeLabels() {
     
     let labels: [SKLabelNode] = [
       PlayLabel(texter: ""),
-      Toggler(labelName: "DevMode", refBool: devmode),
-      Toggler(labelName: "SpinMode", refBool: spinning),
-      Toggler(labelName: "FadeMode", refBool: fademode),
-      Toggler(labelName: "FullMode", refBool: fullmode)
+      Toggler(labelName: "DevMode", refBool: g.devmode),
+      Toggler(labelName: "SpinMode", refBool: g.spinning),
+      Toggler(labelName: "FadeMode", refBool: g.fademode),
+      Toggler(labelName: "FullMode", refBool: g.fullmode)
     ]
     offSetLabel(labels, by: 50)
     addChildren(labels)
-    
-
   }
-  
-  /**
-  override func update(_ currentTime: TimeInterval) {
-    if isplaying.value {
-    isplaying.value = false
-      view!.presentScene(GameScene(size: size))
-    }
-  }*/
   
   // COMPATIBILITY FOR iOS 9:
   private var firstrun = true
   
   override func didMove(to view: SKView) {
     guard firstrun else { return }
-
+    
     UD.initUserDefaults()
     UD.loadHighScore()
     
-    mainmenu = self
+    g.mainmenu = self
     anchorPoint = CGPoint(x: 0.5, y: 0.5)
     print("hi")
     makeLabels()

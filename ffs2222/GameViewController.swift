@@ -2,20 +2,24 @@
 
 import SpriteKit
 
-// Globals:
-var gview = SKView()
-var gsi   = GameScene()
-var score = 0 // Too lazy to make an init for other scenes...
+/// Globals:
 
-var highscore: Int = 0
-var mainmenu: MainMenuScene? = nil
-
-var devdifficulty = 0
-var devmode    = RefBool(false)
-var spinning   = RefBool(false)
-var fademode   = RefBool(false)
-var fullmode   = RefBool(false)
-
+struct g {
+  
+  static var
+  view = SKView(),
+  gsi   = GameScene(),
+  score = 0, // Too lazy to make an init for other scenes...
+  
+  highscore: Int = 0,
+  mainmenu: MainMenuScene? = nil,
+  
+  devdifficulty = 0,
+  devmode    = RefBool(false),
+  spinning   = RefBool(false),
+  fademode   = RefBool(false),
+  fullmode   = RefBool(false)
+}
 
 class GameViewController: UIViewController {
   

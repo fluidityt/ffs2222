@@ -16,7 +16,7 @@ final class FailScene: SKScene {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
       let scene = GameScene(size: self.scene!.size)
-      gsi = scene
+      g.gsi = scene
       self.scene!.view!.presentScene(scene)
     }
     
@@ -33,7 +33,7 @@ final class FailScene: SKScene {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-      self.scene!.view!.presentScene(mainmenu!)
+      self.scene!.view!.presentScene(g.mainmenu!)
     }
     
     required init?(coder aDecoder: NSCoder) { fatalError("") }; override init() { super.init() }
@@ -42,8 +42,8 @@ final class FailScene: SKScene {
   private func makeLabels() {
     
     let
-    scoreLabel = SKLabelNode(text: "SCORE: \(score)!"),
-    hsLabel    = SKLabelNode(text: "HIGHSCORE: \(highscore)"),
+    scoreLabel = SKLabelNode(text: "SCORE: \(g.score)!"),
+    hsLabel    = SKLabelNode(text: "HIGHSCORE: \(g.highscore)"),
     playLabel  = PlayLabel(texter: ""),
     mmLabel    = MainMenuLabel(texter: "")
   
@@ -60,6 +60,6 @@ final class FailScene: SKScene {
     anchorPoint = CGPoint(x: 0.5, y: 0.5)
     makeLabels()
     
-    score = 0
+    g.score = 0
   }
 };

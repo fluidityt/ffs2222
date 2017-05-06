@@ -9,35 +9,35 @@ struct UD {
   static let userDefaults = UserDefaults.standard
   
   struct Keys {
-    static let highscore = "highschore"
+    static let highScore = "highschore"
   }
   
   static func initUserDefaults() {
-    if userDefaults.value(forKey: Keys.highscore) == nil {
-      userDefaults.setValue(0, forKey: Keys.highscore)
+    if userDefaults.value(forKey: Keys.highScore) == nil {
+      userDefaults.setValue(0, forKey: Keys.highScore)
     }
   }
   
   static func saveHighScore() {
     
-    guard let oldHS = userDefaults.value(forKey: Keys.highscore) as? Int else { print("bad key"); return }
-    if score > oldHS {
-      highscore = score
-      userDefaults.setValue(score, forKey: Keys.highscore)
-      print("saved high score!")
+    guard let oldHS = userDefaults.value(forKey: Keys.highScore) as? Int else { print("bad key"); return }
+    if g.score > oldHS {
+      g.highscore = g.score
+      userDefaults.setValue(g.score, forKey: Keys.highScore)
+      print("saved high g.score!")
     }
   }
   
   static func loadHighScore() {
-    guard let value = userDefaults.value(forKey: Keys.highscore) else { print("no hs in UD"); return }
+    guard let value = userDefaults.value(forKey: Keys.highScore) else { print("no hs in UD"); return }
     guard let hs = value as? Int else { print("value was not Int"); return }
-    highscore = hs
-    print("loaded high score!")
+    g.highscore = hs
+    print("loaded high g.score!")
   }
   
   static func setHighScore(to value: Int) {
-    userDefaults.setValue(value, forKey: Keys.highscore)
-    print("reset highscore")
+    userDefaults.setValue(value, forKey: Keys.highScore)
+    print("reset g.highscore")
   }
   
 };

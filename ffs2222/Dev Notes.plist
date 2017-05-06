@@ -8,8 +8,6 @@
 	<string></string>
 	<key>DoContact needs guards</key>
 	<string></string>
-	<key>Change MainMenu to support util funcs</key>
-	<string></string>
 	<key>Random global stuff in DoContact and Spawner</key>
 	<string></string>
 	<key>   </key>
@@ -28,13 +26,13 @@
 	<string></string>
 	<key>challenge and cheat mode -- show icons next to hiscores</key>
 	<string></string>
-	<key>black bar with score label, and joystick underneath?</key>
+	<key>black bar with g.score label, and joystick underneath?</key>
 	<string></string>
 	<key>  </key>
 	<string></string>
 	<key>TODO</key>
 	<array/>
-	<key>Add score lable</key>
+	<key>Add g.score lable</key>
 	<string></string>
 	<key>fast-fall mode (but less blocks)</key>
 	<string></string>

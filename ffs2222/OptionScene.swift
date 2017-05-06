@@ -15,7 +15,7 @@ final class OptionScene: SKScene {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-      guard let main = mainmenu else { fatalError() }
+      guard let main = g.mainmenu else { fatalError() }
       self.scene!.view!.presentScene(main)
     }
     

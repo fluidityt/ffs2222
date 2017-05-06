@@ -27,7 +27,7 @@ fileprivate struct Spawner {
     
     private var localgsi: GameScene
     
-    init(gsi: GameScene) { self.localgsi = gsi }
+    init(gsi: GameScene) { self.localgsi = g.gsi }
     
     func yellowNode() {
       let yellowNode = Stuff(color: .blue, size: localgsi.size30); do {
@@ -53,7 +53,7 @@ fileprivate struct Spawner {
         blackNode.name     = "black"
         blackNode.position = pos
         
-        if fademode.value {
+        if g.fademode.value {
           let
           fin      = SKAction.fadeAlpha(to: 0.10, duration: 0.00),
           fout1    = SKAction.fadeAlpha(to: 0.25, duration: 1.00),
@@ -64,7 +64,7 @@ fileprivate struct Spawner {
           blackNode.run(forever)
         }
         
-        if spinning.value {
+        if g.spinning.value {
           let action: SKAction = {
             if randy(2) == 1 { return SKAction.rotate(byAngle:  90, duration: 1) }
             else             { return SKAction.rotate(byAngle: -90, duration: 1) }
@@ -99,7 +99,7 @@ fileprivate struct Spawner {
         }
         
         lineNode.physicsBody = newPB
-        if fullmode.value { lineNode.position.y = (localgsi.frame.minY - localgsi.size30.height) }
+        if g.fullmode.value { lineNode.position.y = (localgsi.frame.minY - localgsi.size30.height) }
         else              { lineNode.position.y -= localgsi.size30.height }
         
       }
@@ -108,7 +108,7 @@ fileprivate struct Spawner {
     
     func touchPad() {
       let touchPad = TouchPad(player: localgsi.player!, scene: localgsi)
-      if fullmode.value { }
+      if g.fullmode.value { }
       else { touchPad.position.y -= touchPad.size.height / 2 }
       localgsi.addChild(touchPad)
     }
@@ -188,8 +188,8 @@ extension GameScene {
   private func devMode() {
     gs.hits = -5000
     
-    if devdifficulty > 0 {
-      for _ in 1...devdifficulty {
+    if g.devdifficulty > 0 {
+      for _ in 1...g.devdifficulty {
         upDifficulty()
       }
     }
@@ -206,7 +206,7 @@ extension GameScene {
   override func didMove(to view: SKView) {
     // OMFG what have I become??
     
-    print("Welcome to Sprite Attack! Your HS is \(highscore)")
+    print("Welcome to Sprite Attack! Your HS is \(g.highscore)")
     
     selfInit()
     
@@ -214,9 +214,9 @@ extension GameScene {
     
     updateAction()
     
-    if devmode.value { devMode() }
-    if fullmode.value { difficulty.boxSpeed -= 0.15 }
-    score = 0
+    if g.devmode.value { devMode() }
+    if g.fullmode.value { difficulty.boxSpeed -= 0.15 }
+    g.score = 0
   }
 };
 

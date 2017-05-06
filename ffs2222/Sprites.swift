@@ -14,10 +14,10 @@ final class TouchPad: SKSpriteNode {
     
     let color: SKColor
     let size: CGSize
-    if fullmode.value {
+    if g.fullmode.value {
       color = .clear
-      size = gsi.size
-      assert(gsi.size.height > 10)
+      size = g.gsi.size
+      assert(g.gsi.size.height > 10)
     } else {
       color = .white
       size = CGSize(width: scene.size.width, height: (scene.size.height/2))

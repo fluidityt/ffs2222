@@ -6,7 +6,7 @@ extension GameScene {
   /// A bit of extra state just for game loop:
   struct gs {
     static var
-    waiting      = false,     // Used for score increase at end of loop.
+    waiting      = false,     // Used for g.score increase at end of loop.
     hits         = 0,         // Player HP.
     hitThisFrame = false      // Used to keep player alive when hit 2 black at same time.
   }
@@ -20,7 +20,7 @@ extension GameScene {
                   left:       frame.minX + playa.size.width/2,
                   right:      frame.maxX + playa.size.width/2)
     
-    if fullmode.value {
+    if g.fullmode.value {
       if playa.position.y < bounds.fullBottom { playa.position.y = bounds.fullBottom }
     }
     else {
@@ -55,13 +55,13 @@ extension GameScene {
       
       let (yellowNode, blackNode) = assignYellowBlack()
       
-      if !devmode.value { yellowNode.node?.setScale(gsi.difficulty.boxSize) }
+      if !g.devmode.value { yellowNode.node?.setScale(g.gsi.difficulty.boxSize) }
       blackNode.node?.removeFromParent()
     } // ... you know what it is
     
     static func yellowAndLine (contact: SKPhysicsContact) {
-      score += 1
-      print(score)
+      g.score += 1
+      print(g.score)
       
       if contact.bodyA.categoryBitMask == Category.line {
         if let a = contact.bodyA.node { killNode(a) }
@@ -92,7 +92,7 @@ extension GameScene {
   
   func didBegin(_ contact: SKPhysicsContact) {
     
-    defer { if !devmode.value { UD.saveHighScore() } }
+    defer { if !g.devmode.value { UD.saveHighScore() } }
     
     let contactedCategories = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
     
@@ -126,7 +126,7 @@ extension GameScene {
   
   override func didFinishUpdate() {
     
-    switch score {
+    switch g.score {
     // case <#num#>: if  <#excl#>gs.waiting { upDifficulty() }
     case 10: if !gs.waiting { upDifficulty() }
     case 20: if  gs.waiting { upDifficulty() }
