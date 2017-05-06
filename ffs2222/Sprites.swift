@@ -4,7 +4,6 @@
 
 import SpriteKit
 
-
 final class TouchPad: SKSpriteNode {
   
   private var playerInstance: Stuff
@@ -14,10 +13,11 @@ final class TouchPad: SKSpriteNode {
     
     let color: SKColor
     let size: CGSize
+    
     if g.fullmode.value {
       color = .clear
       size = g.gsi.size
-      assert(g.gsi.size.height > 10)
+      assert(g.gsi.size.height > 10) // Make sure we have a normal size.
     } else {
       color = .white
       size = CGSize(width: scene.size.width, height: (scene.size.height/2))
@@ -54,6 +54,5 @@ final class Stuff: SKSpriteNode {
   
   override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
     // position = touches.first!.location(in: self.scene!)
-    
   }
 };

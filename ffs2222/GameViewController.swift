@@ -2,34 +2,13 @@
 
 import SpriteKit
 
-/// Globals:
-
-struct g {
-  
-  static var
-  view = SKView(),
-  gsi   = GameScene(),
-  score = 0, // Too lazy to make an init for other scenes...
-  
-  highscore: Int = 0,
-  mainmenu: MainMenuScene? = nil,
-  
-  devdifficulty = 0,
-  devmode    = RefBool(false),
-  spinning   = RefBool(false),
-  fademode   = RefBool(false),
-  fullmode   = RefBool(false)
-}
-
 class GameViewController: UIViewController {
   
   private let mySize = CGSize(width: 600, height: 500)
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    
-    // UD.setHighScore(to: 0)
-    
+     
     guard let view = self.view as! SKView? else { fatalError("wtf happened") }; do {
       view.ignoresSiblingOrder = true
       view.showsFPS = true

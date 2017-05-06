@@ -61,6 +61,7 @@ extension GameScene {
     
     static func yellowAndLine (contact: SKPhysicsContact) {
       g.score += 1
+      g.gsi.scoreLabel?.text = "Score \(g.score)"
       print(g.score)
       
       if contact.bodyA.categoryBitMask == Category.line {

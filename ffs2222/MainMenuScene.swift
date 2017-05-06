@@ -54,11 +54,15 @@ final class MainMenuScene: SKScene {
   // COMPATIBILITY FOR iOS 9:
   private var firstrun = true
   
+  
+  // MARK: - DMV:
   override func didMove(to view: SKView) {
     guard firstrun else { return }
     
     UD.initUserDefaults()
+    //UD.setHighScore(to: 0)
     UD.loadHighScore()
+    
     
     g.mainmenu = self
     anchorPoint = CGPoint(x: 0.5, y: 0.5)

@@ -1,5 +1,23 @@
 import SpriteKit
 
+/// Globals:
+struct g {
+  
+  static var
+  view = SKView(),
+  gsi   = GameScene(),
+  score = 0, // Too lazy to make an init for other scenes...
+  
+  highscore: Int = 0,
+  mainmenu: MainMenuScene? = nil,
+  
+  devdifficulty = 0,
+  devmode    = RefBool(false),
+  spinning   = RefBool(false),
+  fademode   = RefBool(false),
+  fullmode   = RefBool(false)
+}
+
 // MARK: - Main:
 class GameScene: SKScene, SKPhysicsContactDelegate {
   
@@ -13,7 +31,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   var
   difficulty = (boxNum: 4, boxSpeed: 1.0, boxSize: CGFloat(1.5)),
   action: SKAction?,
-  player: Stuff?
+  player: Stuff?,
+  scoreLabel: SKLabelNode?
   
   lazy var size30: CGSize = CGSize(width: 30, height: 30)
   
@@ -21,33 +40,34 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
 // MARK: - Spawner
 /// Ideally abstract:
-fileprivate struct Spawner {
+fileprivate final class Spawner {
   
     typealias C = GameScene.Category
-    
-    private var localgsi: GameScene
-    
-    init(gsi: GameScene) { self.localgsi = g.gsi }
-    
+  
+    private let localGS: GameScene
+    private lazy var notificationHeight: CGFloat = self.localGS.size.height/7
+  
+    init(gsi: GameScene) { localGS = g.gsi }
+  
     func yellowNode() {
-      let yellowNode = Stuff(color: .blue, size: localgsi.size30); do {
-        let newPB = SKPhysicsBody(rectangleOf: localgsi.size30); do {
+      let yellowNode = Stuff(color: .blue, size: localGS.size30); do {
+        let newPB = SKPhysicsBody(rectangleOf: localGS.size30); do {
           setMasks(pb: newPB, cat: C.yellow, cont: C.black, col: C.zero)
           newPB.affectedByGravity  = false
         }
         yellowNode.physicsBody = newPB
         yellowNode.position.x += 35
-        yellowNode.position.y = localgsi.frame.minY + 35
+        yellowNode.position.y = localGS.frame.minY + 35
       }
       
-      localgsi.addChild(yellowNode)
-      localgsi.player = yellowNode
+      localGS.addChild(yellowNode)
+      localGS.player = yellowNode
     }
     
     func blackNode(pos: CGPoint)  {
       
-      let blackNode = SKSpriteNode(color: .white, size: localgsi.size30); do {
-        let newPB = SKPhysicsBody(rectangleOf: localgsi.size30)
+      let blackNode = SKSpriteNode(color: .white, size: localGS.size30); do {
+        let newPB = SKPhysicsBody(rectangleOf: localGS.size30)
         setMasks(pb: newPB, cat: C.black, cont: C.yellow | C.death, col: C.zero)
         blackNode.physicsBody = newPB
         blackNode.name     = "black"
@@ -74,12 +94,12 @@ fileprivate struct Spawner {
         }
       }
       
-      localgsi.addChild(blackNode)
+      localGS.addChild(blackNode)
     }
     
     func scanline(pos: CGPoint) {
       
-      let lineNode = SKSpriteNode(color: .clear, size: CGSize(width: localgsi.frame.width, height: 1)); do {
+      let lineNode = SKSpriteNode(color: .clear, size: CGSize(width: localGS.frame.width, height: 1)); do {
         let newPB = SKPhysicsBody(rectangleOf: lineNode.size)
         setMasks(pb: newPB, cat: C.line, cont: C.yellow | C.death, col: C.zero)
         
@@ -87,47 +107,49 @@ fileprivate struct Spawner {
         lineNode.position = pos
       }
       
-      localgsi.addChild(lineNode)
+      localGS.addChild(lineNode)
     }
     
     func deathLine() {
       
-      let lineNode = SKSpriteNode(color: .orange, size: CGSize(width: localgsi.frame.width + 1000, height: 2)); do {
+      let lineNode = SKSpriteNode(color: .orange, size: CGSize(width: localGS.frame.width + 1000, height: 2)); do {
         let newPB = SKPhysicsBody(rectangleOf: lineNode.size); do {
           setMasks(pb: newPB, cat: C.death, cont: C.black, col: C.zero)
           newPB.affectedByGravity = false
         }
         
         lineNode.physicsBody = newPB
-        if g.fullmode.value { lineNode.position.y = (localgsi.frame.minY - localgsi.size30.height) }
-        else              { lineNode.position.y -= localgsi.size30.height }
+        if g.fullmode.value { lineNode.position.y =  (localGS.frame.minY  - localGS.size30.height) }
+        else                { lineNode.position.y -= (localGS.size30.height + notificationHeight) }
         
       }
-      localgsi.addChild(lineNode)
+      localGS.addChild(lineNode)
     }
     
     func touchPad() {
-      let touchPad = TouchPad(player: localgsi.player!, scene: localgsi)
+      let touchPad = TouchPad(player: localGS.player!, scene: localGS)
       if g.fullmode.value { }
-      else { touchPad.position.y -= touchPad.size.height / 2 }
-      localgsi.addChild(touchPad)
+      else {
+        touchPad.position.y -= (touchPad.size.height / 2) + notificationHeight
+      }
+      localGS.addChild(touchPad)
     }
     
     func lineOfBlackBoxes() {
       
       func randomX() -> CGFloat {
-        let randomX = randy(Int(localgsi.frame.maxX * 2))
-        let xVal = CGFloat(randomX) - localgsi.frame.maxX
+        let randomX = randy(Int(localGS.frame.maxX * 2))
+        let xVal = CGFloat(randomX) - localGS.frame.maxX
         return xVal
       }
       
-      let yVal = localgsi.frame.maxY + (localgsi.size30.height/2)
-      let numBoxes = localgsi.difficulty.boxNum + randy(6)
+      let yVal = (localGS.frame.maxY + localGS.size30.height/2) - notificationHeight
+      let numBoxes = localGS.difficulty.boxNum + randy(6)
       
       let fairness = CGFloat(15) // 5 points on either side?
       let fairRect = CGRect(middle: CGPoint(x: randomX(), y: yVal),
-                            width:  localgsi.size30.width + fairness,
-                            height: localgsi.size30.height)
+                            width:  localGS.size30.width + fairness,
+                            height: localGS.size30.height)
     
       // Oh my god this is awful:
       for _ in 1...numBoxes {
@@ -140,8 +162,8 @@ fileprivate struct Spawner {
         
         func getRandomRect()  -> CGRect {
           return CGRect(middle: randomPoint,
-                        width: localgsi.size30.width,
-                        height: localgsi.size30.height)
+                        width: localGS.size30.width,
+                        height: localGS.size30.height)
         }
         
         var randomRect = getRandomRect()
@@ -156,7 +178,22 @@ fileprivate struct Spawner {
       
       scanline(pos: CGPoint(x: 0, y: yVal))
     }
-  };
+  
+    func scoreLabel() {
+      let background = SKSpriteNode(color: .white, size: CGSize(width: localGS.size.width, height: notificationHeight)); do {
+        
+        let scoreLabel = SKLabelNode(text: "Score: \(g.score)")
+        scoreLabel.fontName = "Chalkduster"
+        scoreLabel.fontColor = .black
+        localGS.scoreLabel = scoreLabel
+        
+        background.zPosition += 1
+        background.position.y = (localGS.frame.maxY - background.size.height/2)
+        background.addChild(scoreLabel)
+      }
+      localGS.addChild(background)
+  }
+};
 
 // MARK: - updateAction():
 extension GameScene {
@@ -201,6 +238,7 @@ extension GameScene {
     spawn.lineOfBlackBoxes()
     spawn.deathLine()
     spawn.touchPad()
+    spawn.scoreLabel()
   }
   
   override func didMove(to view: SKView) {
