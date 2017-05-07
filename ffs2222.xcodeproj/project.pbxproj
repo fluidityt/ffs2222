@@ -15,6 +15,7 @@
 		4D1991BC1EB9D72000B2873B /* utilz.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D1991BB1EB9D72000B2873B /* utilz.swift */; };
 		4D1991BE1EB9D9EC00B2873B /* sprites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D1991BD1EB9D9EC00B2873B /* sprites.swift */; };
 		4D3C18051EB5A656009A727C /* MainMenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3C18041EB5A656009A727C /* MainMenuScene.swift */; };
+		4D8880F11EBF5AB8008399CE /* labels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D8880F01EBF5AB8008399CE /* labels.swift */; };
 		4DA745A81EBF19E4005F9C4D /* util classes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DA745A71EBF19E4005F9C4D /* util classes.swift */; };
 		4DFA469B1EB177C3008E5847 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFA469A1EB177C3008E5847 /* AppDelegate.swift */; };
 		4DFA46A11EB177C3008E5847 /* GS Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFA46A01EB177C3008E5847 /* GS Init.swift */; };
@@ -47,6 +48,7 @@
 		4D1991BD1EB9D9EC00B2873B /* sprites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = sprites.swift; sourceTree = "<group>"; };
 		4D1991BF1EB9FF2D00B2873B /* CGRect test.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "CGRect test.playground"; sourceTree = "<group>"; };
 		4D3C18041EB5A656009A727C /* MainMenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenuScene.swift; sourceTree = "<group>"; };
+		4D8880F01EBF5AB8008399CE /* labels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = labels.swift; sourceTree = "<group>"; };
 		4DA745A71EBF19E4005F9C4D /* util classes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "util classes.swift"; sourceTree = "<group>"; };
 		4DF5AB9A1EB5D18E005A340A /* open animation.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "open animation.playground"; sourceTree = "<group>"; };
 		4DFA46971EB177C2008E5847 /* ffs2222.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ffs2222.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -138,6 +140,7 @@
 				4DFA46A21EB177C3008E5847 /* GameViewController.swift */,
 				4D1991B91EB9D61100B2873B /* ud funcs.swift */,
 				4D1991BD1EB9D9EC00B2873B /* sprites.swift */,
+				4D8880F01EBF5AB8008399CE /* labels.swift */,
 				4DA745A71EBF19E4005F9C4D /* util classes.swift */,
 				4D1991BB1EB9D72000B2873B /* utilz.swift */,
 				4D0AC0491EBB56CA0078DB73 /* _____________________________ */,
@@ -270,6 +273,7 @@
 				4DFA46A11EB177C3008E5847 /* GS Init.swift in Sources */,
 				4D1991BE1EB9D9EC00B2873B /* sprites.swift in Sources */,
 				4D1991BA1EB9D61100B2873B /* ud funcs.swift in Sources */,
+				4D8880F11EBF5AB8008399CE /* labels.swift in Sources */,
 				4D1991BC1EB9D72000B2873B /* utilz.swift in Sources */,
 				4DFA46A31EB177C3008E5847 /* GameViewController.swift in Sources */,
 				4D1991B81EB9D5B500B2873B /* FailScene.swift in Sources */,

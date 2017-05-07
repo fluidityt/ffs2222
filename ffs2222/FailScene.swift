@@ -1,41 +1,8 @@
 //
-//  OtherScenes.swift
+//  FailScene.swift
 //  ffs2222
 
 import SpriteKit
-
-fileprivate final class PlayLabel: SKLabelNode {
-  
-  init(texter: String) {
-    super.init(fontNamed: "Chalkduster")
-    self.text = ">>> PLAY AGAIN :D <<<"
-    isUserInteractionEnabled = true
-  }
-  
-  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-    let scene = GameScene(size: self.scene!.size)
-    g.gsi = scene
-    self.scene!.view!.presentScene(scene)
-  }
-  
-  required init?(coder aDecoder: NSCoder) { fatalError("") }
-  override init() { super.init() }
-};
-
-fileprivate final class MainMenuLabel: SKLabelNode {
-  
-  init(texter: String) {
-    super.init(fontNamed: "Chalkduster")
-    self.text = ">>> MainMenu <<<"
-    isUserInteractionEnabled = true
-  }
-  
-  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-    self.scene!.view!.presentScene(g.mainmenu!)
-  }
-  
-  required init?(coder aDecoder: NSCoder) { fatalError("") }; override init() { super.init() }
-};
 
 // MARK: - Scene:
 final class FailScene: SKScene {

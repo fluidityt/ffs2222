@@ -40,6 +40,8 @@
 	<array/>
 	<key>fast-fall mode (but less blocks)</key>
 	<string></string>
+	<key>training mode back button</key>
+	<string></string>
 	<key>Add win caption to failscene on new HS</key>
 	<string></string>
 	<key>GameCenter</key>

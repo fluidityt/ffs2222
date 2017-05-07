@@ -3,48 +3,15 @@
 
 import SpriteKit
 
-fileprivate final class PlayLabel: SKLabelNode {
-  
-  init(texter: String) {
-    super.init(fontNamed: "Chalkduster")
-    self.text = "Play Game!"
-    isUserInteractionEnabled = true
-  }
-  
-  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-    let scene = GameScene(size: self.scene!.size)
-    g.gsi = scene
-    self.scene!.view!.presentScene(scene)
-  }
-  
-  required init?(coder aDecoder: NSCoder) { fatalError("") }; override init() { super.init() }
-};
-
-fileprivate final class OptionLabel: SKLabelNode {
-  
-  init(texter: String) {
-    super.init(fontNamed: "Chalkduster")
-    self.text = "Options"
-    isUserInteractionEnabled = true
-  }
-  
-  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-    
-  }
-  
-  required init?(coder aDecoder: NSCoder) { fatalError("") }
-  override init() { super.init() }
-};
+ 
 
 // MARK: - Scene:
 final class MainMenuScene: SKScene {
   
+  private static let scoreText = "Session: \(g.sessionScore) | High: \(g.highscore)"
+  let mm_scoreLabel = SKLabelNode(text: MainMenuScene.scoreText)
   
-  let mm_scoreLabel = SKLabelNode(text: "session: \(g.sessionScore) | high: \(g.highscore)")
-  
-  func updateScore() {
-    mm_scoreLabel.text = "session: \(g.sessionScore) | high: \(g.highscore)"
-  }
+  func updateScore() { mm_scoreLabel.text = MainMenuScene.scoreText }
   
   private func selfInit() {
     setBackGroundColor(forScene: self)
@@ -59,8 +26,8 @@ final class MainMenuScene: SKScene {
       Toggler(labelName: "DevMode",  refBool: g.devmode  ),
       Toggler(labelName: "SpinMode", refBool: g.spinning ),
       Toggler(labelName: "FadeMode", refBool: g.fademode ),
-      Toggler(labelName: "FullMode", refBool: g.fullmode ),
-      Toggler(labelName: "NHMode"  , refBool: g.nhmode   )
+      Toggler(labelName: "FullMode", refBool: g.fullmode )
+      //Toggler(labelName: "NHMode"  , refBool: g.nhmode   )
       // <# Toggler(labelName: "Scoring" , refBool: g.scoremode)
     ]
     
@@ -82,7 +49,7 @@ final class MainMenuScene: SKScene {
     g.sessionScore = 0
     
     UD.initUserDefaults()
-    // UD.setHighScore(to: 0)
+    // UD.setHighScore(to: 158)
     UD.loadHighScore()
   
     selfInit()

@@ -17,8 +17,8 @@ struct g {
   spinning   = RefBool(false),
   fademode   = RefBool(false),
   fullmode   = RefBool(false),
-  nhmode     = RefBool(false),
   scoremode  = RefBool(false),
+  nhmode     = RefBool(true ),
   
   state      = "launch"
 }
