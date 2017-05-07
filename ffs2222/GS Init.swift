@@ -39,7 +39,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   difficulty = (boxNum: 4, boxSpeed: 1.0, boxSize: CGFloat(1.5)),
   action: SKAction?,
   player: Player?,
-  scoreLabel: SKLabelNode?
+  scoreLabel: SKLabelNode?,
+  
+  isInvincible = false  // Used for contact in loop
+  
   
   
   lazy var size30: CGSize = CGSize(width: 30, height: 30)
@@ -251,7 +254,7 @@ extension GameScene {
     spawnStuff()
     updateAction()
     
-    if g.devmode.value  { gs.hits = -5000             }
+    if g.devmode.value  { isInvincible = true         }
     if g.fullmode.value { difficulty.boxSpeed -= 0.15 }
     
     g.score = 0

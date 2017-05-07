@@ -1,25 +1,23 @@
 import SpriteKit
 
+/// Extra state for loop:
+fileprivate var
+waiting      = false,     // Used for g.score increase at end of loop.
+hits         = 0,         // Player HP.
+hitThisFrame = false,     // Used to keep player alive when hit 2 black at same time.
+paused       = false
+
 // MARK: - Game Loop:
 extension GameScene {
-  
-  /// A bit of extra state just for game loop:
-  struct gs {
-    static var
-    waiting      = false,     // Used for g.score increase at end of loop.
-    hits         = 0,         // Player HP.
-    hitThisFrame = false,     // Used to keep player alive when hit 2 black at same time.
-    paused       = false
-  }
-  
+
   // MARK: - TB:
   func pause() {
     // FIXME: FULLMODE BUG HOTFIX:
     if g.fullmode.value { return }
     
-    gs.paused.toggle()
+    paused.toggle()
     
-    if gs.paused {
+    if paused {
       view!.isPaused = true
       view!.frame = CGRect(middle: CGPoint(x: view!.frame.midX, y: view!.frame.midY),
                            width: size.width/3, height: size.height/3)
@@ -58,7 +56,7 @@ extension GameScene {
   }
   
   override func update(_ currentTime: TimeInterval) {
-    gs.hitThisFrame = false
+    hitThisFrame = false
     
     keepPlayerInBounds()
   }
@@ -77,7 +75,7 @@ extension GameScene {
         }
       }
       
-      gs.hitThisFrame = true
+      hitThisFrame = true
       
       let (yellowNode, blackNode) = assignYellowBlack()
       
@@ -90,6 +88,8 @@ extension GameScene {
     static func yellowAndLine (contact: SKPhysicsContact) {
       
       defer { if !g.devmode.value { UD.saveHighScore() } }
+      
+      if isInvincible { return }
       
       g.score += 1
       // <#  g.gsi.scoreLabel?.text = "Score \(g.score)"
@@ -138,9 +138,9 @@ extension GameScene {
   
   // MARK: - End contact:
   override func didSimulatePhysics() {
-    if gs.hitThisFrame { gs.hits += 1 }
-    if gs.hits >= 2    {
-      gs.hits = 0
+    if hitThisFrame { hits += 1 }
+    if hits >= 2    {
+      hits = 0
       view!.presentScene(FailScene(size: size))
     }
   }
@@ -152,17 +152,17 @@ extension GameScene {
     difficulty.boxSpeed -= 0.1
     updateAction()
     
-    if gs.waiting { gs.waiting = false }
-    else { gs.waiting = true }
+    if waiting { waiting = false }
+    else { waiting = true }
   }
   
   override func didFinishUpdate() {
     
     switch g.score {
-    // case <#num#>: if  <#excl#>gs.waiting { upDifficulty() }
-    case 10: if !gs.waiting { upDifficulty() }
-    case 20: if  gs.waiting { upDifficulty() }
-    case 30: if !gs.waiting { upDifficulty() }
+    // case <#num#>: if  <#excl#>waiting { upDifficulty() }
+    case 10: if !waiting { upDifficulty() }
+    case 20: if  waiting { upDifficulty() }
+    case 30: if !waiting { upDifficulty() }
     default: ()
     }
   }
