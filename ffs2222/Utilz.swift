@@ -20,7 +20,10 @@ func setMasks(pb: SKPhysicsBody, cat: UInt32, cont: UInt32, col: UInt32) {
 }
 
 func changeFont(_ labels: [SKLabelNode]) {
-  for label in labels { label.fontName = "Chalkduster" }
+  for label in labels {
+    label.fontName = "Chalkduster"
+    label.fontColor = .black
+  }
 }
 
 /// Top label is [0]
@@ -41,6 +44,10 @@ extension CGRect {
     self.origin = CGPoint(x: x, y: y)
     self.size   = CGSize(width: width, height: height)
   }
+}
+
+func setBackGroundColor(forScene: SKScene) {
+  forScene.backgroundColor = UIColor(red:0.95, green:0.95, blue:0.95, alpha:1.0)
 }
 
 extension SKNode {

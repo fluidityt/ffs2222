@@ -63,8 +63,13 @@ extension GameScene {
     } // ... you know what it is
     
     static func yellowAndLine (contact: SKPhysicsContact) {
+      
+      defer { if !g.devmode.value { UD.saveHighScore() } }
+      
       g.score += 1
       g.gsi.scoreLabel?.text = "Score \(g.score)"
+      if g.score > g.sessionScore { g.sessionScore = g.score }
+      
       print(g.score)
       
       if contact.bodyA.categoryBitMask == Category.line {
@@ -95,9 +100,6 @@ extension GameScene {
   };
   
   func didBegin(_ contact: SKPhysicsContact) {
-    
-    defer { if !g.devmode.value { UD.saveHighScore() } }
-    
     let contactedCategories = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
     
     switch contactedCategories {
@@ -112,7 +114,7 @@ extension GameScene {
   override func didSimulatePhysics() {
     if gs.hitThisFrame { gs.hits += 1 }
     if gs.hits >= 2    {
-      gs.hits = 0 // FIXME: Reset for next game since this is not an instance variable... what?
+      gs.hits = 0
       view!.presentScene(FailScene(size: size))
     }
   }
@@ -141,6 +143,9 @@ extension GameScene {
   
   
   func pause() {
+    // FIXME: FULLMODE BUG HOTFIX:
+    if g.fullmode.value { return }
+    
     gs.paused.toggle()
     
     if gs.paused {

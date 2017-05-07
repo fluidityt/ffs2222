@@ -9,7 +9,7 @@ final class MainMenuScene: SKScene {
     
     init(texter: String) {
       super.init(fontNamed: "Chalkduster")
-      self.text = "Play Game! Best Score: \(g.highscore)"
+      self.text = "Play Game!"
       isUserInteractionEnabled = true
     }
     
@@ -38,43 +38,49 @@ final class MainMenuScene: SKScene {
     override init() { super.init() }
   };
 
+  private func selfInit() {
+setBackGroundColor(forScene: self)
+    anchorPoint = CGPoint(x: 0.5, y: 0.5)
+  }
+  
   private func makeLabels() {
     
     let labels: [SKLabelNode] = [
       PlayLabel(texter: ""),
+      SKLabelNode(text: "session: \(g.sessionScore) | high: \(g.highscore)"),
       Toggler(labelName: "DevMode" , refBool: g.devmode  ),
       Toggler(labelName: "SpinMode", refBool: g.spinning ),
       Toggler(labelName: "FadeMode", refBool: g.fademode ),
       Toggler(labelName: "FullMode", refBool: g.fullmode ),
-      Toggler(labelName: "NHMode"  , refBool: g.nhmode   ),
-      Toggler(labelName: "Scoring" , refBool: g.scoremode)
+      Toggler(labelName: "NHMode"  , refBool: g.nhmode   )
+      // Toggler(labelName: "Scoring" , refBool: g.scoremode)
     ]
-    labels[0].position.y += 200
+    labels[0].position.y += 250
     offSetLabel(labels, by: 50)
+    changeFont(labels)
     addChildren(labels)
   }
   
-  // COMPATIBILITY FOR iOS 9:
+  // ***COMPATIBILITY FOR iOS 9*** \\
   private var firstrun = true
-  
   
   // MARK: - DMV:
   override func didMove(to view: SKView) {
     guard firstrun else { return }
     
     g.state = "menu"
+    g.mainmenu = self
+    g.sessionScore = 0
     
     UD.initUserDefaults()
-    //UD.setHighScore(to: 0)
+    //    UD.setHighScore(to: 104)
     UD.loadHighScore()
     
-    
-    g.mainmenu = self
-    anchorPoint = CGPoint(x: 0.5, y: 0.5)
-    print("hi")
+  
+    selfInit()
     makeLabels()
     
-    // COMPATIBILITY IOS 9
+    // ***COMPATIBILITY FOR iOS 9*** \\
     firstrun = false
   }
 };

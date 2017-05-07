@@ -39,27 +39,36 @@ final class FailScene: SKScene {
     required init?(coder aDecoder: NSCoder) { fatalError("") }; override init() { super.init() }
   };
   
+  private func selfInit() {
+    scaleMode = .aspectFit
+    anchorPoint = CGPoint(x: 0.5, y: 0.5)
+    setBackGroundColor(forScene: self)
+  }
+  
   private func makeLabels() {
     
-    let
-    scoreLabel = SKLabelNode(text: "SCORE: \(g.score)!"),
-    hsLabel    = SKLabelNode(text: "HIGHSCORE: \(g.highscore)"),
-    playLabel  = PlayLabel(texter: ""),
-    mmLabel    = MainMenuLabel(texter: "")
+    let labels: [SKLabelNode] = [
+      SKLabelNode(text: "SCORE: \(g.score)!"),
+      SKLabelNode(text: "HIGHSCORE: \(g.highscore)"),
+      SKLabelNode(text: "SESSION: \(g.sessionScore)"),
+      PlayLabel(texter: ""),
+      MainMenuLabel(texter: "")
+    ]
   
-    scoreLabel.position.y += 100
+    labels[0].position.y += 100
     
-    let labels = [scoreLabel, hsLabel, playLabel, mmLabel]
+     //labels = [scoreLabel, hsLabel, sesLabel, playLabel, mmLabel]
     offSetLabel(labels)
     changeFont (labels)
     addChildren(labels)
   }
   
+  // MARK: - DMV:
   override func didMove(to view: SKView) {
-    scaleMode = .aspectFit
-    anchorPoint = CGPoint(x: 0.5, y: 0.5)
+  selfInit()
     makeLabels()
     
+    // Important this is last:
     g.score = 0
   }
 };

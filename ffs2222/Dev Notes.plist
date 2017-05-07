@@ -10,6 +10,8 @@
 	<string></string>
 	<key>Random global stuff in DoContact and Spawner</key>
 	<string></string>
+	<key>Protocol for makeLab selfInit</key>
+	<string></string>
 	<key>   </key>
 	<string></string>
 	<key>DESIGN</key>
@@ -63,6 +65,8 @@
 	<key>FIXME</key>
 	<array/>
 	<key>horizontal doublebox hit still kills</key>
+	<string></string>
+	<key>fix scoremode</key>
 	<string></string>
 	<key>fullmode + pause = crash</key>
 	<string></string>

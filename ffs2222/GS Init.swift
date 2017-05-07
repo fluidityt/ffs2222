@@ -6,10 +6,11 @@ struct g {
   static var
   view = SKView(),
   gsi   = GameScene(),
-  score = 0, // Too lazy to make an init for other scenes...
-  
-  highscore: Int = 0,
   mainmenu: MainMenuScene? = nil,
+  
+  score = 0,
+  sessionScore = 0,
+  highscore: Int = 0,
   
   devdifficulty = 0,
   devmode    = RefBool(false),
@@ -37,6 +38,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   action: SKAction?,
   player: Stuff?,
   scoreLabel: SKLabelNode?
+  
   
   lazy var size30: CGSize = CGSize(width: 30, height: 30)
   lazy var notificationHeight: CGFloat = (self.size.height/7)/2
@@ -227,7 +229,7 @@ extension GameScene {
     //view!.frame = CGRect(x: 0, y: 0, width: 350, height: 350)
     scaleMode = .aspectFit
     anchorPoint = CGPoint(x: 0.5, y: 0.5)
-    backgroundColor = .gray
+    setBackGroundColor(forScene: self)
     physicsWorld.contactDelegate = self
     physicsWorld.gravity = CGVector(dx: 0, dy: -0.25)
   }

@@ -20,7 +20,6 @@ class GameViewController: UIViewController {
     let scene = MainMenuScene(size: CGSize(width: 600, height: 1000)) // Why does this work?
     scene.scaleMode = .aspectFit
     view.presentScene(scene)
-    print(view.frame.height)
   }
   
   override var shouldAutorotate: Bool { return true }
