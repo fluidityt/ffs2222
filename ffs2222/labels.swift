@@ -7,7 +7,13 @@ final class PlayLabel: SKLabelNode {
   
   init(texter: String) {
     super.init(fontNamed: "Chalkduster")
-    self.text = ">>> PLAY AGAIN :D <<<"
+
+    self.text = {
+      if      g.state == State.fail { return ">>> PLAY AGAIN :D <<<" }
+      else if g.state == State.main { return "Play Game!"            }
+      else                          { return "error"                 }
+    }()
+    
     isUserInteractionEnabled = true
   }
   
@@ -30,6 +36,8 @@ final class MainMenuLabel: SKLabelNode {
   }
   
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    guard let mm = g.mainmenu else { fatalError() }
+    mm.updateScore()
     self.scene!.view!.presentScene(g.mainmenu!)
   }
   

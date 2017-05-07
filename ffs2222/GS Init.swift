@@ -1,8 +1,10 @@
 import SpriteKit
 
+enum State { case game, main, fail, loading }
+
 /// Globals:
 struct g {
-  
+
   static var
   view = SKView(),
   gsi   = GameScene(),
@@ -20,7 +22,7 @@ struct g {
   scoremode  = RefBool(false),
   nhmode     = RefBool(true ),
   
-  state      = "launch"
+  state      = State.loading
 }
 
 // MARK: - Scene:
@@ -241,7 +243,7 @@ extension GameScene {
   
   override func didMove(to view: SKView) {
     // OMFG what have I become??
-    g.state = "game"
+    g.state = .main
     
     print("Welcome to Sprite Attack! Your HS is \(g.highscore)")
     

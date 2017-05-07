@@ -12,9 +12,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   }
   func applicationWillResignActive(_ application: UIApplication) {  }
   func applicationDidEnterBackground(_ application: UIApplication) {
-    if g.state == "game" {
-      g.gsi.pause()
-    }
+    
   }
   func applicationWillEnterForeground(_ application: UIApplication) {  }
   func applicationDidBecomeActive(_ application: UIApplication) {

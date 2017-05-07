@@ -60,7 +60,7 @@ extension SKNode {
 
 
 struct SKPoint {
-  static let topLeft     = CGPoint(x: 0, y: 1)
+static let topLeft     = CGPoint(x: 0, y: 1)
   static let topRight    = CGPoint(x: 1, y: 1)
   static let bottomLeft  = CGPoint(x: 0, y: 0)
   static let bottomRight = CGPoint(x: 1, y: 0)

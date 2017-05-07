@@ -23,7 +23,8 @@ struct UD {
     guard let oldHS = userDefaults.value(forKey: Keys.highScore) as? Int else { print("bad key"); return }
     if g.score > oldHS {
       g.highscore = g.score
-      g.mainmenu?.updateScore()
+      guard let mm = g.mainmenu else { fatalError() }
+      mm.updateScore()
       FailScene.newHighscore = true
       userDefaults.setValue(g.score, forKey: Keys.highScore)
       print("saved high g.score!")
@@ -34,14 +35,16 @@ struct UD {
     guard let value = userDefaults.value(forKey: Keys.highScore) else { print("no hs in UD"); return }
     guard let hs = value as? Int else { print("value was not Int"); return }
     g.highscore = hs
-    g.mainmenu?.updateScore()
+    guard let mm = g.mainmenu else { fatalError() }
+    mm.updateScore()
     print("loaded high g.score!")
   }
   
   static func setHighScore(to value: Int) {
     userDefaults.setValue(value, forKey: Keys.highScore)
     g.highscore = value
-    g.mainmenu?.updateScore()
+    guard let mm = g.mainmenu else { fatalError() }
+    mm.updateScore()
     print("reset g.highscore")
   }
   

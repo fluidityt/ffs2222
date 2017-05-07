@@ -81,8 +81,10 @@ extension GameScene {
       
       let (yellowNode, blackNode) = assignYellowBlack()
       
-      if !g.devmode.value { yellowNode.node?.setScale(g.gsi.difficulty.boxSize) }
-      blackNode.node?.removeFromParent()
+      guard let yn = yellowNode.node, let bn = blackNode.node else { fatalError() }
+      
+      if !g.devmode.value { yn.setScale(g.gsi.difficulty.boxSize) }
+      bn.removeFromParent()
     } // ... you know what it is
     
     static func yellowAndLine (contact: SKPhysicsContact) {

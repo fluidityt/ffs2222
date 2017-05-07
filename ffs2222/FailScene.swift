@@ -46,6 +46,8 @@ final class FailScene: SKScene {
   
   // MARK: - DMV:
   override func didMove(to view: SKView) {
+    g.state = .fail
+    
     selfInit()
     makeLabels()
     if FailScene.newHighscore { congratulatePlayer() }

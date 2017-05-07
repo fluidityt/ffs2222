@@ -1,5 +1,5 @@
 //
-// LaunchScene.swift
+// MainMenuScene.swift
 
 import SpriteKit
 
@@ -8,7 +8,7 @@ import SpriteKit
 // MARK: - Scene:
 final class MainMenuScene: SKScene {
   
-  private static let scoreText = "Session: \(g.sessionScore) | High: \(g.highscore)"
+  private static var scoreText: String { return "Session: \(g.sessionScore) | High: \(g.highscore)" }
   let mm_scoreLabel = SKLabelNode(text: MainMenuScene.scoreText)
   
   func updateScore() { mm_scoreLabel.text = MainMenuScene.scoreText }
@@ -44,7 +44,7 @@ final class MainMenuScene: SKScene {
   override func didMove(to view: SKView) {
     guard firstrun else { return }
     
-    g.state = "menu"
+    g.state = .main
     g.mainmenu = self
     g.sessionScore = 0
     

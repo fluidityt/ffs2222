@@ -2,3 +2,7 @@
 import SpriteKit
 
 
+class Menu {
+  
+  
+}
