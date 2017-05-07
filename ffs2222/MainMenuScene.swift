@@ -56,6 +56,7 @@ final class MainMenuScene: SKScene {
     let labels: [SKLabelNode] = [
       PlayLabel(texter: ""),
       mm_scoreLabel,
+      Toggler(labelName: "DevMode",  refBool: g.devmode  ),
       Toggler(labelName: "SpinMode", refBool: g.spinning ),
       Toggler(labelName: "FadeMode", refBool: g.fademode ),
       Toggler(labelName: "FullMode", refBool: g.fullmode ),

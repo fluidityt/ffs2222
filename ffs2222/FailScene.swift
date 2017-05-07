@@ -68,7 +68,7 @@ final class FailScene: SKScene {
   private func congratulatePlayer() {
     let grats = SKLabelNode(text: "Congrats! New Highscore!!"); do {
       changeFont([grats])
-      let offset = 75
+      let offset = CGFloat(75)
       grats.position.y = frame.maxY - (grats.frame.size.height/2 + offset)
       grats.run(.repeatForever(.sequence([.scale(to: 1.25, duration: 0.25),
                                           .scale(to: 1, duration: 0.25)])))
