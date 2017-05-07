@@ -39,6 +39,13 @@ fileprivate final class OptionLabel: SKLabelNode {
 // MARK: - Scene:
 final class MainMenuScene: SKScene {
   
+  
+  let mm_scoreLabel = SKLabelNode(text: "session: \(g.sessionScore) | high: \(g.highscore)")
+  
+  func updateScore() {
+    mm_scoreLabel.text = "session: \(g.sessionScore) | high: \(g.highscore)"
+  }
+  
   private func selfInit() {
     setBackGroundColor(forScene: self)
     anchorPoint = CGPoint(x: 0.5, y: 0.5)
@@ -48,13 +55,12 @@ final class MainMenuScene: SKScene {
     
     let labels: [SKLabelNode] = [
       PlayLabel(texter: ""),
-      SKLabelNode(text: "session: \(g.sessionScore) | high: \(g.highscore)"),
-      Toggler(labelName: "DevMode" , refBool: g.devmode  ),
+      mm_scoreLabel,
       Toggler(labelName: "SpinMode", refBool: g.spinning ),
       Toggler(labelName: "FadeMode", refBool: g.fademode ),
       Toggler(labelName: "FullMode", refBool: g.fullmode ),
       Toggler(labelName: "NHMode"  , refBool: g.nhmode   )
-      // Toggler(labelName: "Scoring" , refBool: g.scoremode)
+      // <# Toggler(labelName: "Scoring" , refBool: g.scoremode)
     ]
     
     labels[0].position.y += 250
@@ -75,9 +81,8 @@ final class MainMenuScene: SKScene {
     g.sessionScore = 0
     
     UD.initUserDefaults()
-    //    UD.setHighScore(to: 104)
+    // UD.setHighScore(to: 0)
     UD.loadHighScore()
-    
   
     selfInit()
     makeLabels()

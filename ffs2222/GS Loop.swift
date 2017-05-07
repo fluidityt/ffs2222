@@ -90,7 +90,7 @@ extension GameScene {
       defer { if !g.devmode.value { UD.saveHighScore() } }
       
       g.score += 1
-      g.gsi.scoreLabel?.text = "Score \(g.score)"
+      // <#  g.gsi.scoreLabel?.text = "Score \(g.score)"
       if g.score > g.sessionScore { g.sessionScore = g.score }
       
       print(g.score)

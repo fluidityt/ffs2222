@@ -57,13 +57,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ffs2222/MainMenuScene.swift"
-            timestampString = "515828880.156094"
+            filePath = "ffs2222/GS Loop.swift"
+            timestampString = "515853831.853015"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "56"
-            endingLineNumber = "56"
-            landmarkName = "makeLabels()"
+            startingLineNumber = "93"
+            endingLineNumber = "93"
+            landmarkName = "yellowAndLine(contact:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

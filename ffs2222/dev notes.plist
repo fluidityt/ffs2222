@@ -12,6 +12,12 @@
 	<string></string>
 	<key>Protocol for makeLab selfInit</key>
 	<string></string>
+	<key>make mainmenu initable</key>
+	<string></string>
+	<key>hi and session scores spaghetti</key>
+	<string></string>
+	<key>convert UD to FP</key>
+	<string></string>
 	<key>   </key>
 	<string></string>
 	<key>DESIGN</key>
@@ -38,6 +44,8 @@
 	<string></string>
 	<key>In-app menu</key>
 	<string></string>
+	<key>icloud hiscores</key>
+	<string></string>
 	<key> </key>
 	<string></string>
 	<key>Options menu (with colors and stuff)</key>
@@ -56,13 +64,11 @@
 	<string></string>
 	<key>fix autopause</key>
 	<string></string>
-	<key>highscore not saving failscreen?</key>
-	<string></string>
-	<key>mainmenu scores broken</key>
-	<string></string>
 	<key>fix scoremode</key>
 	<string></string>
 	<key>fullmode + pause = crash</key>
+	<string></string>
+	<key>hardcoded numbers to %screen</key>
 	<string></string>
 </dict>
 </plist>
