@@ -58,12 +58,6 @@ extension SKNode {
   }
 }
 
-class RefBool {
-  var value: Bool
-  init(_ value: Bool) {
-    self.value = value
-  }
-}
 
 struct SKPoint {
   static let topLeft     = CGPoint(x: 0, y: 1)
@@ -72,3 +66,12 @@ struct SKPoint {
   static let bottomRight = CGPoint(x: 1, y: 0)
   static let middle      = CGPoint(x: 0.5, y: 0.5)
 }
+
+extension Bool {
+  mutating func toggle() {
+    if self == true {
+      self = false
+    } else { self = true }
+  }
+}
+

@@ -23,7 +23,7 @@ struct g {
   state      = "launch"
 }
 
-// MARK: - Main:
+// MARK: - Scene:
 class GameScene: SKScene, SKPhysicsContactDelegate {
   
   /// Bitmasks:
@@ -36,7 +36,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   var
   difficulty = (boxNum: 4, boxSpeed: 1.0, boxSize: CGFloat(1.5)),
   action: SKAction?,
-  player: Stuff?,
+  player: Player?,
   scoreLabel: SKLabelNode?
   
   
@@ -61,7 +61,7 @@ fileprivate final class Spawner {
   }
 
   func yellowNode() {
-    let yellowNode = Stuff(color: .yellow, size: localGS.size30); do {
+    let yellowNode = Player(color: .yellow, size: localGS.size30); do {
       let newPB = SKPhysicsBody(rectangleOf: localGS.size30); do {
         setMasks(pb: newPB, cat: C.yellow, cont: C.black, col: C.zero)
         newPB.affectedByGravity  = false
@@ -206,22 +206,6 @@ fileprivate final class Spawner {
   }
 };
 
-// MARK: - updateAction():
-extension GameScene {
-  
-  func updateAction() {
-    
-    removeAction(forKey: "spawner")
-    
-    let wait     = SKAction.wait(forDuration: difficulty.boxSpeed)
-    let run      = SKAction.run { Spawner(gsi: self).lineOfBlackBoxes() }
-    let sequence = SKAction.sequence([wait, run])
-    
-    self.action  = SKAction.repeatForever(sequence)
-    self.run(action!, withKey: "spawner")
-  }
-};
-
 // MARK: - DMV:
 extension GameScene {
   
@@ -234,16 +218,6 @@ extension GameScene {
     physicsWorld.gravity = CGVector(dx: 0, dy: -0.25)
   }
   
-  private func devMode() {
-    gs.hits = -5000
-    
-    if g.devdifficulty > 0 {
-      for _ in 1...g.devdifficulty {
-        upDifficulty()
-      }
-    }
-  }
-  
   private func spawnStuff() {
     let spawn = Spawner(gsi: self)
     spawn.yellowNode()
@@ -251,6 +225,18 @@ extension GameScene {
     spawn.deathLine()
     spawn.touchPad()
     spawn.scoreLabel()
+  }
+
+  func updateAction() {
+    
+    removeAction(forKey: "spawner")
+    
+    let wait     = SKAction.wait(forDuration: difficulty.boxSpeed)
+    let run      = SKAction.run { Spawner(gsi: self).lineOfBlackBoxes() }
+    let sequence = SKAction.sequence([wait, run])
+    
+    self.action  = SKAction.repeatForever(sequence)
+    self.run(action!, withKey: "spawner")
   }
   
   override func didMove(to view: SKView) {
@@ -260,13 +246,12 @@ extension GameScene {
     print("Welcome to Sprite Attack! Your HS is \(g.highscore)")
     
     selfInit()
-    
     spawnStuff()
-    
     updateAction()
     
-    if g.devmode.value { devMode() }
+    if g.devmode.value  { gs.hits = -5000             }
     if g.fullmode.value { difficulty.boxSpeed -= 0.15 }
+    
     g.score = 0
   }
 };

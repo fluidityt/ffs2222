@@ -12,6 +12,29 @@ extension GameScene {
     paused       = false
   }
   
+  // MARK: - TB:
+  func pause() {
+    // FIXME: FULLMODE BUG HOTFIX:
+    if g.fullmode.value { return }
+    
+    gs.paused.toggle()
+    
+    if gs.paused {
+      view!.isPaused = true
+      view!.frame = CGRect(middle: CGPoint(x: view!.frame.midX, y: view!.frame.midY),
+                           width: size.width/3, height: size.height/3)
+    } else {
+      view!.isPaused = false
+      view!.frame = CGRect(middle: CGPoint(x: view!.frame.midX, y: view!.frame.midY),
+                           width:  UIWindow().frame.width, height: UIWindow().frame.height)
+    }
+  }
+  
+  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    pause()
+  }
+  
+  // MARK: - Update:
   private func keepPlayerInBounds() {
     guard let playa = player else { fatalError("issue with player") }
     
@@ -40,7 +63,7 @@ extension GameScene {
     keepPlayerInBounds()
   }
   
-  /// Static methods for didBegin():
+  // MARK: - Contact:
   private struct DoContact {
     
     static func blackAndYellow(contact: SKPhysicsContact) {
@@ -111,6 +134,7 @@ extension GameScene {
     }
   }
   
+  // MARK: - End contact:
   override func didSimulatePhysics() {
     if gs.hitThisFrame { gs.hits += 1 }
     if gs.hits >= 2    {
@@ -119,7 +143,7 @@ extension GameScene {
     }
   }
   
-  /// Difficulty:
+  // MARK: - Post:
   func upDifficulty() {
     print("difficulty up!")
     difficulty.boxNum += 1
@@ -141,25 +165,4 @@ extension GameScene {
     }
   }
   
-  
-  func pause() {
-    // FIXME: FULLMODE BUG HOTFIX:
-    if g.fullmode.value { return }
-    
-    gs.paused.toggle()
-    
-    if gs.paused {
-      view!.isPaused = true
-      view!.frame = CGRect(middle: CGPoint(x: view!.frame.midX, y: view!.frame.midY),
-                           width: size.width/3, height: size.height/3)
-    } else {
-      view!.isPaused = false
-      view!.frame = CGRect(middle: CGPoint(x: view!.frame.midX, y: view!.frame.midY),
-                           width:  UIWindow().frame.width, height: UIWindow().frame.height)
-    }
-  }
-  
-  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-    pause()
-  }
 };

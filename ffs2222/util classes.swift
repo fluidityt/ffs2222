@@ -1,7 +1,15 @@
+//
+//  Toggler.swift
+//  ffs2222
 
 import SpriteKit
 
-
+class RefBool {
+  var value: Bool
+  init(_ value: Bool) {
+    self.value = value
+  }
+}
 
 class Toggler: SKLabelNode {
   
@@ -10,12 +18,12 @@ class Toggler: SKLabelNode {
   
   var labelName: String
   /*
-  var offText = ""
-  var onText = ""
-  */
+   var offText = ""
+   var onText = ""
+   */
   
   func toggleOn() {
-      refBool.value = true
+    refBool.value = true
     text = labelName + ": on"
   }
   
@@ -25,12 +33,12 @@ class Toggler: SKLabelNode {
   }
   
   /*init(offText: String, onText: String, refBool: RefBool) {
-    ref = refBool
-    super.init(fontNamed: "Chalkduster")
-    if refBool.value { toggleOn() } else { toggleOff() }
-    isUserInteractionEnabled = true
-  }
-  */
+   ref = refBool
+   super.init(fontNamed: "Chalkduster")
+   if refBool.value { toggleOn() } else { toggleOff() }
+   isUserInteractionEnabled = true
+   }
+   */
   
   init(labelName: String, refBool: RefBool) {
     self.refBool = refBool
@@ -46,19 +54,13 @@ class Toggler: SKLabelNode {
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     if refBool.value { toggleOff() } else { toggleOn() }
   }
-
+  
   required init?(coder aDecoder: NSCoder) { fatalError("") }
   override init() {
-  self.refBool = RefBool(false)
+    self.refBool = RefBool(false)
     self.labelName = "ERROR"
     super.init()
   }
 };
 
-extension Bool {
-  mutating func toggle() {
-    if self == true {
-      self = false
-      } else { self = true }
-  }
-}
+

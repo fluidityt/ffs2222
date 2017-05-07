@@ -3,43 +3,44 @@
 
 import SpriteKit
 
+fileprivate final class PlayLabel: SKLabelNode {
+  
+  init(texter: String) {
+    super.init(fontNamed: "Chalkduster")
+    self.text = "Play Game!"
+    isUserInteractionEnabled = true
+  }
+  
+  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    let scene = GameScene(size: self.scene!.size)
+    g.gsi = scene
+    self.scene!.view!.presentScene(scene)
+  }
+  
+  required init?(coder aDecoder: NSCoder) { fatalError("") }; override init() { super.init() }
+};
+
+fileprivate final class OptionLabel: SKLabelNode {
+  
+  init(texter: String) {
+    super.init(fontNamed: "Chalkduster")
+    self.text = "Options"
+    isUserInteractionEnabled = true
+  }
+  
+  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    
+  }
+  
+  required init?(coder aDecoder: NSCoder) { fatalError("") }
+  override init() { super.init() }
+};
+
+// MARK: - Scene:
 final class MainMenuScene: SKScene {
   
-  private final class PlayLabel: SKLabelNode {
-    
-    init(texter: String) {
-      super.init(fontNamed: "Chalkduster")
-      self.text = "Play Game!"
-      isUserInteractionEnabled = true
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-      let scene = GameScene(size: self.scene!.size)
-      g.gsi = scene
-      self.scene!.view!.presentScene(scene)
-    }
-    
-    required init?(coder aDecoder: NSCoder) { fatalError("") }; override init() { super.init() }
-  };
-  
-  private final class OptionLabel: SKLabelNode {
-    
-    init(texter: String) {
-      super.init(fontNamed: "Chalkduster")
-      self.text = "Options"
-      isUserInteractionEnabled = true
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-      
-    }
-    
-    required init?(coder aDecoder: NSCoder) { fatalError("") }
-    override init() { super.init() }
-  };
-
   private func selfInit() {
-setBackGroundColor(forScene: self)
+    setBackGroundColor(forScene: self)
     anchorPoint = CGPoint(x: 0.5, y: 0.5)
   }
   
@@ -55,6 +56,7 @@ setBackGroundColor(forScene: self)
       Toggler(labelName: "NHMode"  , refBool: g.nhmode   )
       // Toggler(labelName: "Scoring" , refBool: g.scoremode)
     ]
+    
     labels[0].position.y += 250
     offSetLabel(labels, by: 50)
     changeFont(labels)
