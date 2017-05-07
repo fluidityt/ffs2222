@@ -3,7 +3,7 @@
 
 import SpriteKit
 
-public class LaunchScene: SKScene {
+private class LaunchScene: SKScene {
   
   func randy(_ num: Int) -> Int { return Int(arc4random_uniform(UInt32(num)))+1 }
   
@@ -18,7 +18,7 @@ public class LaunchScene: SKScene {
   
   func spawnBlackNode(pos: CGPoint)  {
     
-    let blackNode = SKSpriteNode(color: .white, size: size30)
+    let blackNode = SKSpriteNode(color: .black, size: size30)
     let newPB = SKPhysicsBody(rectangleOf: size30)
     newPB.velocity.dy -= CGFloat(randy(100))
     blackNode.physicsBody = newPB
@@ -111,7 +111,7 @@ public class LaunchScene: SKScene {
     }
   }
   
- public override func didMove(to view: SKView) {
+  public override func didMove(to view: SKView) {
     anchorPoint = CGPoint(x: 0.5, y: 0.5)
     spawnLabel()
     dropBoxes()

@@ -16,6 +16,8 @@
 	<array/>
 	<key>have boxes laugh at you once you die</key>
 	<string></string>
+	<key>Score display as option?</key>
+	<string></string>
 	<key>Add top10 with names?</key>
 	<string></string>
 	<key>game mode.. .two yellow boxes??</key>
@@ -32,11 +34,11 @@
 	<string></string>
 	<key>TODO</key>
 	<array/>
-	<key>fast-fall mode (but less blocks)</key>
-	<string></string>
 	<key>Add pause feature (with timer)</key>
 	<string></string>
 	<key>Session hiscores</key>
+	<string></string>
+	<key>fast-fall mode (but less blocks)</key>
 	<string></string>
 	<key>Auto-pause </key>
 	<string></string>
@@ -61,6 +63,8 @@
 	<key>FIXME</key>
 	<array/>
 	<key>horizontal doublebox hit still kills</key>
+	<string></string>
+	<key>fullmode + pause = crash</key>
 	<string></string>
 	<key>--&gt;&gt;need to actually delete the whole &quot;box&quot; even if it is 3+ long</key>
 	<string></string>

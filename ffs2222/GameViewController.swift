@@ -13,7 +13,6 @@ class GameViewController: UIViewController {
       view.ignoresSiblingOrder = true
       view.showsFPS = true
       view.showsNodeCount = true
-      view.backgroundColor = .white
       view.frame = CGRect(x: 0, y: 0, width: mySize.width, height: mySize.height)
       // g.view = view
     }

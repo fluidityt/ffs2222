@@ -42,11 +42,14 @@ final class MainMenuScene: SKScene {
     
     let labels: [SKLabelNode] = [
       PlayLabel(texter: ""),
-      Toggler(labelName: "DevMode", refBool: g.devmode),
-      Toggler(labelName: "SpinMode", refBool: g.spinning),
-      Toggler(labelName: "FadeMode", refBool: g.fademode),
-      Toggler(labelName: "FullMode", refBool: g.fullmode)
+      Toggler(labelName: "DevMode" , refBool: g.devmode  ),
+      Toggler(labelName: "SpinMode", refBool: g.spinning ),
+      Toggler(labelName: "FadeMode", refBool: g.fademode ),
+      Toggler(labelName: "FullMode", refBool: g.fullmode ),
+      Toggler(labelName: "NHMode"  , refBool: g.nhmode   ),
+      Toggler(labelName: "Scoring" , refBool: g.scoremode)
     ]
+    labels[0].position.y += 200
     offSetLabel(labels, by: 50)
     addChildren(labels)
   }
