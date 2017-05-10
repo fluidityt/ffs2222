@@ -74,6 +74,8 @@
 	<array/>
 	<key>fix autopause</key>
 	<string></string>
+	<key>devmode difficulty no increase</key>
+	<string></string>
 	<key>fix scoremode</key>
 	<string></string>
 	<key>fullmode + pause = crash</key>
@@ -81,6 +83,10 @@
 	<key>hardcoded numbers to %screen</key>
 	<string></string>
 	<key>ipad: pause leftright border</key>
+	<string></string>
+	<key>New item</key>
+	<string></string>
+	<key>noticiable gaps in updifficulty</key>
 	<string></string>
 </dict>
 </plist>

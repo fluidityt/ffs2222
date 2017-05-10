@@ -1,3 +1,4 @@
+// Initial difficulty numbers: num 4, mod 6
 import SpriteKit
 
 enum State { case game, main, fail, loading }
@@ -37,7 +38,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   };
   
   var
-  difficulty = (boxNum: 4, boxNumMod: 6, boxSpeed: 1.0, boxSize: CGFloat(1.5)),
+  difficulty = (boxNum: 4, boxNumMod: 4, boxSpeed: 1.0, boxSize: CGFloat(1.5)),
   action: SKAction?,
   player: Player?,
   scoreLabel: SKLabelNode?,
@@ -113,7 +114,6 @@ fileprivate final class Spawner {
   }
   
   func lineOfBlackBoxes(difficulty: (base: Int, mod: Int)) {
-    
     // Data:
     let yVal = (localGS.frame.maxY + localGS.size30.height/2) - nh
     let numBoxes = difficulty.base + difficulty.mod

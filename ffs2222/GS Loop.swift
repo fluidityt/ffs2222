@@ -186,13 +186,24 @@ extension GameScene {
     else { waiting = true }
   }
   
+  func upBoxes() {
+    print("boxes up!")
+    difficulty.boxNum += 1
+    updateAction()
+    
+    if waiting { waiting = false }
+    else { waiting = true }
+  }
+  
   override func didFinishUpdate() {
     
     switch g.score {
     // case <#num#>: if  <#excl#>waiting { upDifficulty() }
-    case 10: if !waiting { upDifficulty() }
-    case 20: if  waiting { upDifficulty() }
-    case 30: if !waiting { upDifficulty() }
+    case  15: if !waiting { upDifficulty() }
+    case  30: if  waiting { upDifficulty() }
+    case  45: if !waiting { upDifficulty() }
+    case  70: if  waiting { upBoxes()      }
+    case 100: if !waiting { upBoxes()      }
     default: ()
     }
   }
