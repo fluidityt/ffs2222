@@ -40,6 +40,8 @@
 	<string></string>
 	<key>reset session button?</key>
 	<string></string>
+	<key>single space mode?</key>
+	<string></string>
 	<key>  </key>
 	<string></string>
 	<key>TODO</key>
@@ -71,8 +73,6 @@
 	<key>FIXME</key>
 	<array/>
 	<key>fix autopause</key>
-	<string></string>
-	<key>edge case two boxes disappear</key>
 	<string></string>
 	<key>fix scoremode</key>
 	<string></string>

@@ -116,7 +116,7 @@ fileprivate final class Spawner {
     
     // Data:
     let yVal = (localGS.frame.maxY + localGS.size30.height/2) - nh
-    let numBoxes = localGS.difficulty.boxNum + randy(6)
+    let numBoxes = localGS.difficulty.boxNum
     var listOfXes: [CGFloat] = []
     
     // Helper:
@@ -261,7 +261,7 @@ extension GameScene {
     removeAction(forKey: "spawner")
     
     let wait     = SKAction.wait(forDuration: difficulty.boxSpeed)
-    let run      = SKAction.run { Spawner(gsi: self).twoBoxes()/*lineOfBlackBoxes()*/ }
+    let run      = SKAction.run { Spawner(gsi: self).lineOfBlackBoxes() }
     let sequence = SKAction.sequence([wait, run])
     
     self.action  = SKAction.repeatForever(sequence)
