@@ -84,8 +84,8 @@ extension GameScene {
       
       if !g.devmode.value { yellowNode.setScale(g.gameScene.difficulty.boxSize) }
       
-      // Remove black nodes:
-      do {
+      func removeANode(blackNode: SKNode) {
+        
         // Find nodes at left and right:
         
         let oneLeft    = blackNode.frame.minX - 1
@@ -98,9 +98,15 @@ extension GameScene {
         let leftNodes  = g.gameScene.nodes(at: pointLeft)
         let rightNodes = g.gameScene.nodes(at: pointRight)
         
-        for ln in leftNodes  { print(ln.name) }
-        for rn in rightNodes { print(rn.name) }
+        for ln in leftNodes  {
+          if ln.name != nil { removeANode(blackNode: ln) }
+        }
+        for rn in rightNodes {
+          if rn.name != nil { removeANode(blackNode: rn) }
+        }
       }
+      
+      removeANode(blackNode: blackNode)
       
       // Send signal to take dps at end of physics:
       hitThisFrame = true
@@ -161,6 +167,8 @@ extension GameScene {
   
   // MARK: - End contact:
   override func didSimulatePhysics() {
+    if isInvincible { return }
+    
     if hitThisFrame { hits += 1 }
     if hits >= 2    {
       hits = 0

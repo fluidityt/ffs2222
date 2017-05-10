@@ -118,12 +118,32 @@ fileprivate final class Spawner {
     var blackNodes: [SKSpriteNode] = []
     let yVal = (localGS.frame.maxY + localGS.size30.height/2) - nh
     let numBoxes = localGS.difficulty.boxNum + randy(6)
-
+    var listOfXes: [CGFloat] = []
+    
     // Helper:
     func randomX() -> CGFloat {
-      let randomX = randy(Int(localGS.frame.maxX * 2))
-      let xVal = CGFloat(randomX) - localGS.frame.maxX
-      return xVal
+      
+      func subRandomX() -> CGFloat {
+        let randX = randy(Int(localGS.frame.maxX * 2))
+        return CGFloat(randX) - localGS.frame.maxX
+      }
+      
+      // Can I please do recursion lol:
+      var restart = true
+      var xReturn = subRandomX()
+      
+      if listOfXes.isEmpty { restart = false }
+      
+      while restart {
+        xReturn = subRandomX()
+        restart = false
+        
+        for x in listOfXes {
+          if xReturn == x { restart = true }
+        }
+      }
+      
+      return xReturn
     }
     
     func getFairPoint(fairness: CGFloat) -> CGPoint {
@@ -142,7 +162,7 @@ fileprivate final class Spawner {
                       height: localGS.size30.height)
       }
       
-      // Logic:
+      // Assignment:
       var randomRect = getRandomRect()
       
       while randomRect.intersects(fairRect) {

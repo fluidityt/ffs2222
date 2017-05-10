@@ -147,8 +147,31 @@ extension GameScene {
       view?.presentScene(FailScene(size: size))
     }
     
+    func removeANode(blackNode: SKNode) {
+
+      // Find nodes at left and right:
+      
+      let oneLeft    = blackNode.frame.minX - 1
+      let oneRight   = blackNode.frame.maxX + 1
+      let pointLeft  = CGPoint(x: oneLeft, y: blackNode.position.y)
+      let pointRight = CGPoint(x: oneRight, y: blackNode.position.y)
+      
+      blackNode.removeFromParent()
+      
+      let leftNodes  = nodes(at: pointLeft)
+      let rightNodes = nodes(at: pointRight)
+      
+      for ln in leftNodes  {
+       if ln.name != nil { removeANode(blackNode: ln) }
+      }
+      for rn in rightNodes {
+        if rn.name != nil { removeANode(blackNode: rn) }
+      }
+    }
+    
+    if let blackNode = blackNode.node { removeANode(blackNode: blackNode) }
     yellowNode.node?.setScale(difficultyBoxSize)
-    blackNode.node?.removeFromParent()
+    // blackNode.node?.removeFromParent()
   }
   
   public func didBegin(_ contact: SKPhysicsContact) {
