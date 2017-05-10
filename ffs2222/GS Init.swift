@@ -37,7 +37,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   };
   
   var
-  difficulty = (boxNum: {4+randy(6)}(), boxSpeed: 1.0, boxSize: CGFloat(1.5)),
+  difficulty = (boxNum: 4, boxNumMod: 6, boxSpeed: 1.0, boxSize: CGFloat(1.5)),
   action: SKAction?,
   player: Player?,
   scoreLabel: SKLabelNode?,
@@ -112,11 +112,12 @@ fileprivate final class Spawner {
     localGS.addChild(blackNode)
   }
   
-  func lineOfBlackBoxes() {
+  func lineOfBlackBoxes(difficulty: (base: Int, mod: Int)) {
     
     // Data:
     let yVal = (localGS.frame.maxY + localGS.size30.height/2) - nh
-    let numBoxes = localGS.difficulty.boxNum
+    let numBoxes = difficulty.base + difficulty.mod
+    print("NUMBOXES: \(numBoxes)")
     var listOfXes: [CGFloat] = []
     
     // Helper:
@@ -250,7 +251,7 @@ extension GameScene {
   private func spawnStuff() {
     let spawn = Spawner(gsi: self)
     spawn.yellowNode()
-    spawn.lineOfBlackBoxes()
+    spawn.lineOfBlackBoxes(difficulty: (difficulty.boxNum, randy(difficulty.boxNumMod)))
     spawn.deathLine()
     spawn.touchPad()
     spawn.scoreLabel()
@@ -261,7 +262,11 @@ extension GameScene {
     removeAction(forKey: "spawner")
     
     let wait     = SKAction.wait(forDuration: difficulty.boxSpeed)
-    let run      = SKAction.run { Spawner(gsi: self).lineOfBlackBoxes() }
+    let run      = SKAction.run {
+      Spawner(gsi: self).lineOfBlackBoxes(difficulty: (base: self.difficulty.boxNum,
+                                                       mod:  randy(self.difficulty.boxNumMod)))
+    }
+    
     let sequence = SKAction.sequence([wait, run])
     
     self.action  = SKAction.repeatForever(sequence)
