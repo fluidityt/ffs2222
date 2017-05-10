@@ -64,7 +64,10 @@ extension GameScene {
   // MARK: - Contact:
   private struct DoContact {
     
-    static func blackAndYellow(contact: SKPhysicsContact) {
+    static var contact = SKPhysicsContact()
+    
+    /// ... you know what it is ...
+    static func blackAndYellow() {
       
       func assignYellowBlack() ->  (SKPhysicsBody, SKPhysicsBody) {
         if contact.bodyA.categoryBitMask == Category.yellow {
@@ -75,28 +78,46 @@ extension GameScene {
         }
       }
       
+      let (yellowPB, blackPB) = assignYellowBlack()
+      
+      guard let yellowNode = yellowPB.node, let blackNode = blackPB.node else { fatalError() }
+      
+      if !g.devmode.value { yellowNode.setScale(g.gameScene.difficulty.boxSize) }
+      
+      // Remove black nodes:
+      do {
+        // Find nodes at left and right:
+        
+        let oneLeft    = blackNode.frame.minX - 1
+        let oneRight   = blackNode.frame.maxX + 1
+        let pointLeft  = CGPoint(x: oneLeft, y: blackNode.position.y)
+        let pointRight = CGPoint(x: oneRight, y: blackNode.position.y)
+        
+        blackNode.removeFromParent()
+        
+        let leftNodes  = g.gameScene.nodes(at: pointLeft)
+        let rightNodes = g.gameScene.nodes(at: pointRight)
+        
+        for ln in leftNodes  { print(ln.name) }
+        for rn in rightNodes { print(rn.name) }
+      }
+      
+      // Send signal to take dps at end of physics:
       hitThisFrame = true
-      
-      let (yellowNode, blackNode) = assignYellowBlack()
-      
-      guard let yn = yellowNode.node, let bn = blackNode.node else { fatalError() }
-      
-      if !g.devmode.value { yn.setScale(g.gsi.difficulty.boxSize) }
-      bn.removeFromParent()
-    } // ... you know what it is
+    }
     
-    static func yellowAndLine (contact: SKPhysicsContact) {
+    static func yellowAndLine() {
       
       defer { if !g.devmode.value { UD.saveHighScore() } }
       
-      if isInvincible { return }
+      if g.gameScene.isInvincible { return }
       
       g.score += 1
       // <#  g.gsi.scoreLabel?.text = "Score \(g.score)"
       if g.score > g.sessionScore { g.sessionScore = g.score }
       
       print(g.score)
-      
+     
       if contact.bodyA.categoryBitMask == Category.line {
         if let a = contact.bodyA.node { killNode(a) }
       }
@@ -105,7 +126,7 @@ extension GameScene {
       }
     }
     
-    static func deathAndBlack (contact: SKPhysicsContact) {
+    static func deathAndBlack() {
       if contact.bodyA.categoryBitMask == Category.black {
         if let a = contact.bodyA.node { killNode(a) }
       }
@@ -114,7 +135,7 @@ extension GameScene {
       }
     }
     
-    static func deathAndLine  (contact: SKPhysicsContact) {
+    static func deathAndLine() {
       if contact.bodyA.categoryBitMask == Category.line {
         if let a = contact.bodyA.node { killNode(a) }
       }
@@ -125,14 +146,16 @@ extension GameScene {
   };
   
   func didBegin(_ contact: SKPhysicsContact) {
+    DoContact.contact = contact
+    
     let contactedCategories = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
     
     switch contactedCategories {
-    case Category.black  | Category.yellow : DoContact.blackAndYellow(contact: contact)
-    case Category.yellow | Category.line   : DoContact.yellowAndLine (contact: contact)
-    case Category.black  | Category.death  : DoContact.deathAndBlack (contact: contact)
-    case Category.line   | Category.death  : DoContact.deathAndLine  (contact: contact)
-    default: ()
+      case Category.black  | Category.yellow : DoContact.blackAndYellow()
+      case Category.yellow | Category.line   : DoContact.yellowAndLine ()
+      case Category.black  | Category.death  : DoContact.deathAndBlack ()
+      case Category.line   | Category.death  : DoContact.deathAndLine  ()
+      default: ()
     }
   }
   

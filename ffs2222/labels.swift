@@ -19,7 +19,7 @@ final class PlayLabel: SKLabelNode {
   
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     let scene = GameScene(size: self.scene!.size)
-    g.gsi = scene
+    g.gameScene = scene
     self.scene!.view!.presentScene(scene)
   }
   

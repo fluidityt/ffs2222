@@ -6,15 +6,16 @@ enum State { case game, main, fail, loading }
 struct g {
 
   static var
-  view = SKView(),
-  gsi   = GameScene(),
+  view      = SKView(),
+  gameScene = GameScene(),
   mainmenu: MainMenuScene? = nil,
   
-  score = 0,
-  sessionScore = 0,
+  score          = 0,
+  sessionScore   = 0,
   highscore: Int = 0,
+  fairness       = 15,
   
-  devdifficulty = 0,
+  // All of this could be one ref to an enum
   devmode    = RefBool(false),
   spinning   = RefBool(false),
   fademode   = RefBool(false),
@@ -36,14 +37,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   };
   
   var
-  difficulty = (boxNum: 4, boxSpeed: 1.0, boxSize: CGFloat(1.5)),
+  difficulty = (boxNum: {4+randy(6)}(), boxSpeed: 1.0, boxSize: CGFloat(1.5)),
   action: SKAction?,
   player: Player?,
   scoreLabel: SKLabelNode?,
   
   isInvincible = false  // Used for contact in loop
-  
-  
   
   lazy var size30: CGSize = CGSize(width: 30, height: 30)
   lazy var notificationHeight: CGFloat = (self.size.height/7)/2
@@ -60,7 +59,7 @@ fileprivate final class Spawner {
   private lazy var nh: CGFloat = self.localGS.notificationHeight
   
   init(gsi: GameScene) {
-    localGS = g.gsi
+    localGS = g.gameScene
     
     if g.nhmode.value == false { localGS.notificationHeight = 0 }
   }
@@ -113,6 +112,55 @@ fileprivate final class Spawner {
     localGS.addChild(blackNode)
   }
   
+  func lineOfBlackBoxes() {
+    
+    // Data:
+    var blackNodes: [SKSpriteNode] = []
+    let yVal = (localGS.frame.maxY + localGS.size30.height/2) - nh
+    let numBoxes = localGS.difficulty.boxNum + randy(6)
+
+    // Helper:
+    func randomX() -> CGFloat {
+      let randomX = randy(Int(localGS.frame.maxX * 2))
+      let xVal = CGFloat(randomX) - localGS.frame.maxX
+      return xVal
+    }
+    
+    func getFairPoint(fairness: CGFloat) -> CGPoint {
+      
+      let fairRect = CGRect(middle: CGPoint(x: randomX(), y: yVal),
+                            width:  localGS.size30.width + fairness,
+                            height: localGS.size30.height)
+      
+      func getRandomPoint() -> CGPoint { return CGPoint(x: randomX(), y: yVal) }
+      
+      var randomPoint = getRandomPoint()
+      
+      func getRandomRect()  -> CGRect {
+        return CGRect(middle: randomPoint,
+                      width: localGS.size30.width,
+                      height: localGS.size30.height)
+      }
+      
+      // Logic:
+      var randomRect = getRandomRect()
+      
+      while randomRect.intersects(fairRect) {
+        randomPoint = getRandomPoint()
+        randomRect = getRandomRect()
+      }
+      
+      return randomPoint
+    }
+    
+    // Logic:
+    for _ in 1...numBoxes {
+      blackNode(pos: getFairPoint(fairness: CGFloat(g.fairness)))
+    }
+    
+    scanline(pos: CGPoint(x: 0, y: yVal))
+  }
+  
   func scanline(pos: CGPoint) {
     
     let lineNode = SKSpriteNode(color: .clear, size: CGSize(width: localGS.frame.width, height: 1)); do {
@@ -149,50 +197,6 @@ fileprivate final class Spawner {
       touchPad.position.y -= (touchPad.size.height / 2) + nh
     }
     localGS.addChild(touchPad)
-  }
-  
-  func lineOfBlackBoxes() {
-    
-    func randomX() -> CGFloat {
-      let randomX = randy(Int(localGS.frame.maxX * 2))
-      let xVal = CGFloat(randomX) - localGS.frame.maxX
-      return xVal
-    }
-    
-    let yVal = (localGS.frame.maxY + localGS.size30.height/2) - nh
-    let numBoxes = localGS.difficulty.boxNum + randy(6)
-    
-    let fairness = CGFloat(15) // 5 points on either side?
-    let fairRect = CGRect(middle: CGPoint(x: randomX(), y: yVal),
-                          width:  localGS.size30.width + fairness,
-                          height: localGS.size30.height)
-    
-    // Oh my god this is awful:
-    for _ in 1...numBoxes {
-      
-      func getRandomPoint() -> CGPoint { return CGPoint(x: randomX(), y: yVal) }
-      
-      var randomPoint = getRandomPoint()
-      
-      func randomizePoint() { randomPoint = getRandomPoint() }
-      
-      func getRandomRect()  -> CGRect {
-        return CGRect(middle: randomPoint,
-                      width: localGS.size30.width,
-                      height: localGS.size30.height)
-      }
-      
-      var randomRect = getRandomRect()
-      
-      while randomRect.intersects(fairRect) {
-        randomizePoint()
-        randomRect = getRandomRect()
-      }
-      
-      blackNode(pos: randomPoint)
-    }
-    
-    scanline(pos: CGPoint(x: 0, y: yVal))
   }
   
   func scoreLabel() {
@@ -254,6 +258,7 @@ extension GameScene {
     spawnStuff()
     updateAction()
     
+    // if g.modes.values.contains(.dev) { isInvincible = true }
     if g.devmode.value  { isInvincible = true         }
     if g.fullmode.value { difficulty.boxSpeed -= 0.15 }
     

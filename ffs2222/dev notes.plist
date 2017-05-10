@@ -18,11 +18,15 @@
 	<string></string>
 	<key>convert UD to FP</key>
 	<string></string>
+	<key>make modes an enum</key>
+	<string></string>
 	<key>   </key>
 	<string></string>
 	<key>DESIGN</key>
 	<array/>
 	<key>Add top10 with names?</key>
+	<string></string>
+	<key>pacman dots?</key>
 	<string></string>
 	<key>game mode.. .two yellow boxes??</key>
 	<string></string>

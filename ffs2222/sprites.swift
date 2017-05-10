@@ -16,8 +16,8 @@ import SpriteKit
       
       if g.fullmode.value {
         color = .clear
-        size = g.gsi.size
-        assert(g.gsi.size.height > 10) // Make sure we have a normal size.
+        size = g.gameScene.size
+        assert(g.gameScene.size.height > 10) // Make sure we have a normal size.
       } else {
         color = .black
         size = CGSize(width: scene.size.width, height: (scene.size.height/2))

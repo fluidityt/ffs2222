@@ -50,6 +50,8 @@
 		4D3C18041EB5A656009A727C /* MainMenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenuScene.swift; sourceTree = "<group>"; };
 		4D8880F01EBF5AB8008399CE /* labels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = labels.swift; sourceTree = "<group>"; };
 		4DA745A71EBF19E4005F9C4D /* util classes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "util classes.swift"; sourceTree = "<group>"; };
+		4DAE476C1EC2D55300713291 /* fally original.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "fally original.playground"; sourceTree = "<group>"; };
+		4DE3291E1EC2CEB700C871C3 /* horizontal collision fix.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "horizontal collision fix.playground"; sourceTree = "<group>"; };
 		4DF5AB9A1EB5D18E005A340A /* open animation.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "open animation.playground"; sourceTree = "<group>"; };
 		4DFA46971EB177C2008E5847 /* ffs2222.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ffs2222.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DFA469A1EB177C3008E5847 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -154,6 +156,8 @@
 			children = (
 				4DFA46B51EB177C3008E5847 /* ffs2222Tests.swift */,
 				4DFA46B71EB177C3008E5847 /* Info.plist */,
+				4DAE476C1EC2D55300713291 /* fally original.playground */,
+				4DE3291E1EC2CEB700C871C3 /* horizontal collision fix.playground */,
 				4D1991BF1EB9FF2D00B2873B /* CGRect test.playground */,
 				4DF5AB9A1EB5D18E005A340A /* open animation.playground */,
 				4D0AC04C1EBC2CA40078DB73 /* TestScene.sks */,

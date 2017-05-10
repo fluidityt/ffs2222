@@ -19,7 +19,7 @@ struct UD {
   }
   
   static func saveHighScore() {
-    
+    // This is crazy.. mutating state in 4 different places...
     guard let oldHS = userDefaults.value(forKey: Keys.highScore) as? Int else { print("bad key"); return }
     if g.score > oldHS {
       g.highscore = g.score
