@@ -26,6 +26,8 @@
 	<array/>
 	<key>Add top10 with names?</key>
 	<string></string>
+	<key>collect block mode?</key>
+	<string></string>
 	<key>pacman dots?</key>
 	<string></string>
 	<key>game mode.. .two yellow boxes??</key>
@@ -68,9 +70,9 @@
 	<string></string>
 	<key>FIXME</key>
 	<array/>
-	<key>horizontal doublebox hit still kills</key>
-	<string></string>
 	<key>fix autopause</key>
+	<string></string>
+	<key>edge case two boxes disappear</key>
 	<string></string>
 	<key>fix scoremode</key>
 	<string></string>
@@ -79,8 +81,6 @@
 	<key>hardcoded numbers to %screen</key>
 	<string></string>
 	<key>ipad: pause leftright border</key>
-	<string></string>
-	<key>mainmenu says playagain</key>
 	<string></string>
 </dict>
 </plist>
