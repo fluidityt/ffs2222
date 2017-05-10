@@ -182,8 +182,8 @@ extension GameScene {
     difficulty.boxSpeed -= 0.1
     updateAction()
     
-    if waiting { waiting = false }
-    else { waiting = true }
+    waiting.toggle()
+    player?.toggleColor()
   }
   
   func upBoxes() {
@@ -191,17 +191,18 @@ extension GameScene {
     difficulty.boxNum += 1
     updateAction()
     
-    if waiting { waiting = false }
-    else { waiting = true }
+    waiting.toggle()
+    player?.toggleColor()
   }
   
   override func didFinishUpdate() {
     
     switch g.score {
     // case <#num#>: if  <#excl#>waiting { upDifficulty() }
+    case   0: waiting = false
+    case  5: if !waiting  { upDifficulty() }
+    case  10: if  waiting { upDifficulty() }
     case  15: if !waiting { upDifficulty() }
-    case  30: if  waiting { upDifficulty() }
-    case  45: if !waiting { upDifficulty() }
     case  70: if  waiting { upBoxes()      }
     case 100: if !waiting { upBoxes()      }
     default: ()

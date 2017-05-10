@@ -50,6 +50,17 @@ import SpriteKit
       // isUserInteractionEnabled = true
     }
     
+    func toggleColor() {
+      
+      if color == .green  { color = .orange }
+      
+      if color == .yellow { color = .green  }
+      
+      
+    }
+    
+    
+    
     required init?(coder aDecoder: NSCoder) { fatalError() }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
