@@ -182,7 +182,7 @@ extension GameScene {
   func upDifficulty() {
     print("difficulty up!")
     difficulty.boxNum += 1
-    difficulty.boxSpeed -= 0.1
+    difficulty.boxSpeed -= 0.07
     updateAction()
     
     waiting.toggle()
