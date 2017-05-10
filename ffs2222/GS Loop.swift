@@ -5,7 +5,10 @@ fileprivate var
 waiting      = false,     // Used for g.score increase at end of loop.
 hits         = 0,         // Player HP.
 hitThisFrame = false,     // Used to keep player alive when hit 2 black at same time.
-paused       = false
+paused       = false,
+
+linesCleared = 0
+
 
 // MARK: - Game Loop:
 extension GameScene {
@@ -115,6 +118,8 @@ extension GameScene {
       
       defer { if !g.devmode.value { UD.saveHighScore() } }
       
+      linesCleared += 1
+      
       if g.gameScene.isInvincible { return }
       
       g.score += 1
@@ -179,7 +184,7 @@ extension GameScene {
   func upDifficulty() {
     print("difficulty up!")
     difficulty.boxNum += 1
-    difficulty.boxSpeed -= 0.1
+    difficulty.boxSpeed -= 0.07
     updateAction()
     
     waiting.toggle()
@@ -197,14 +202,17 @@ extension GameScene {
   
   override func didFinishUpdate() {
     
-    switch g.score {
+    // Not sure if this is needed:
+    if g.score == 0 { linesCleared = 0 }
+    
+    switch linesCleared {
     // case <#num#>: if  <#excl#>waiting { upDifficulty() }
     case   0: waiting = false
-    case  5: if !waiting  { upDifficulty() }
-    case  10: if  waiting { upDifficulty() }
-    case  15: if !waiting { upDifficulty() }
-    case  70: if  waiting { upBoxes()      }
-    case 100: if !waiting { upBoxes()      }
+    case  10: if !waiting { upDifficulty() }
+    case  20: if  waiting { upDifficulty() }
+    case  30: if !waiting { upDifficulty() }
+    case  40: if  waiting { upBoxes()      }
+    case  50: if !waiting { upBoxes()      }
     default: ()
     }
   }

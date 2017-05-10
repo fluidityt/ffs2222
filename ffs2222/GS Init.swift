@@ -117,7 +117,6 @@ fileprivate final class Spawner {
     // Data:
     let yVal = (localGS.frame.maxY + localGS.size30.height/2) - nh
     let numBoxes = difficulty.base + difficulty.mod
-    print("NUMBOXES: \(numBoxes)")
     var listOfXes: [CGFloat] = []
     
     // Helper:
