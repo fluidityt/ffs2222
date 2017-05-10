@@ -87,8 +87,8 @@ extension GameScene {
       func removeANode(blackNode: SKNode) {
         
         // Find nodes at left and right:
-        let oneLeft    = blackNode.frame.minX - 1
-        let oneRight   = blackNode.frame.maxX + 1
+        let oneLeft    = blackNode.frame.minX - 0.9
+        let oneRight   = blackNode.frame.maxX + 0.9
         let pointLeft  = CGPoint(x: oneLeft, y: blackNode.position.y)
         let pointRight = CGPoint(x: oneRight, y: blackNode.position.y)
         

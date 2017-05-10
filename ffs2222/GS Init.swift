@@ -115,7 +115,6 @@ fileprivate final class Spawner {
   func lineOfBlackBoxes() {
     
     // Data:
-    var blackNodes: [SKSpriteNode] = []
     let yVal = (localGS.frame.maxY + localGS.size30.height/2) - nh
     let numBoxes = localGS.difficulty.boxNum + randy(6)
     var listOfXes: [CGFloat] = []
@@ -146,6 +145,7 @@ fileprivate final class Spawner {
       return xReturn
     }
     
+    // Helper 2:
     func getFairPoint(fairness: CGFloat) -> CGPoint {
       
       let fairRect = CGRect(middle: CGPoint(x: randomX(), y: yVal),
@@ -162,7 +162,7 @@ fileprivate final class Spawner {
                       height: localGS.size30.height)
       }
       
-      // Assignment:
+      // Logic:
       var randomRect = getRandomRect()
       
       while randomRect.intersects(fairRect) {
@@ -173,7 +173,7 @@ fileprivate final class Spawner {
       return randomPoint
     }
     
-    // Logic:
+    // Assignment:
     for _ in 1...numBoxes {
       blackNode(pos: getFairPoint(fairness: CGFloat(g.fairness)))
     }
@@ -202,7 +202,7 @@ fileprivate final class Spawner {
         newPB.affectedByGravity = false
       }
       
-      lineNode.physicsBody = newPB
+     lineNode.physicsBody = newPB
       if g.fullmode.value { lineNode.position.y =  (localGS.frame.minY  - localGS.size30.height) }
       else                { lineNode.position.y -= (localGS.size30.height + nh) }
       
@@ -261,7 +261,7 @@ extension GameScene {
     removeAction(forKey: "spawner")
     
     let wait     = SKAction.wait(forDuration: difficulty.boxSpeed)
-    let run      = SKAction.run { Spawner(gsi: self).lineOfBlackBoxes() }
+    let run      = SKAction.run { Spawner(gsi: self).twoBoxes()/*lineOfBlackBoxes()*/ }
     let sequence = SKAction.sequence([wait, run])
     
     self.action  = SKAction.repeatForever(sequence)
