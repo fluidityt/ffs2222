@@ -1,14 +1,11 @@
 import SpriteKit
 
 /// Extra state for loop:
-fileprivate var
+var
 waiting      = false,     // Used for g.score increase at end of loop.
 hits         = 0,         // Player HP.
 hitThisFrame = false,     // Used to keep player alive when hit 2 black at same time.
-paused       = false,
-
-linesCleared = 0
-
+paused       = false
 
 // MARK: - Game Loop:
 extension GameScene {
@@ -118,16 +115,17 @@ extension GameScene {
       
       defer { if !g.devmode.value { UD.saveHighScore() } }
       
-      linesCleared += 1
+      g.linesCleared += 1
       
-      if g.gameScene.isInvincible { return }
+      // Increase score:
+      if g.gameScene.isInvincible == false {
+        g.score += 1
+        // <#  g.gsi.scoreLabel?.text = "Score \(g.score)"
+        if g.score > g.sessionScore { g.sessionScore = g.score }
+        print("score:", g.score)
+      }
       
-      g.score += 1
-      // <#  g.gsi.scoreLabel?.text = "Score \(g.score)"
-      if g.score > g.sessionScore { g.sessionScore = g.score }
-      
-      print(g.score)
-     
+      // Kill nodes:
       if contact.bodyA.categoryBitMask == Category.line {
         if let a = contact.bodyA.node { killNode(a) }
       }
@@ -157,7 +155,7 @@ extension GameScene {
   
   func didBegin(_ contact: SKPhysicsContact) {
     DoContact.contact = contact
-    
+  
     let contactedCategories = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
     
     switch contactedCategories {
@@ -184,7 +182,7 @@ extension GameScene {
   func upDifficulty() {
     print("difficulty up!")
     difficulty.boxNum += 1
-    difficulty.boxSpeed -= 0.07
+    difficulty.boxSpeed -= 0.1
     updateAction()
     
     waiting.toggle()
@@ -201,11 +199,8 @@ extension GameScene {
   }
   
   override func didFinishUpdate() {
-    
-    // Not sure if this is needed:
-    if g.score == 0 { linesCleared = 0 }
-    
-    switch linesCleared {
+  
+    switch g.linesCleared {
     // case <#num#>: if  <#excl#>waiting { upDifficulty() }
     case   0: waiting = false
     case  10: if !waiting { upDifficulty() }

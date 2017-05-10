@@ -11,6 +11,7 @@ struct g {
   gameScene = GameScene(),
   mainmenu: MainMenuScene? = nil,
   
+  linesCleared   = 0,
   score          = 0,
   sessionScore   = 0,
   highscore: Int = 0,
@@ -287,6 +288,7 @@ extension GameScene {
     if g.fullmode.value { difficulty.boxSpeed -= 0.15 }
     
     g.score = 0
+    g.linesCleared = 0
   }
 };
 
