@@ -3,6 +3,7 @@
 
 import SpriteKit
 
+// MARK: - PlayLabel:
 final class PlayLabel: SKLabelNode {
   
   init(texter: String) {
@@ -23,10 +24,10 @@ final class PlayLabel: SKLabelNode {
     self.scene!.view!.presentScene(scene)
   }
   
-  required init?(coder aDecoder: NSCoder) { fatalError("") }
-  override init() { super.init() }
+  required init?(coder aDecoder: NSCoder) { fatalError("") };  override init() { super.init() }
 };
 
+// MARK: - MainMenuLabel:
 final class MainMenuLabel: SKLabelNode {
   
   init(texter: String) {
@@ -44,6 +45,7 @@ final class MainMenuLabel: SKLabelNode {
   required init?(coder aDecoder: NSCoder) { fatalError("") }; override init() { super.init() }
 };
 
+// MARK: - OptionLabel:
 final class OptionLabel: SKLabelNode {
   
   init(texter: String) {
@@ -56,6 +58,5 @@ final class OptionLabel: SKLabelNode {
     
   }
   
-  required init?(coder aDecoder: NSCoder) { fatalError("") }
-  override init() { super.init() }
+  required init?(coder aDecoder: NSCoder) { fatalError("") };  override init() { super.init() }
 };

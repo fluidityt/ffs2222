@@ -23,12 +23,12 @@ final class MainMenuScene: SKScene {
     let labels: [SKLabelNode] = [
       PlayLabel(texter: ""),
       mm_scoreLabel,
-      Toggler(labelName: "DevMode",  refBool: g.devmode  ),
-      Toggler(labelName: "SpinMode", refBool: g.spinning ),
-      Toggler(labelName: "FadeMode", refBool: g.fademode ),
-      Toggler(labelName: "FullMode", refBool: g.fullmode )
-      //Toggler(labelName: "NHMode"  , refBool: g.nhmode   )
-      // <# Toggler(labelName: "Scoring" , refBool: g.scoremode)
+      Toggler(labelName: "DevMode",  refBool: g.mode.dev  ),
+      Toggler(labelName: "SpinMode", refBool: g.mode.spin ),
+      Toggler(labelName: "FadeMode", refBool: g.mode.fade ),
+      Toggler(labelName: "FullMode", refBool: g.mode.fade )
+      //Toggler(labelName: "NHMode"  , refBool: g.mode.nh   )
+      // <# Toggler(labelName: "Scoring" , refBool: g.mode.score)
     ]
     
     labels[0].position.y += 250

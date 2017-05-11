@@ -24,15 +24,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ffs2222/GS Loop.swift"
-            timestampString = "516111984.326203"
+            timestampString = "516126026.833113"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "185"
-            endingLineNumber = "185"
+            startingLineNumber = "89"
+            endingLineNumber = "89"
             landmarkName = "upDifficulty()"
             landmarkType = "7">
          </BreakpointContent>

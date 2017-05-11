@@ -1,11 +1,5 @@
 import SpriteKit
 
-/// Extra state for loop:
-var
-waiting      = false,     // Used for g.score increase at end of loop.
-hits         = 0,         // Player HP.
-hitThisFrame = false,     // Used to keep player alive when hit 2 black at same time.
-paused       = false
 
 // MARK: - Game Loop:
 extension GameScene {
@@ -13,11 +7,11 @@ extension GameScene {
   // MARK: - TB:
   func pause() {
     // FIXME: FULLMODE BUG HOTFIX:
-    if g.fullmode.value { return }
+    if g.mode.fade.value { return }
     
-    paused.toggle()
+    g.paused.toggle()
     
-    if paused {
+    if g.paused {
       view!.isPaused = true
       view!.frame = CGRect(middle: CGPoint(x: view!.frame.midX, y: view!.frame.midY),
                            width: size.width/3, height: size.height/3)
@@ -34,16 +28,16 @@ extension GameScene {
   
   // MARK: - Update:
   private func keepPlayerInBounds() {
-    guard let playa = player else { fatalError("issue with player") }
+    guard let playa = g.player else { fatalError("issue with player") }
     
-    let nh = notificationHeight
+    let nh = g.notificationHeight
     let bounds = (fullBottom: frame.minY + playa.size.height/2,
                   bottom:     frame.midY + playa.size.height/2,
                   top:        frame.maxY - playa.size.height/2,
                   left:       frame.minX + playa.size.width/2,
                   right:      frame.maxX - playa.size.width/2)
     
-    if g.fullmode.value {
+    if g.mode.fade.value {
       if playa.position.y < bounds.fullBottom { playa.position.y = bounds.fullBottom }
     }
     else {
@@ -56,124 +50,34 @@ extension GameScene {
   }
   
   override func update(_ currentTime: TimeInterval) {
-    hitThisFrame = false
+    g.hitThisFrame = false
     
     keepPlayerInBounds()
   }
   
   // MARK: - Contact:
-  private struct DoContact {
-    
-    static var contact = SKPhysicsContact()
-    
-    /// ... you know what it is ...
-    static func blackAndYellow() {
-      
-      func assignYellowBlack() ->  (SKPhysicsBody, SKPhysicsBody) {
-        if contact.bodyA.categoryBitMask == Category.yellow {
-          return (contact.bodyA, contact.bodyB)
-        }
-        else {
-          return (contact.bodyB, contact.bodyA)
-        }
-      }
-      
-      let (yellowPB, blackPB) = assignYellowBlack()
-      
-      guard let yellowNode = yellowPB.node, let blackNode = blackPB.node else { fatalError() }
-      
-      if !g.devmode.value { yellowNode.setScale(g.gameScene.difficulty.boxSize) }
-      
-      func removeANode(blackNode: SKNode) {
-        
-        // Find nodes at left and right:
-        let oneLeft    = blackNode.frame.minX - 0.9
-        let oneRight   = blackNode.frame.maxX + 0.9
-        let pointLeft  = CGPoint(x: oneLeft, y: blackNode.position.y)
-        let pointRight = CGPoint(x: oneRight, y: blackNode.position.y)
-        
-        blackNode.removeFromParent()
-        
-        let leftNodes  = g.gameScene.nodes(at: pointLeft)
-        let rightNodes = g.gameScene.nodes(at: pointRight)
-        
-        for ln in leftNodes  {
-          if ln.name != nil { removeANode(blackNode: ln) }
-        }
-        for rn in rightNodes {
-          if rn.name != nil { removeANode(blackNode: rn) }
-        }
-      }
-      
-      removeANode(blackNode: blackNode)
-      
-      // Send signal to take dps at end of physics:
-      hitThisFrame = true
-    }
-    
-    static func yellowAndLine() {
-      
-      defer { if !g.devmode.value { UD.saveHighScore() } }
-      
-      g.linesCleared += 1
-      
-      // Increase score:
-      if g.gameScene.isInvincible == false {
-        g.score += 1
-        // <#  g.gsi.scoreLabel?.text = "Score \(g.score)"
-        if g.score > g.sessionScore { g.sessionScore = g.score }
-        print("score:", g.score)
-      }
-      
-      // Kill nodes:
-      if contact.bodyA.categoryBitMask == Category.line {
-        if let a = contact.bodyA.node { killNode(a) }
-      }
-      else {
-        if let b = contact.bodyB.node { killNode(b) }
-      }
-    }
-    
-    static func deathAndBlack() {
-      if contact.bodyA.categoryBitMask == Category.black {
-        if let a = contact.bodyA.node { killNode(a) }
-      }
-      else {
-        if let b = contact.bodyB.node { killNode(b) }
-      }
-    }
-    
-    static func deathAndLine() {
-      if contact.bodyA.categoryBitMask == Category.line {
-        if let a = contact.bodyA.node { killNode(a) }
-      }
-      else {
-        if let b = contact.bodyB.node { killNode(b) }
-      }
-    }
-  };
   
   func didBegin(_ contact: SKPhysicsContact) {
-    DoContact.contact = contact
+    let doContact = DoContact(contact: contact)
   
     let contactedCategories = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
     
     switch contactedCategories {
-      case Category.black  | Category.yellow : DoContact.blackAndYellow()
-      case Category.yellow | Category.line   : DoContact.yellowAndLine ()
-      case Category.black  | Category.death  : DoContact.deathAndBlack ()
-      case Category.line   | Category.death  : DoContact.deathAndLine  ()
+      case Category.yellow | Category.line   : doContact.yellowAndLine ()
+      case Category.black  | Category.yellow : doContact.blackAndYellow()
+      case Category.black  | Category.death  : doContact.deathAndBlack ()
+      case Category.line   | Category.death  : doContact.deathAndLine  ()
       default: ()
     }
   }
   
   // MARK: - End contact:
   override func didSimulatePhysics() {
-    if isInvincible { return }
+    if g.isInvincible { return }
     
-    if hitThisFrame { hits += 1 }
-    if hits >= 2    {
-      hits = 0
+    if g.hitThisFrame { g.hits += 1 }
+    if g.hits >= 2    {
+      g.hits = 0
       view!.presentScene(FailScene(size: size))
     }
   }
@@ -181,28 +85,30 @@ extension GameScene {
   // MARK: - Post:
   func upDifficulty() {
     print("difficulty up!")
-    difficulty.boxNum += 1
-    difficulty.boxSpeed -= 0.07
+    g.difficulty.boxNum   += 1
+    g.difficulty.boxSpeed -= 0.08
     updateAction()
     
-    waiting.toggle()
-    player?.toggleColor()
+    g.waiting.toggle()
+    g.player?.toggleColor()
   }
   
   func upBoxes() {
     print("boxes up!")
-    difficulty.boxNum += 1
+    g.difficulty.boxNum += 1
     updateAction()
     
-    waiting.toggle()
-    player?.toggleColor()
+    g.waiting.toggle()
+    g.player?.toggleColor()
   }
   
   override func didFinishUpdate() {
   
+    let waiting = g.waiting
+    
     switch g.linesCleared {
     // case <#num#>: if  <#excl#>waiting { upDifficulty() }
-    case   0: waiting = false
+    case   0: g.waiting = false
     case  10: if !waiting { upDifficulty() }
     case  20: if  waiting { upDifficulty() }
     case  30: if !waiting { upDifficulty() }

@@ -14,7 +14,7 @@ import SpriteKit
       let color: SKColor
       let size: CGSize
       
-      if g.fullmode.value {
+      if g.mode.fade.value {
         color = .clear
         size = g.gameScene.size
         assert(g.gameScene.size.height > 10) // Make sure we have a normal size.
@@ -42,7 +42,8 @@ import SpriteKit
       }
     }
   };
-  
+
+
   final class Player: SKSpriteNode {
     
     init(color: SKColor, size: CGSize) {

@@ -74,9 +74,11 @@
 	<array/>
 	<key>fix autopause</key>
 	<string></string>
-	<key>fix scoremode</key>
+	<key>fix mode.score</key>
 	<string></string>
-	<key>fullmode + pause = crash</key>
+	<key>random crash on contact</key>
+	<string></string>
+	<key>mode.fade + pause = crash</key>
 	<string></string>
 	<key>hardcoded numbers to %screen</key>
 	<string></string>
