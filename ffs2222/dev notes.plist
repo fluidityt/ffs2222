@@ -4,11 +4,7 @@
 <dict>
 	<key>CREV</key>
 	<array/>
-	<key>Config file (difficulty / globals)</key>
-	<string></string>
 	<key>DoContact needs guards</key>
-	<string></string>
-	<key>Random global stuff in DoContact and Spawner</key>
 	<string></string>
 	<key>Protocol for makeLab selfInit</key>
 	<string></string>
@@ -16,9 +12,7 @@
 	<string></string>
 	<key>hi and session scores spaghetti</key>
 	<string></string>
-	<key>convert UD to FP</key>
-	<string></string>
-	<key>make modes an enum</key>
+	<key>func for assigning pb in dc</key>
 	<string></string>
 	<key>   </key>
 	<string></string>
@@ -27,8 +21,6 @@
 	<key>Add top10 with names?</key>
 	<string></string>
 	<key>collect block mode?</key>
-	<string></string>
-	<key>pacman dots?</key>
 	<string></string>
 	<key>game mode.. .two yellow boxes??</key>
 	<string></string>
@@ -46,21 +38,27 @@
 	<string></string>
 	<key>TODO</key>
 	<array/>
-	<key>fast-fall mode (but less blocks)</key>
+	<key>menu screen on pause</key>
 	<string></string>
-	<key>training mode back button</key>
+	<key>reward for being at top of screen</key>
 	<string></string>
-	<key>Add win caption to failscene on new HS</key>
+	<key>change themes (atari, neon, etc)</key>
 	<string></string>
-	<key>GameCenter</key>
-	<string></string>
-	<key>In-app menu</key>
+	<key>back button in devmode</key>
 	<string></string>
 	<key>icloud hiscores</key>
 	<string></string>
-	<key> </key>
+	<key>GameCenter</key>
 	<string></string>
-	<key>Options menu (with colors and stuff)</key>
+	<key>       </key>
+	<string></string>
+	<key>turbo mode (guitar hero)</key>
+	<string></string>
+	<key>In-app menu</key>
+	<string></string>
+	<key>Options menu</key>
+	<string></string>
+	<key> </key>
 	<string></string>
 	<key>Eye animations</key>
 	<string></string>
@@ -72,19 +70,17 @@
 	<string></string>
 	<key>FIXME</key>
 	<array/>
+	<key>random crash on contact</key>
+	<string></string>
 	<key>fix autopause</key>
 	<string></string>
 	<key>fix mode.score</key>
 	<string></string>
-	<key>random crash on contact</key>
-	<string></string>
-	<key>mode.fade + pause = crash</key>
-	<string></string>
 	<key>hardcoded numbers to %screen</key>
 	<string></string>
-	<key>ipad: pause leftright border</key>
+	<key>fullmode crash</key>
 	<string></string>
-	<key>noticiable gaps in updifficulty</key>
+	<key>ipad: pause leftright border</key>
 	<string></string>
 </dict>
 </plist>
