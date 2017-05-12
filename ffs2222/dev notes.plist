@@ -4,7 +4,9 @@
 <dict>
 	<key>CREV</key>
 	<array/>
-	<key>DoContact needs guards</key>
+	<key>Too much global state</key>
+	<string></string>
+	<key>Some unit testing for states / modes</key>
 	<string></string>
 	<key>Protocol for makeLab selfInit</key>
 	<string></string>
@@ -38,15 +40,17 @@
 	<string></string>
 	<key>TODO</key>
 	<array/>
-	<key>menu screen on pause</key>
-	<string></string>
 	<key>reward for being at top of screen</key>
+	<string></string>
+	<key>MenuScene on pause</key>
 	<string></string>
 	<key>change themes (atari, neon, etc)</key>
 	<string></string>
 	<key>back button in devmode</key>
 	<string></string>
 	<key>icloud hiscores</key>
+	<string></string>
+	<key>sensitivity option (ipad)</key>
 	<string></string>
 	<key>GameCenter</key>
 	<string></string>
@@ -71,6 +75,8 @@
 	<key>FIXME</key>
 	<array/>
 	<key>random crash on contact</key>
+	<string></string>
+	<key>fademode needs more variablility</key>
 	<string></string>
 	<key>fix autopause</key>
 	<string></string>

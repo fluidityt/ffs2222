@@ -7,7 +7,12 @@ extension GameScene {
   // MARK: - TB:
   func pause() {
     // FIXME: FULLMODE BUG HOTFIX:
-    if g.mode.fade.value { return }
+    if g.mode.full.isOn { return }
+    
+    if g.mode.dev.isOn {
+      if let view = view { if let mm = g.mainmenu { view.presentScene(mm) } }
+      return
+    }
     
     g.paused.toggle()
     

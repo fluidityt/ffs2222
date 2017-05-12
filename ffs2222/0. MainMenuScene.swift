@@ -49,7 +49,7 @@ final class MainMenuScene: SKScene {
     g.sessionScore = 0
     
     UD.initUserDefaults()
-    // UD.setHighScore(to: 158)
+    // UD.setHighScore(to: 116)
     UD.loadHighScore()
   
     selfInit()
