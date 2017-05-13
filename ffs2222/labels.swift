@@ -19,9 +19,11 @@ final class PlayLabel: SKLabelNode {
   }
   
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-    let scene = GameScene(size: self.scene!.size)
-    g.gameScene = scene
-    self.scene!.view!.presentScene(scene)
+    if let scene = self.scene { if let view = scene.view {
+      newGame()
+      view.presentScene(g.gameScene)
+      }
+    }
   }
   
   required init?(coder aDecoder: NSCoder) { fatalError("") };  override init() { super.init() }
@@ -38,8 +40,11 @@ final class MainMenuLabel: SKLabelNode {
   
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     guard let mm = g.mainmenu else { fatalError() }
-    mm.updateScore()
-    self.scene!.view!.presentScene(g.mainmenu!)
+    if let scene = self.scene { if let view = scene.view {
+      mm.updateScore()
+      view.presentScene(g.mainmenu!)
+      }
+    }
   }
   
   required init?(coder aDecoder: NSCoder) { fatalError("") }; override init() { super.init() }

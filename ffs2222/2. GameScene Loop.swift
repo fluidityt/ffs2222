@@ -10,6 +10,7 @@ extension GameScene {
     if g.mode.full.isOn { return }
     
     if g.mode.dev.isOn {
+      newGame()
       if let view = view { if let mm = g.mainmenu { view.presentScene(mm) } }
       return
     }
@@ -82,7 +83,6 @@ extension GameScene {
     
     if g.hitThisFrame { g.hits += 1 }
     if g.hits >= 2    {
-      g.hits = 0
       view!.presentScene(FailScene(size: size))
     }
   }

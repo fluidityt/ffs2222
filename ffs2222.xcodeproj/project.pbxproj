@@ -14,6 +14,7 @@
 		4D1991BA1EB9D61100B2873B /* 2. UD funcs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D1991B91EB9D61100B2873B /* 2. UD funcs.swift */; };
 		4D1991BC1EB9D72000B2873B /* utilz.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D1991BB1EB9D72000B2873B /* utilz.swift */; };
 		4D1991BE1EB9D9EC00B2873B /* sprites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D1991BD1EB9D9EC00B2873B /* sprites.swift */; };
+		4D3B2AAC1EC6080100E12909 /* file2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3B2AAB1EC6080100E12909 /* file2.swift */; };
 		4D3C18051EB5A656009A727C /* 0. MainMenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3C18041EB5A656009A727C /* 0. MainMenuScene.swift */; };
 		4D3FAF391EC36B810074FA7B /* 1. Spawner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3FAF381EC36B810074FA7B /* 1. Spawner.swift */; };
 		4D3FAF3B1EC36BFE0074FA7B /* 2. DoContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3FAF3A1EC36BFE0074FA7B /* 2. DoContact.swift */; };
@@ -49,6 +50,7 @@
 		4D1991BB1EB9D72000B2873B /* utilz.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = utilz.swift; sourceTree = "<group>"; };
 		4D1991BD1EB9D9EC00B2873B /* sprites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = sprites.swift; sourceTree = "<group>"; };
 		4D1991BF1EB9FF2D00B2873B /* CGRect test.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "CGRect test.playground"; sourceTree = "<group>"; };
+		4D3B2AAB1EC6080100E12909 /* file2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = file2.swift; sourceTree = "<group>"; };
 		4D3C18041EB5A656009A727C /* 0. MainMenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "0. MainMenuScene.swift"; sourceTree = "<group>"; };
 		4D3FAF381EC36B810074FA7B /* 1. Spawner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "1. Spawner.swift"; sourceTree = "<group>"; };
 		4D3FAF3A1EC36BFE0074FA7B /* 2. DoContact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "2. DoContact.swift"; sourceTree = "<group>"; };
@@ -153,6 +155,7 @@
 				4DA745A71EBF19E4005F9C4D /* util classes.swift */,
 				4D1991BB1EB9D72000B2873B /* utilz.swift */,
 				4D0AC04A1EBB56E70078DB73 /* file.swift */,
+				4D3B2AAB1EC6080100E12909 /* file2.swift */,
 			);
 			path = ffs2222;
 			sourceTree = "<group>";
@@ -286,6 +289,7 @@
 				4D1991BA1EB9D61100B2873B /* 2. UD funcs.swift in Sources */,
 				4D8880F11EBF5AB8008399CE /* labels.swift in Sources */,
 				4D1991BC1EB9D72000B2873B /* utilz.swift in Sources */,
+				4D3B2AAC1EC6080100E12909 /* file2.swift in Sources */,
 				4DFA46A31EB177C3008E5847 /* -1. GameViewController.swift in Sources */,
 				4D1991B81EB9D5B500B2873B /* 3. FailScene.swift in Sources */,
 				4D0C93971EBC8F1100A6F4CB /* 2. GameScene Loop.swift in Sources */,

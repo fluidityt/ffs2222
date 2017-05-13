@@ -18,10 +18,10 @@ struct g {
   view       = SKView(),
   gameScene  = GameScene(),
   nextAction = SKAction(),
+  pbKill:    = [SKPhysicsBody](),
   mainmenu:    MainMenuScene?,
   scoreLabel:  SKLabelNode?,
   player:      Player?,
-  
   // Score:
   linesCleared   = 0,
   score          = 0,
@@ -51,6 +51,16 @@ struct g {
   isInvincible = false      // Used for contact in loop
 };
 
+func newGame() {
+  g.linesCleared = 0
+  g.score = 0
+  g.waiting = false
+  g.paused = false
+  g.isInvincible = false
+  g.hits = 0
+  g.gameScene = GameScene(size: CGSize(width: 600, height: 1000))
+  g.difficulty = (boxNum: 4, boxNumMod: 4, boxSpeed: 1.0, boxSize: CGFloat(1.5))
+}
 
 // MARK: - DMV:
 class GameScene: SKScene, SKPhysicsContactDelegate {
@@ -109,5 +119,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     g.score = 0
     g.linesCleared = 0
   }
+  
+  
 };
 
