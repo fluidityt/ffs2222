@@ -22,6 +22,10 @@
 	<array/>
 	<key>Add top10 with names?</key>
 	<string></string>
+	<key>dynamic light</key>
+	<string></string>
+	<key>paralaxing</key>
+	<string></string>
 	<key>collect block mode?</key>
 	<string></string>
 	<key>game mode.. .two yellow boxes??</key>
@@ -43,6 +47,10 @@
 	<key>TODO</key>
 	<array/>
 	<key>reward for being at top of screen</key>
+	<string></string>
+	<key>more fun stuff</key>
+	<string></string>
+	<key>fademode needs more variablility</key>
 	<string></string>
 	<key>MenuScene on pause</key>
 	<string></string>
@@ -76,9 +84,7 @@
 	<string></string>
 	<key>FIXME</key>
 	<array/>
-	<key>random crash on contact</key>
-	<string></string>
-	<key>fademode needs more variablility</key>
+	<key>fademode vs fullmode</key>
 	<string></string>
 	<key>fix autopause</key>
 	<string></string>

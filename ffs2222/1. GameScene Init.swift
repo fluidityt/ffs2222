@@ -9,6 +9,8 @@ enum Category {
   three =   UInt32 (4),    line  =   UInt32 (8),    death =   UInt32 (16)
 };
 
+typealias  Succeeded = Bool
+
 /// Globals:
 struct g {
   
@@ -18,7 +20,7 @@ struct g {
   view       = SKView(),
   gameScene  = GameScene(),
   nextAction = SKAction(),
-  pbKill:    = [SKPhysicsBody](),
+  pbKill     = Set<SKNode>(),
   mainmenu:    MainMenuScene?,
   scoreLabel:  SKLabelNode?,
   player:      Player?,
@@ -38,7 +40,8 @@ struct g {
   difficulty = (boxNum: 4,
                 boxNumMod: 4,
                 boxSpeed: 1.0,
-                boxSize: CGFloat(1.5)),
+                boxSize: CGFloat(1.5),
+                spinMod: {return Int(spinAdjustor.number)}()),
   size30 = CGSize(width: 30, height: 30),
   notificationHeight: CGFloat  = ((gameScene.size.height/7)/2),
   
@@ -59,7 +62,8 @@ func newGame() {
   g.isInvincible = false
   g.hits = 0
   g.gameScene = GameScene(size: CGSize(width: 600, height: 1000))
-  g.difficulty = (boxNum: 4, boxNumMod: 4, boxSpeed: 1.0, boxSize: CGFloat(1.5))
+  g.difficulty = (boxNum: 4, boxNumMod: 4, boxSpeed: 1.0, boxSize: CGFloat(1.5),
+                  spinMod: {return Int(spinAdjustor.number)}())
 }
 
 // MARK: - DMV:
@@ -89,9 +93,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     g.nextAction = {
       let wait     = SKAction.wait(forDuration: g.difficulty.boxSpeed)
       let run      = SKAction.run {
+        if randy(g.difficulty.spinMod) < g.difficulty.boxNum { g.mode.spin.value = true }
+        
         var spawn = Spawner(gsi: self)
         spawn.lineOfBlackBoxes(
           difficulty: (base: g.difficulty.boxNum, mod:  randy(g.difficulty.boxNumMod)))
+        
+        g.mode.spin.value = false
       }
       let onFinish = SKAction.run { self.run(g.nextAction) }
       let sequence = SKAction.sequence([wait,run,onFinish])
@@ -114,12 +122,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // if g.modes.values.contains(.dev) { isInvincible = true }
     if g.mode.dev.value  { g.isInvincible = true         }
-    if g.mode.fade.value { g.difficulty.boxSpeed -= 0.15 }
+    if g.mode.full.value { g.difficulty.boxSpeed -= 0.15 }
     
     g.score = 0
     g.linesCleared = 0
   }
-  
-  
 };
 

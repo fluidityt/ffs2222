@@ -43,7 +43,7 @@ extension GameScene {
                   left:       frame.minX + playa.size.width/2,
                   right:      frame.maxX - playa.size.width/2)
     
-    if g.mode.fade.value {
+    if g.mode.full.value {
       if playa.position.y < bounds.fullBottom { playa.position.y = bounds.fullBottom }
     }
     else {
@@ -79,11 +79,16 @@ extension GameScene {
   
   // MARK: - End contact:
   override func didSimulatePhysics() {
-    if g.isInvincible { return }
     
-    if g.hitThisFrame { g.hits += 1 }
-    if g.hits >= 2    {
-      view!.presentScene(FailScene(size: size))
+    for node in g.pbKill {
+      g.pbKill.remove(node)
+      node.removeFromParent()
+    }
+    
+    scoring: do {
+      if g.isInvincible { break scoring }
+      if g.hitThisFrame { g.hits += 1 }
+      if g.hits >= 2    { view!.presentScene(FailScene(size: size)) }
     }
   }
   

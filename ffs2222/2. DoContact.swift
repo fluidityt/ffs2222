@@ -8,6 +8,27 @@ struct DoContact {
   
   var contact: SKPhysicsContact
   
+  // SHould be pb or node?
+  private func sendToDie(_ node: SKNode) {
+    g.pbKill.insert(node)
+    node.name = "dead"
+    node.physicsBody?.categoryBitMask = Category.zero
+  }
+  
+  private func killACategory(category: UInt32) -> Succeeded {
+    if contact.bodyA.categoryBitMask == category{
+      guard let a = contact.bodyA.node else { return false }
+      sendToDie(a)
+      return true
+    }
+    else if contact.bodyB.categoryBitMask == category {
+      guard let b = contact.bodyB.node else { return false }
+      sendToDie(b)
+      return true
+    }
+    else { return false }
+  }
+  
   init(contact: SKPhysicsContact) { self.contact = contact }
   
   /// ... you know what it is ...
@@ -36,16 +57,16 @@ struct DoContact {
       let pointLeft  = CGPoint(x: oneLeft, y: blackNode.position.y)
       let pointRight = CGPoint(x: oneRight, y: blackNode.position.y)
       
-      blackNode.removeFromParent()
+      sendToDie(blackNode)
       
       let leftNodes  = g.gameScene.nodes(at: pointLeft)
       let rightNodes = g.gameScene.nodes(at: pointRight)
       
       for ln in leftNodes  {
-        if ln.name != nil { removeANode(blackNode: ln) }
+        if ln.name == "black" { removeANode(blackNode: ln) }
       }
       for rn in rightNodes {
-        if rn.name != nil { removeANode(blackNode: rn) }
+        if rn.name == "black" { removeANode(blackNode: rn) }
       }
     }
     
@@ -55,13 +76,12 @@ struct DoContact {
     g.hitThisFrame = true
   }
   
-   func yellowAndLine() {
+  func yellowAndLine() {
     
     defer { if !g.mode.dev.value { UD.saveHighScore() } }
     
     g.linesCleared += 1
     
-    // Increase score:
     if g.isInvincible == false {
       g.score += 1
       // <#  g.gsi.scoreLabel?.text = "Score \(g.score)"
@@ -69,30 +89,10 @@ struct DoContact {
       print("score:", g.score)
     }
     
-    // Kill nodes:
-    if contact.bodyA.categoryBitMask == Category.line {
-      if let a = contact.bodyA.node { killNode(a) }
-    }
-    else {
-      if let b = contact.bodyB.node { killNode(b) }
-    }
+    _=killACategory(category: Category.line)
   }
   
-   func deathAndBlack() {
-    if contact.bodyA.categoryBitMask == Category.black {
-      if let a = contact.bodyA.node { killNode(a) }
-    }
-    else {
-      if let b = contact.bodyB.node { killNode(b) }
-    }
-  }
+  func deathAndBlack() { _=killACategory(category: Category.black) }
   
-   func deathAndLine() {
-    if contact.bodyA.categoryBitMask == Category.line {
-      if let a = contact.bodyA.node { killNode(a) }
-    }
-    else {
-      if let b = contact.bodyB.node { killNode(b) }
-    }
-  }
+  func deathAndLine()  { _=killACategory(category: Category.line)  }
 };

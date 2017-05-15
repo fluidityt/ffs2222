@@ -42,6 +42,7 @@ struct Spawner {
       blackNode.name     = "black"
       blackNode.position = pos
       
+      // MODES:
       if g.mode.fade.value {
         let
         fin      = SKAction.fadeAlpha(to: 0.10, duration: 0.00),
@@ -156,7 +157,7 @@ struct Spawner {
       }
       
       lineNode.physicsBody = newPB
-      if g.mode.fade.value { lineNode.position.y =  (localGS.frame.minY  - g.size30.height) }
+      if g.mode.full.value { lineNode.position.y =  (localGS.frame.minY  - g.size30.height) }
       else                 { lineNode.position.y -= (g.size30.height + nh) }
       
     }
@@ -165,7 +166,7 @@ struct Spawner {
   
   mutating func touchPad() {
     let touchPad = TouchPad(player: g.player!, scene: localGS)
-    if g.mode.fade.value { }
+    if g.mode.full.value { }
     else {
       touchPad.position.y -= (touchPad.size.height / 2) + nh
     }
