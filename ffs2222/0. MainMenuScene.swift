@@ -4,7 +4,6 @@
 import SpriteKit
 
  
-let spinAdjustor = Adjustor(text: "SpinMode:", number: 15, step: 1)
 
 // MARK: - Scene:
 final class MainMenuScene: SKScene {
@@ -24,11 +23,11 @@ final class MainMenuScene: SKScene {
     let labels: [SKLabelNode] = [
       PlayLabel(texter: ""),
       mm_scoreLabel,
-      Toggler(labelName: "DevMode",  refBool: g.mode.dev  ),
-     // Toggler(labelName: "SpinMode", refBool: g.mode.spin ),
+      Toggler(labelName: "GodMode",  refBool: g.mode.dev  ),
+      // Toggler(labelName: "SpinMode", refBool: g.mode.spin ),
       Toggler(labelName: "FadeMode", refBool: g.mode.fade ),
       Toggler(labelName: "FullMode", refBool: g.mode.full ),
-      spinAdjustor
+      g.spinAdjustor
       //Toggler(labelName: "NHMode"  , refBool: g.mode.nh   )
       // <# Toggler(labelName: "Scoring" , refBool: g.mode.score)
     ]

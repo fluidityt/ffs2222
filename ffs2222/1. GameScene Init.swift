@@ -21,9 +21,12 @@ struct g {
   gameScene  = GameScene(),
   nextAction = SKAction(),
   pbKill     = Set<SKNode>(),
+  spinAdjustor = Adjustor(text: "SpinMode:", number: 15, step: 1),
   mainmenu:    MainMenuScene?,
   scoreLabel:  SKLabelNode?,
   player:      Player?,
+
+  
   // Score:
   linesCleared   = 0,
   score          = 0,
@@ -63,7 +66,7 @@ func newGame() {
   g.hits = 0
   g.gameScene = GameScene(size: CGSize(width: 600, height: 1000))
   g.difficulty = (boxNum: 4, boxNumMod: 4, boxSpeed: 1.0, boxSize: CGFloat(1.5),
-                  spinMod: {return Int(spinAdjustor.number)}())
+                  spinMod: {return Int(g.spinAdjustor.number)}())
 }
 
 // MARK: - DMV:
