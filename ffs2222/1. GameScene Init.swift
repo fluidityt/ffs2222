@@ -21,7 +21,7 @@ struct g {
   gameScene  = GameScene(),
   nextAction = SKAction(),
   pbKill     = Set<SKNode>(),
-  spinAdjustor = Adjustor(text: "SpinMode:", number: 15, step: 1),
+  // spinAdjustor = Adjustor(text: "SpinMode:", number: 15, step: 1),
   mainmenu:    MainMenuScene?,
   scoreLabel:  SKLabelNode?,
   player:      Player?,
@@ -38,13 +38,15 @@ struct g {
                 fade:  RefBool(false), full: RefBool(false),
                 score: RefBool(false), nh:   RefBool(true),
                 bar:   RefBool(false)),
+  // Doubles:
+  dub        = (spinMod: RefDouble(15), x: RefDouble(0)),
   
   // Difficulty / UI Settings:
   difficulty = (boxNum: 4,
                 boxNumMod: 4,
                 boxSpeed: 1.0,
                 boxSize: CGFloat(1.5),
-                spinMod: {return Int(spinAdjustor.number)}(),
+                spinMod: { return Int(g.dub.spinMod.value) }(),
                 barBase: CGFloat(55),
                 barMod:  CGFloat(25)),
   
@@ -70,7 +72,7 @@ func newGame() {
   g.hits = 0
   g.gameScene = GameScene(size: CGSize(width: 600, height: 1000))
   g.difficulty = (boxNum: 4, boxNumMod: 4, boxSpeed: 1.0, boxSize: CGFloat(1.5),
-                  spinMod: {return Int(g.spinAdjustor.number)}(),
+                  spinMod: { return Int(g.dub.spinMod.value) }(),
                   barBase: 55,
                   barMod:  25
   )

@@ -22,6 +22,14 @@ final class RefBool {
   }
 };
 
+final class RefDouble {
+  var value: Double
+  
+  init(_ value: Double) {
+    self.value = value
+  }
+};
+
 // MARK: - Toggler:
 public final class Toggler: SKLabelNode {
   
@@ -98,6 +106,8 @@ public final class Adjustor: SKLabelNode {
     }
   }
   
+  private var refDouble: RefDouble
+  
   var number: Double {
     get {
       guard let txt = numLabel.text else { return -99 }
@@ -106,6 +116,7 @@ public final class Adjustor: SKLabelNode {
       } else { return -99 }
     }
     set {
+      refDouble.value = newValue
       numLabel.text = String(newValue)
     }
   }
@@ -161,9 +172,11 @@ public final class Adjustor: SKLabelNode {
     numLabel.position.y = node.frame.minY + (numLabel.frame.height/2)
   }
   
-  init(text: String, number: Double, step: Double) {
+  init(text: String, refDouble: RefDouble, step: Double) {
+    self.refDouble = refDouble
     super.init()
-    //super.init(texture: nil, color: SKColor.clear, size: CGSize.zero)
+    
+    let number = refDouble.value
     self.text   = text
     self.number = number
     if step <= 0 {

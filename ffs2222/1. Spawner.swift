@@ -4,7 +4,6 @@
 
 import SpriteKit
 
-
 // MARK: - Spawner
 struct Spawner {
   

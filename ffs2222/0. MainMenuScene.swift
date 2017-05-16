@@ -28,9 +28,10 @@ final class MainMenuScene: SKScene {
       Toggler(labelName: "FadeMode", refBool: g.mode.fade ),
       Toggler(labelName: "FullMode", refBool: g.mode.full ),
       Toggler(labelName: "BarMode", refBool:  g.mode.bar  ),
-      g.spinAdjustor
       //Toggler(labelName: "NHMode"  , refBool: g.mode.nh   )
       // <# Toggler(labelName: "Scoring" , refBool: g.mode.score)
+      
+      Adjustor(text: "SpinMod", refDouble: g.dub.spinMod, step: 1)
     ]
     
     labels[0].position.y += 250
