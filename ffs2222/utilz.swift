@@ -12,6 +12,7 @@ func killNode(_ node: SKNode) {
 }
 
 func randy(_ num: Int) -> Int { return Int(arc4random_uniform(UInt32(num)))+1 }
+func randy(_ num: CGFloat) -> CGFloat { return CGFloat(arc4random_uniform(UInt32(num)))+1 }
 
 func setMasks(pb: SKPhysicsBody, cat: UInt32, cont: UInt32, col: UInt32) {
   pb.categoryBitMask = cat
@@ -34,6 +35,13 @@ func offSetLabel(_ labels: [SKLabelNode], by amount: CGFloat = 50) {
   }
 }
 
+/// For use with anchorpoints and pbs
+func pbCenter(on node: SKSpriteNode) -> CGPoint {
+  return  CGPoint(x: CGFloat(node.size.width * (node.anchorPoint.x - 0.5) - node.size.width),
+                  y: CGFloat(node.size.height * (0.5 - node.anchorPoint.y)))
+}
+
+
 extension CGRect {
   
   init(middle: CGPoint, width: CGFloat, height: CGFloat) {
@@ -51,6 +59,7 @@ func setBackGroundColor(forScene: SKScene) {
 }
 
 extension SKNode {
+  
   func addChildren(_ nodes: [SKNode]) {
     for node in nodes {
       self.addChild(node)
@@ -58,12 +67,28 @@ extension SKNode {
   }
 }
 
+extension SKSpriteNode {
+  func center() -> CGPoint {
+    return CGPoint(x: CGFloat(size.width  * (anchorPoint.x - 0.5)),
+                   y: CGFloat(size.height * (0.5 - anchorPoint.y)))
+  }
+}
+
+extension CGRect {
+  func center() -> CGPoint {
+    return CGPoint(x: self.midX, y: self.midY)
+  }
+}
+
+
 struct SKPoint {
   static let topLeft     = CGPoint(x: 0, y: 1)
   static let topRight    = CGPoint(x: 1, y: 1)
   static let bottomLeft  = CGPoint(x: 0, y: 0)
   static let bottomRight = CGPoint(x: 1, y: 0)
   static let middle      = CGPoint(x: 0.5, y: 0.5)
+  static let middleLeft  = CGPoint(x: 0,   y: 0.5)
+  static let middleRight = CGPoint(x: 1,   y: 0.5)
 }
 
 extension Bool {

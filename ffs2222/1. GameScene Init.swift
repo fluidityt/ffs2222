@@ -36,15 +36,19 @@ struct g {
   // Modes:
   mode       = (dev:   RefBool(false), spin: RefBool(false),
                 fade:  RefBool(false), full: RefBool(false),
-                score: RefBool(false), nh:   RefBool(true)),
+                score: RefBool(false), nh:   RefBool(true),
+                bar:   RefBool(false)),
   
   // Difficulty / UI Settings:
-  fairness       = 15,
   difficulty = (boxNum: 4,
                 boxNumMod: 4,
                 boxSpeed: 1.0,
                 boxSize: CGFloat(1.5),
-                spinMod: {return Int(spinAdjustor.number)}()),
+                spinMod: {return Int(spinAdjustor.number)}(),
+                barBase: CGFloat(55),
+                barMod:  CGFloat(25)),
+  
+  fairness   = 15,
   size30 = CGSize(width: 30, height: 30),
   notificationHeight: CGFloat  = ((gameScene.size.height/7)/2),
   
@@ -66,7 +70,10 @@ func newGame() {
   g.hits = 0
   g.gameScene = GameScene(size: CGSize(width: 600, height: 1000))
   g.difficulty = (boxNum: 4, boxNumMod: 4, boxSpeed: 1.0, boxSize: CGFloat(1.5),
-                  spinMod: {return Int(g.spinAdjustor.number)}())
+                  spinMod: {return Int(g.spinAdjustor.number)}(),
+                  barBase: 55,
+                  barMod:  25
+  )
 }
 
 // MARK: - DMV:

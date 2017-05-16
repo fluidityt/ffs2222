@@ -6,6 +6,10 @@
 	<array/>
 	<key>Too much global state</key>
 	<string></string>
+	<key>make randomX a util</key>
+	<string></string>
+	<key>make blackbar exact length</key>
+	<string></string>
 	<key>Some unit testing for states / modes</key>
 	<string></string>
 	<key>Protocol for makeLab selfInit</key>
@@ -15,6 +19,8 @@
 	<key>hi and session scores spaghetti</key>
 	<string></string>
 	<key>func for assigning pb in dc</key>
+	<string></string>
+	<key>figure out fucking anchorpoint PB</key>
 	<string></string>
 	<key>   </key>
 	<string></string>

@@ -13,13 +13,14 @@ class GameViewController: UIViewController {
       view.ignoresSiblingOrder = true
       view.showsFPS = true
       view.showsNodeCount = true
+      view.showsPhysics = true
       view.frame = CGRect(x: 0, y: 0, width: mySize.width, height: mySize.height)
       // g.view = view
     }
     
     let scene = MainMenuScene(size: CGSize(width: 600, height: 1000)) // Why does this work?
     scene.scaleMode = .aspectFit
-    view.presentScene(scene)
+     view.presentScene(scene)
     print("hi")
   }
   

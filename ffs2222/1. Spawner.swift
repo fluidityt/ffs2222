@@ -4,7 +4,6 @@
 
 import SpriteKit
 
-var barMode = true
 
 // MARK: - Spawner
 struct Spawner {
@@ -40,43 +39,46 @@ struct Spawner {
     let emptyNode = SKSpriteNode(color: .clear, size: CGSize(width: width, height: g.size30.height))
     emptyNode.position = pos
     
-    func subRandomX() -> CGFloat {
-      let randX = randy(Int(localGS.frame.maxX * 2))
-      return CGFloat(randX) - localGS.frame.maxX
+    setEmptyNode: do {
+      func subRandomX() -> CGFloat {
+        let randX = randy(Int(localGS.frame.maxX * 2))
+        return CGFloat(randX) - localGS.frame.maxX
+      }
+      
+      let maxX = localGS.frame.maxX - emptyNode.size.width/2
+      let minX = localGS.frame.minX + emptyNode.size.width/2
+      let randomX = subRandomX() // CGFloat(randy(Int(localGS.size.width)))
+      
+      if      randomX > maxX { emptyNode.position.x = maxX    }
+      else if randomX < minX { emptyNode.position.x = minX    }
+      else                   { emptyNode.position.x = randomX }
     }
     
-    let maxX = localGS.frame.maxX - emptyNode.size.width/2
-    let minX = localGS.frame.minX + emptyNode.size.width/2
-    let randomX = subRandomX() // CGFloat(randy(Int(localGS.size.width)))
-    
-    if      randomX > maxX { emptyNode.position.x = maxX    }
-    else if randomX < minX { emptyNode.position.x = minX    }
-    else                   { emptyNode.position.x = randomX }
-    
-    let leftPoint      = CGPoint(x: emptyNode.frame.minX, y: emptyNode.frame.midY)
-    let convertedPoint = localGS.convertPoint(toView: leftPoint)
-    //convert(leftPoint, from: emptyNode)
-    
-    let leftSize  = CGSize(width: convertedPoint.x, height: g.size30.height)
-    let rightSize = CGSize(width: (localGS.size.width - emptyNode.size.width - leftSize.width), height: g.size30.height)
-    
-    let leftSide  = SKSpriteNode(color: .black, size: leftSize ); do {
-      let leftPB  = SKPhysicsBody(rectangleOf: leftSide.size)
-      setMasks(pb: leftPB , cat: C.black, cont: C.yellow | C.death, col: C.zero)
-      leftSide.physicsBody = leftPB
-      leftSide.position    = emptyNode.position
-      leftSide.position.x -= leftSide.size.width/2
+    setLeftRightSides: do {
+      let mySize = CGSize( width: localGS.size.width, height: g.size30.height)
+      
+      let leftSide  = SKSpriteNode(color: .black, size: mySize ); do {
+        leftSide.position    = emptyNode.position
+        leftSide.position.x -= emptyNode.size.width/2
+        leftSide.position.x -= leftSide.size.width/2
+        
+        let leftPB  = SKPhysicsBody(rectangleOf: leftSide.size)
+        setMasks(pb: leftPB , cat: C.black, cont: C.yellow | C.death, col: C.zero)
+        leftSide.physicsBody = leftPB
+      }
+      
+      let rightSide = SKSpriteNode(color: .black, size: mySize); do {
+        rightSide.position    = emptyNode.position
+        rightSide.position.x += emptyNode.size.width/2
+        rightSide.position.x += rightSide.size.width/2
+        
+        let rightPB = SKPhysicsBody(rectangleOf: rightSide.size)
+        setMasks(pb: rightPB, cat: C.black, cont: C.yellow | C.death, col: C.zero)
+        rightSide.physicsBody = rightPB
+      }
+     
+      localGS.addChildren([leftSide, rightSide])
     }
-
-    let rightSide = SKSpriteNode(color: .black, size: rightSize); do {
-      let rightPB = SKPhysicsBody(rectangleOf: rightSide.size)
-      setMasks(pb: rightPB, cat: C.black, cont: C.yellow | C.death, col: C.zero)
-      rightSide.physicsBody = rightPB
-      rightSide.position    = emptyNode.position
-      rightSide.position.x += rightSide.size.width/2
-    }
-
-    localGS.addChildren([leftSide, rightSide])
   }
   
   func blackNode(pos: CGPoint)  {
@@ -176,8 +178,9 @@ struct Spawner {
     // Assignment:
     scanline(pos: CGPoint(x: 0, y: yVal))
     
-    if barMode {
-      blackBar(width: 25, pos: getFairPoint(fairness: 15)) // shouldn't matter
+    if g.mode.bar.isOn {
+      blackBar(width: g.difficulty.barBase + randy(g.difficulty.barMod),
+               pos: getFairPoint(fairness: 15)) // shouldn't matter
       return
     }
     
