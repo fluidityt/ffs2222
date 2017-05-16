@@ -12,8 +12,8 @@ class GameViewController: UIViewController {
     guard let view = self.view as! SKView? else { fatalError("wtf happened") }; do {
       view.ignoresSiblingOrder = true
       view.showsFPS = true
-      view.showsNodeCount = true
       view.showsPhysics = true
+      // view.showsNodeCount = true
       view.frame = CGRect(x: 0, y: 0, width: mySize.width, height: mySize.height)
       // g.view = view
     }

@@ -58,6 +58,7 @@
 		4DA745A71EBF19E4005F9C4D /* util classes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "util classes.swift"; sourceTree = "<group>"; };
 		4DAE476C1EC2D55300713291 /* fally original.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "fally original.playground"; sourceTree = "<group>"; };
 		4DCF91481ECB7ED5006AA0A6 /* pb anchorpoint.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "pb anchorpoint.playground"; sourceTree = "<group>"; };
+		4DCF91491ECB90A0006AA0A6 /* WinbyJump.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = WinbyJump.playground; sourceTree = "<group>"; };
 		4DE3291E1EC2CEB700C871C3 /* Adjustor.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Adjustor.playground; sourceTree = "<group>"; };
 		4DF5AB9A1EB5D18E005A340A /* open animation.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "open animation.playground"; sourceTree = "<group>"; };
 		4DFA46971EB177C2008E5847 /* ffs2222.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ffs2222.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -172,6 +173,7 @@
 				4DF5AB9A1EB5D18E005A340A /* open animation.playground */,
 				4D0AC04C1EBC2CA40078DB73 /* TestScene.sks */,
 				4DCF91481ECB7ED5006AA0A6 /* pb anchorpoint.playground */,
+				4DCF91491ECB90A0006AA0A6 /* WinbyJump.playground */,
 			);
 			path = ffs2222Tests;
 			sourceTree = "<group>";
