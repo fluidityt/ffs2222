@@ -3,6 +3,12 @@ import SpriteKit
 // http://stackoverflow.com/questions/31574049/moving-node-on-top-of-a-moving-platform
 // http://www.learn-cocos2d.com/2013/08/physics-engine-platformer-terrible-idea/
 
+
+// try a contacter, or just do a fake physics body? 
+
+let categoryPlayer = UInt32(1)
+let categoryEnemy  = UInt32(2)
+
 class GameScene2: SKScene {
   
   // var:
@@ -23,7 +29,7 @@ class GameScene2: SKScene {
   let
   gravityUp   = CGVector(dx: 0, dy: -20),
   gravityDown = CGVector(dx: 0, dy: -30),
-  jumpPower   = CGVector(dx: 0, dy: 45 ),
+  jumpPower   = CGVector(dx: 0, dy: 55 ),
   playerMass  = CGFloat(1)
   
   // Player:
@@ -60,12 +66,14 @@ class GameScene2: SKScene {
     
     for node in enemyHash.values {
       guard player.frame.intersects(node.frame) else { continue }
-      
+    
       if let ppio = platformPlayerIsOn {
+        print("found ppio")
         // Isn't there a better way to just ensure that ppio is never found once set?
-        if ppio == node { return nil }
+        if ppio == node { continue }
       }
       else {
+        print("found not ppio")
         hitEnemy = node
         return node
       }
@@ -80,7 +88,7 @@ class GameScene2: SKScene {
     
     assert(node != platformPlayerIsOn) // handled in checker.
     
-    if player.position.y > node.position.y {
+    if (player.position.y - player.size.height/2) > (node.position.y - node.size.height/2) {
       putNodeOnTopOfAnother(put: player, on: node)
       player.physicsBody = GameScene2.makePlayerPB(player: player)
       platformPlayerIsOn = node // will stop calling collide on this node until jump.
@@ -154,14 +162,15 @@ extension GameScene2 {
   }
   
   override func didEvaluateActions() {
+  }
+  
+  override func didSimulatePhysics() {
     if let hitNode = checkCollision() {
       collide(with: hitNode)
     }
     
     if playerIsOnPlatform { keepPlayerOnPlatform() }
-  }
-  
-  override func didSimulatePhysics() {
+
     keepPlayerInBounds()
   }
   
@@ -174,7 +183,7 @@ extension GameScene2 {
     }
     
     if dead {
-      
+      view?.presentScene(GameScene2(size: size))
     }
     
   }

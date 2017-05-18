@@ -30,18 +30,41 @@ class Spawner2 {
   private func animate(enemy: SKSpriteNode) {
     /* fast = 2; let slow = 3; let norm = 2.5 */
     
+    func findFirstPointX() -> CGFloat {
+      if enemy.position.x < 0 { return frame.maxX } // move to right
+      else { return frame.minX }                    // move to left
+    }
+    func findSecondPointX() -> CGFloat {
+      if enemy.position.x < 0 { return frame.minX } // move to right
+      else { return frame.maxX }                    // move to left
+    }
+    
     let
-    pointY      = localGS.nextPos.y,
-    leftPoint   = CGPoint(x: frame.minX, y: pointY),
-    rightPoint  = CGPoint(x: frame.maxX, y: pointY),
+    pointY       = localGS.nextPos.y,
+    firstPoint   = CGPoint(x: findFirstPointX(), y: pointY),
+    secondPoint  = CGPoint(x: findSecondPointX(), y: pointY),
     
     randomSpeed = TimeInterval(1 + randy(3)),
-    action1     = SKAction.move(to: leftPoint,  duration: randomSpeed),
-    action2     = SKAction.move(to: rightPoint, duration: randomSpeed),
+    action1     = SKAction.move(to: firstPoint,  duration: randomSpeed),
+    action2     = SKAction.move(to: secondPoint, duration: randomSpeed),
     sequence    = SKAction.sequence([action1, action2]),
     repeating   = SKAction.repeatForever(sequence)
     
     enemy.run(repeating)
+  }
+  
+  private func pickNextPos(spawnedNode node: SKSpriteNode) -> CGPoint {
+    var returnPos = node.position
+    returnPos.y += node.size.height
+    
+    // Spawn two up?:
+    if randy(2) == 1 { returnPos.y += node.size.height }
+    
+    // Spawn on left?
+    if randy(2) == 1 { returnPos.x = frame.minX - node.size.width/2 }
+    else { returnPos.x = frame.maxX + node.size.width/2 }
+    
+    return returnPos
   }
   
   func startingLineAndPlayer() {
@@ -57,8 +80,10 @@ class Spawner2 {
     }
     addToHash(enemy: enemy)
     
-    localGS.nextPos = enemy.position
-    localGS.nextPos.y += enemy.size.height
+    localGS.platformPlayerIsOn = enemy
+    localGS.playerIsOnPlatform = true
+    
+    localGS.nextPos = pickNextPos(spawnedNode: enemy)
     localGS.addChild(enemy)
     localGS.addChild(player)
     localGS.putNodeOnTopOfAnother(put: player, on: enemy)
@@ -81,8 +106,53 @@ class Spawner2 {
       animate(enemy: enemy)
     }
     addToHash(enemy: enemy)
-    localGS.nextPos = enemy.position
-    localGS.nextPos.y += enemy.size.height
+    
+    localGS.nextPos = pickNextPos(spawnedNode: enemy)
     localGS.addChild(enemy)
   }
+}
+
+// Not really a scene:
+class PhysicsDelegate: SKScene, SKPhysicsContactDelegate {
+
+  var localGS = GameScene2(size: CGSize.zero)
+  var contact = SKPhysicsContact()
+  
+  var player: SKSpriteNode { return localGS.player }
+  
+  private func assignYellowBlack() ->  (player: SKPhysicsBody, enemy: SKPhysicsBody) {
+    
+    if contact.bodyA.categoryBitMask == categoryPlayer {
+      return (contact.bodyA, contact.bodyB)
+    }   else { return (contact.bodyB, contact.bodyA) }
+  }
+  
+  func blackAndYellow() {
+    
+    let (playerPB, enemyPB) = assignYellowBlack()
+    
+    guard let playerNode = playerPB.node, let enemyNode = enemyPB.node else { fatalError("no nodes") }
+    
+    if playerNode
+    
+  }
+  
+  func didBegin(_ contact: SKPhysicsContact) {
+    self.contact = contact
+    
+    let contactedCategories = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
+    
+    
+    switch contactedCategories {
+    case categoryPlayer | categoryPlayer:
+      blackAndYellow()
+    default:
+      ()
+    }
+  }
+  
+  func didEnd(_ contact: SKPhysicsContact) {
+    self.contact = contact
+  }
+  
 }
