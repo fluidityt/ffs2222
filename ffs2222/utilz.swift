@@ -41,7 +41,6 @@ func pbCenter(on node: SKSpriteNode) -> CGPoint {
                   y: CGFloat(node.size.height * (0.5 - node.anchorPoint.y)))
 }
 
-
 extension CGRect {
   
   init(middle: CGPoint, width: CGFloat, height: CGFloat) {

@@ -4,21 +4,38 @@ import SpriteKit
 // http://www.learn-cocos2d.com/2013/08/physics-engine-platformer-terrible-idea/
 
 class GameScene2: SKScene {
-
-  // Proppy:
-  var playerIsJumping = false
-  var playerIsOnPlatform = false
   
-  var playerY = CGFloat(0)
-  var enemyStarting  = CGPoint.zero
+  // var:
+  var
+  playerIsJumping = false,
+  playerIsOnPlatform = false,
+  platformPlayerIsOn: SKSpriteNode? = SKSpriteNode(),
+  enemyHash = ["first": SKSpriteNode()],
+  hitEnemy = SKSpriteNode(),
   
-  let gravityUp   = CGVector(dx: 0, dy: -20)
-  let gravityDown = CGVector(dx: 0, dy: -30)
-  let jumpPower   = CGVector(dx: 0, dy: 45 )
-  let playerMass  = CGFloat(1)
-
+  playerY = CGFloat(0),
+  enemyStarting  = CGPoint.zero,
+  nextPos = CGPoint(x: 0, y: 0),
   
-  // Funky:
+  dead = false
+  
+  // let:
+  let
+  gravityUp   = CGVector(dx: 0, dy: -20),
+  gravityDown = CGVector(dx: 0, dy: -30),
+  jumpPower   = CGVector(dx: 0, dy: 45 ),
+  playerMass  = CGFloat(1)
+  
+  // Player:
+  let player: SKSpriteNode = {
+    let player2 = SKSpriteNode(color: .green, size: CGSize(width: 30, height: 50))
+    
+    player2.physicsBody = GameScene2.makePlayerPB(player: player2)
+    
+    return player2
+  }()
+  
+  // MARK: - Funky:
   private static func makePlayerPB(player: SKSpriteNode) -> SKPhysicsBody {
     
     let newPB = SKPhysicsBody(rectangleOf: player.size)
@@ -27,46 +44,72 @@ class GameScene2: SKScene {
     return newPB
   }
   
-  func putPlayerOnTopOfPlatform() {
-    player.position.y = enemy.position.y
-    player.position.y += player.size.height/2
-    player.position.y += enemy.size.height/2
+  private func selfInit() {
+    anchorPoint = CGPoint(x: 0.5, y: 0.5)
+    physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
+    physicsWorld.gravity = gravityUp
   }
   
-  func collide() {
-    if playerIsJumping {
-      return
-    }
+  func putNodeOnTopOfAnother(put node1: SKSpriteNode, on node2: SKSpriteNode) {
+    node1.position.y = node2.position.y
+    node1.position.y += node1.size.height/2
+    node1.position.y += node2.size.height/2
+  }
+  
+  func checkCollision() -> SKSpriteNode? {
     
-    if playerIsOnPlatform {
-      return
+    for node in enemyHash.values {
+      guard player.frame.intersects(node.frame) else { continue }
+      
+      if let ppio = platformPlayerIsOn {
+        // Isn't there a better way to just ensure that ppio is never found once set?
+        if ppio == node { return nil }
+      }
+      else {
+        hitEnemy = node
+        return node
+      }
     }
+    // Base case:
+    return nil
+  }
+  
+  func collide(with node: SKSpriteNode) {
+    // if playerIsJumping { return }
+    // if playerIsOnPlatform { return }
     
-    if player.position.y > enemy.position.y {
-      putPlayerOnTopOfPlatform()
+    assert(node != platformPlayerIsOn) // handled in checker.
+    
+    if player.position.y > node.position.y {
+      putNodeOnTopOfAnother(put: player, on: node)
       player.physicsBody = GameScene2.makePlayerPB(player: player)
+      platformPlayerIsOn = node // will stop calling collide on this node until jump.
+      playerIsOnPlatform = true
     }
     
-    playerIsOnPlatform = true
+    else {
+      dead = true
+      // TODO: playDeathAnimation()
+    }
+    
   }
   
   func keepPlayerOnPlatform() {
-    let enemyDX = enemyStarting.x - enemy.position.x
-    putPlayerOnTopOfPlatform()
+    assert(playerIsOnPlatform, "wtf happened")
+    guard let ppio = platformPlayerIsOn else { fatalError("why is this called") }
+    
+    let enemyDX = enemyStarting.x - ppio.position.x
+    putNodeOnTopOfAnother(put: player, on: ppio)
     player.position.x -= enemyDX
   }
   
   func jump() {
-    player.physicsBody = GameScene2.makePlayerPB(player: player)
-    
-    playerIsJumping = true
+    platformPlayerIsOn = nil
+    playerIsJumping    = true
+    playerIsOnPlatform = false
     
     physicsWorld.gravity = gravityUp
-    
-    if playerIsOnPlatform {
-      playerIsOnPlatform = false
-    }
-    
+    player.physicsBody   = GameScene2.makePlayerPB(player: player)
     player.removeAllActions()
     player.physicsBody?.applyImpulse(jumpPower)
   }
@@ -77,30 +120,45 @@ class GameScene2: SKScene {
     }
   }
   
-  func enemyAnimation() {
-    let leftPoint = CGPoint(x: frame.minX, y: frame.midY)
-    let rightPoint = CGPoint(x: frame.maxX, y: frame.midY)
-    
-    let action1 = SKAction.move(to: leftPoint, duration: 3)
-    let action2 = SKAction.move(to: rightPoint, duration: 3)
-    let sequence = SKAction.sequence([action1, action2])
-    let repeating = SKAction.repeatForever(sequence)
-    enemy.run(repeating, withKey: "sup")
+  func updateSpawner() {
+    let wait = SKAction.wait(forDuration: 3)
+    let run = SKAction.run {
+      Spawner2(gs: self).blackLine(pos: self.nextPos)
+      self.updateSpawner()
+    }
+    let sequence = SKAction.sequence([wait, run])
+    self.run(sequence)
   }
   
+  // Initials + touches:
+  override func didMove(to view: SKView) {
+    selfInit()
+    Spawner2(gs: self).startingLineAndPlayer()
+    updateSpawner()
+  }
+  
+  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    jump()
+  }
+}
+
+// MARK: - Game loop:
+extension GameScene2 {
+  
   override func update(_ currentTime: TimeInterval) {
-    enemyStarting = enemy.position // set for keepOnPlatform()
+    if let ppio = platformPlayerIsOn {
+      enemyStarting = ppio.position // set for keepOnPlatform()
+    }
+    
     playerY = player.position.y    // set for dfu check
   }
   
   override func didEvaluateActions() {
-    if player.frame.intersects(enemy.frame) {
-      collide()
+    if let hitNode = checkCollision() {
+      collide(with: hitNode)
     }
     
-    if playerIsOnPlatform {
-      keepPlayerOnPlatform()
-    }
+    if playerIsOnPlatform { keepPlayerOnPlatform() }
   }
   
   override func didSimulatePhysics() {
@@ -115,45 +173,10 @@ class GameScene2: SKScene {
       physicsWorld.gravity = gravityDown
     }
     
+    if dead {
+      
+    }
+    
   }
-  
-  var player: SKSpriteNode = {
-    let player2 = SKSpriteNode(color: .green, size: CGSize(width: 30, height: 30))
 
-    player2.physicsBody = GameScene2.makePlayerPB(player: player2)
-    
-    return player2
-  }()
-  
-  var enemy: SKSpriteNode = {
-    let enemy = SKSpriteNode(color: .blue, size: CGSize(width: 200, height: 10))
-    enemy.position.x += 200
-    
-    
-    let newPB = SKPhysicsBody(rectangleOf: enemy.size)
-    newPB.restitution = 0
-    newPB.isDynamic = false
-    enemy.physicsBody = newPB
-    return enemy
-  }()
-  
-  
-  
-  override func didMove(to view: SKView) {
-    self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-    addChild(player)
-    
-    enemyAnimation()
-    
-    self.physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
-    self.physicsWorld.gravity = gravityUp
-    
-    player.position.y = 0
-  }
-  
-  
-  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-    jump()
-  }
-  
 }
