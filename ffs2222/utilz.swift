@@ -13,6 +13,7 @@ func killNode(_ node: SKNode) {
 
 func randy(_ num: Int) -> Int { return Int(arc4random_uniform(UInt32(num)))+1 }
 func randy(_ num: CGFloat) -> CGFloat { return CGFloat(arc4random_uniform(UInt32(num)))+1 }
+func randy(_ num: Double) -> Double { return Double(arc4random_uniform(UInt32(num)))+1 }
 
 func setMasks(pb: SKPhysicsBody, cat: UInt32, cont: UInt32, col: UInt32) {
   pb.categoryBitMask = cat

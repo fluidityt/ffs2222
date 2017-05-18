@@ -46,6 +46,7 @@ class GameScene2: SKScene {
     newPB.restitution = 0
     newPB.categoryBitMask = categoryPlayer
     newPB.contactTestBitMask = categoryEnemy
+    newPB.usesPreciseCollisionDetection = true
     // newPB.mass = playerMass
     return newPB
   }
@@ -63,19 +64,13 @@ class GameScene2: SKScene {
     node1.position.y += node2.size.height/2
   }
 
-  func keepPlayerOnPlatform() {
-    assert(playerIsOnPlatform, "wtf happened")
-    guard let ppio = platformPlayerIsOn else { fatalError("why is this called") }
-    
-    let enemyDX = enemyStarting.x - ppio.position.x
-    putNodeOnTopOfAnother(put: player, on: ppio)
-    player.position.x -= enemyDX
-  }
-  
   func jump() {
+    print("jumping")
     platformPlayerIsOn = nil
     playerIsJumping    = true
     playerIsOnPlatform = false
+    
+    player.position.y += 1
     
     physicsWorld.gravity = gravityUp
     player.physicsBody   = GameScene2.makePlayerPB(player: player)
@@ -83,14 +78,24 @@ class GameScene2: SKScene {
     player.physicsBody?.applyImpulse(jumpPower)
   }
   
+  func keepPlayerOnPlatform() {
+    assert(playerIsOnPlatform, "wtf happened")
+    guard let ppio = platformPlayerIsOn else { fatalError("why is this called") }
+    
+    let enemyDX = enemyStarting.x - ppio.position.x
+    // putNodeOnTopOfAnother(put: player, on: ppio)
+    player.position.x -= enemyDX
+  }
+  
   func keepPlayerInBounds(){
     if player.position.y  < frame.minY {
+      print("kpib")
       player.position.y = frame.minY + player.size.height/2
     }
   }
   
   func updateSpawner() {
-    let wait = SKAction.wait(forDuration: 3)
+    let wait = SKAction.wait(forDuration: TimeInterval(1 + randy(3)))
     let run = SKAction.run {
       Spawner2(gs: self).blackLine(pos: self.nextPos)
       self.updateSpawner()
@@ -109,7 +114,7 @@ class GameScene2: SKScene {
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     jump()
   }
-}
+};
 
 // MARK: - Game loop:
 extension GameScene2 {
@@ -123,7 +128,9 @@ extension GameScene2 {
   }
   
   override func didEvaluateActions() {
-    if playerIsOnPlatform { keepPlayerOnPlatform() }
+    if playerIsOnPlatform {
+       keepPlayerOnPlatform()
+    }
   }
   
   override func didSimulatePhysics() {
@@ -135,7 +142,7 @@ extension GameScene2 {
     
     // Player will fall with more gravity than jump:
     if player.position.y < playerY {
-      physicsWorld.gravity = gravityDown
+       physicsWorld.gravity = gravityDown
     }
     
     // Reset game:
@@ -144,5 +151,4 @@ extension GameScene2 {
     }
     
   }
-
-}
+};

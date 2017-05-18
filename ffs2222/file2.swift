@@ -14,8 +14,9 @@ class Spawner2 {
   private var frame: CGRect        { return localGS.frame }
   
   // Difficulty:
-  private let baseSpeed = 1,
-  speedMod  = 3,
+  private let
+  baseSpeed = 1.5,
+  speedMod  = 2.5,
   baseSize  = 50,
   sizeMod   = 150
   
@@ -44,7 +45,7 @@ class Spawner2 {
     firstPoint   = CGPoint(x: findFirstPointX(), y: pointY),
     secondPoint  = CGPoint(x: findSecondPointX(), y: pointY),
     
-    randomSpeed = TimeInterval(1 + randy(3)),
+    randomSpeed = TimeInterval(baseSpeed + randy(speedMod)),
     action1     = SKAction.move(to: firstPoint,  duration: randomSpeed),
     action2     = SKAction.move(to: secondPoint, duration: randomSpeed),
     sequence    = SKAction.sequence([action1, action2]),
@@ -55,13 +56,16 @@ class Spawner2 {
   
   private func pickNextPos(spawnedNode node: SKSpriteNode) -> CGPoint {
     var returnPos = node.position
+    returnPos.y += 2
     returnPos.y += node.size.height
     
     // Spawn two up?:
     if randy(2) == 1 { returnPos.y += node.size.height }
     
     // Spawn on left?
-    if randy(2) == 1 { returnPos.x = frame.minX - node.size.width/2 }
+    if player.position.y > frame.midX - frame.size.width/4 {
+      returnPos.x = frame.minX - node.size.width/2
+    }
     else { returnPos.x = frame.maxX + node.size.width/2 }
     
     return returnPos
@@ -99,11 +103,12 @@ class Spawner2 {
       newPB.contactTestBitMask = categoryPlayer
       newPB.restitution = 0
       newPB.isDynamic = false
+      newPB.usesPreciseCollisionDetection = true
  
       enemy.physicsBody = newPB
       enemy.position = pos
       enemy.name = "enemy" + String(spawnCount)
-      if randomWidth < 75 { enemy.color = .purple }
+      if randomWidth < 100 { enemy.color = .purple }
       
       animate(enemy: enemy)
     }
@@ -114,13 +119,15 @@ class Spawner2 {
   }
 }
 
-// Not really a scene:
-extension GameScene2
-class PhysicsDelegate: SKScene, SKPhysicsContactDelegate {
-
+class DoContact2 {
   var localGS = GameScene2(size: CGSize.zero)
   var contact = SKPhysicsContact()
   var player: SKSpriteNode { return localGS.player }
+  
+  init(contact: SKPhysicsContact, gameScene: GameScene2) {
+    self.contact = contact
+    localGS = gameScene
+  }
   
   private func assignYellowBlack() ->  (player: SKPhysicsBody, enemy: SKPhysicsBody) {
     
@@ -130,48 +137,72 @@ class PhysicsDelegate: SKScene, SKPhysicsContactDelegate {
   }
   
   func blackAndYellow() {
-  
+    
     let gs = localGS
     let (playerPB, enemyPB) = assignYellowBlack()
     guard
       let playerNode = playerPB.node as? SKSpriteNode,
       let enemyNode  = enemyPB .node as? SKSpriteNode else { fatalError("no nodes") }
     
-    if enemyNode === gs.platformPlayerIsOn {
-      print("contact found platform!")
+    
+    let playRightX = gs.convert(CGPoint(x: playerNode.position.x + playerNode.size.width/2,
+                                        y: playerNode.position.y), from: playerNode).x
+    let enemLeftX  = gs.convert(CGPoint(x: enemyNode .position.x - enemyNode.size.width/2,
+                                        y: enemyNode.position.y), from: enemyNode).x
+    let playLeftX  = gs.convert(CGPoint(x: playerNode.position.x - playerNode.size.width/2,
+                                        y: playerNode.position.y), from: playerNode).x
+    let enemRightX = gs.convert(CGPoint(x: enemyNode .position.x + enemyNode.size.width/2,
+                                        y: enemyNode.position.y), from: enemyNode).x
+    // CHeck left / right hit:
+    if playRightX <= enemLeftX || playLeftX >= enemRightX {
+      gs.dead = true
       return
     }
     
-    // Player is above the contacted node:
-    if (playerNode.position.y - playerNode.frame.size.height/2)
-      > (enemyNode.position.y - enemyNode.frame.size.height/2) {
+    // Check if same hit:
+    else if enemyNode === gs.platformPlayerIsOn {
+      return
+    }
       
-      gs.putNodeOnTopOfAnother(put: playerNode, on: enemyNode)
+      // Player is above the contacted node:
+      
+      /*if (playerNode.position.y - playerNode.frame.size.height/2)
+       > (enemyNode.position.y - enemyNode.frame.size.height/2) {*/
+      
+    else if playerNode.position.y > enemyNode.position.y {
+      //gs.putNodeOnTopOfAnother(put: playerNode, on: enemyNode)
       gs.platformPlayerIsOn  = enemyNode
       gs.playerIsOnPlatform  = true
       playerNode.physicsBody = GameScene2.makePlayerPB(player: playerNode)
-      
+      return
     }
-    else { gs.dead = true }
+      
+    else {
+      gs.dead = true
+    }
     
   }
   
+}
+// Not really a scene:
+extension GameScene2: SKPhysicsContactDelegate {
+  
   func didBegin(_ contact: SKPhysicsContact) {
-    print("hiii")
-    self.contact = contact
+    print("db")
+    let doContact = DoContact2(contact: contact, gameScene: self)
     
     let contactedCategories = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
     
     switch contactedCategories {
     case categoryPlayer | categoryEnemy:
-      blackAndYellow()
+      doContact.blackAndYellow()
     default:
       ()
     }
   }
   
   func didEnd(_ contact: SKPhysicsContact) {
-    self.contact = contact
+    //self.contact = contact
   }
   
 }
