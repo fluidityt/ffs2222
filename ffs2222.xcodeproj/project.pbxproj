@@ -54,6 +54,7 @@
 		4D3C18041EB5A656009A727C /* 0. MainMenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "0. MainMenuScene.swift"; sourceTree = "<group>"; };
 		4D3FAF381EC36B810074FA7B /* 1. Spawner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "1. Spawner.swift"; sourceTree = "<group>"; wrapsLines = 0; };
 		4D3FAF3A1EC36BFE0074FA7B /* 2. DoContact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "2. DoContact.swift"; sourceTree = "<group>"; };
+		4D41E0481ECE5D6200CDB1CD /* custom collision test.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "custom collision test.playground"; sourceTree = "<group>"; };
 		4D8880F01EBF5AB8008399CE /* labels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = labels.swift; sourceTree = "<group>"; };
 		4DA745A71EBF19E4005F9C4D /* util classes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "util classes.swift"; sourceTree = "<group>"; };
 		4DAE476C1EC2D55300713291 /* fally original.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "fally original.playground"; sourceTree = "<group>"; };
@@ -174,6 +175,7 @@
 				4D0AC04C1EBC2CA40078DB73 /* TestScene.sks */,
 				4DCF91481ECB7ED5006AA0A6 /* pb anchorpoint.playground */,
 				4DCF91491ECB90A0006AA0A6 /* WinbyJump.playground */,
+				4D41E0481ECE5D6200CDB1CD /* custom collision test.playground */,
 			);
 			path = ffs2222Tests;
 			sourceTree = "<group>";
