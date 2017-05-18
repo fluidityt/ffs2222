@@ -10,6 +10,7 @@ scene.physicsBody = SKPhysicsBody(edgeLoopFrom: scene.frame)
 PlaygroundPage.current.liveView = view
 view.presentScene(scene)
 //view.frameInterval = 4
+
 struct Category {
   static let
   none = UInt32(0), player = UInt32(1), enemy = UInt32(2)
@@ -33,9 +34,12 @@ class GameScene: SKScene {
   var playerStarting = CGPoint.zero
   var enemyStarting  = CGPoint.zero
   
-  func keepPlayerOnPlatform() {
-    let enemyDX = enemyStarting.x - enemy.position.x
-    player.position.x += enemyDX
+  
+  // Funky:
+  func putPlayerOnTopOfPlatform() {
+    player.position.y = enemy.position.y
+    player.position.y += player.size.height/2
+    player.position.y += enemy.size.height/2
   }
   
   func collide() {
@@ -48,14 +52,18 @@ class GameScene: SKScene {
     }
     
     if player.position.y > enemy.position.y {
-      player.position.y = enemy.position.y
-      player.position.y += player.size.height/2
-      player.position.y += enemy.size.height/2
+      putPlayerOnTopOfPlatform()
       player.physicsBody = SKPhysicsBody(rectangleOf: player.size)
       player.run(enemy.action(forKey: "sup")!)
     }
     
     playerIsOnPlatform = true
+  }
+  
+  func keepPlayerOnPlatform() {
+    let enemyDX = enemyStarting.x - enemy.position.x
+    putPlayerOnTopOfPlatform()
+    player.position.x += enemyDX
   }
   
   func jump() {
@@ -76,8 +84,10 @@ class GameScene: SKScene {
     }
   }
   
-  override func didFinishUpdate() {
-    if playerIsJumping { playerIsJumping = false }
+  
+  override func update(_ currentTime: TimeInterval) {
+    playerStarting = player.position
+    enemyStarting = enemy.position
   }
   
   override func didEvaluateActions() {
@@ -94,10 +104,11 @@ class GameScene: SKScene {
     // keepPlayerInBounds()
   }
   
-  override func update(_ currentTime: TimeInterval) {
-    playerStarting = player.position
-     enemyStarting = enemy.position
+  override func didFinishUpdate() {
+    if playerIsJumping { playerIsJumping = false }
   }
+  
+
   
   // http://stackoverflow.com/questions/31574049/moving-node-on-top-of-a-moving-platform
   // http://www.learn-cocos2d.com/2013/08/physics-engine-platformer-terrible-idea/
