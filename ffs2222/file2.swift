@@ -95,6 +95,8 @@ class Spawner2 {
     
     let enemy = SKSpriteNode(color: .blue, size: CGSize(width: randomWidth, height: 40)); do {
       let newPB = SKPhysicsBody(rectangleOf: enemy.size)
+      newPB.categoryBitMask = categoryEnemy
+      newPB.contactTestBitMask = categoryPlayer
       newPB.restitution = 0
       newPB.isDynamic = false
  
@@ -113,11 +115,11 @@ class Spawner2 {
 }
 
 // Not really a scene:
+extension GameScene2
 class PhysicsDelegate: SKScene, SKPhysicsContactDelegate {
 
   var localGS = GameScene2(size: CGSize.zero)
   var contact = SKPhysicsContact()
-  
   var player: SKSpriteNode { return localGS.player }
   
   private func assignYellowBlack() ->  (player: SKPhysicsBody, enemy: SKPhysicsBody) {
@@ -128,23 +130,40 @@ class PhysicsDelegate: SKScene, SKPhysicsContactDelegate {
   }
   
   func blackAndYellow() {
-    
+  
+    let gs = localGS
     let (playerPB, enemyPB) = assignYellowBlack()
+    guard
+      let playerNode = playerPB.node as? SKSpriteNode,
+      let enemyNode  = enemyPB .node as? SKSpriteNode else { fatalError("no nodes") }
     
-    guard let playerNode = playerPB.node, let enemyNode = enemyPB.node else { fatalError("no nodes") }
+    if enemyNode === gs.platformPlayerIsOn {
+      print("contact found platform!")
+      return
+    }
     
-    if playerNode
+    // Player is above the contacted node:
+    if (playerNode.position.y - playerNode.frame.size.height/2)
+      > (enemyNode.position.y - enemyNode.frame.size.height/2) {
+      
+      gs.putNodeOnTopOfAnother(put: playerNode, on: enemyNode)
+      gs.platformPlayerIsOn  = enemyNode
+      gs.playerIsOnPlatform  = true
+      playerNode.physicsBody = GameScene2.makePlayerPB(player: playerNode)
+      
+    }
+    else { gs.dead = true }
     
   }
   
   func didBegin(_ contact: SKPhysicsContact) {
+    print("hiii")
     self.contact = contact
     
     let contactedCategories = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
     
-    
     switch contactedCategories {
-    case categoryPlayer | categoryPlayer:
+    case categoryPlayer | categoryEnemy:
       blackAndYellow()
     default:
       ()

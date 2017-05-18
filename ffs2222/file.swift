@@ -35,17 +35,17 @@ class GameScene2: SKScene {
   // Player:
   let player: SKSpriteNode = {
     let player2 = SKSpriteNode(color: .green, size: CGSize(width: 30, height: 50))
-    
     player2.physicsBody = GameScene2.makePlayerPB(player: player2)
-    
     return player2
   }()
   
   // MARK: - Funky:
-  private static func makePlayerPB(player: SKSpriteNode) -> SKPhysicsBody {
+   static func makePlayerPB(player: SKSpriteNode) -> SKPhysicsBody {
     
     let newPB = SKPhysicsBody(rectangleOf: player.size)
     newPB.restitution = 0
+    newPB.categoryBitMask = categoryPlayer
+    newPB.contactTestBitMask = categoryEnemy
     // newPB.mass = playerMass
     return newPB
   }
@@ -54,6 +54,7 @@ class GameScene2: SKScene {
     anchorPoint = CGPoint(x: 0.5, y: 0.5)
     physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
     physicsWorld.gravity = gravityUp
+    physicsWorld.contactDelegate = self
   }
   
   func putNodeOnTopOfAnother(put node1: SKSpriteNode, on node2: SKSpriteNode) {
@@ -61,47 +62,7 @@ class GameScene2: SKScene {
     node1.position.y += node1.size.height/2
     node1.position.y += node2.size.height/2
   }
-  
-  func checkCollision() -> SKSpriteNode? {
-    
-    for node in enemyHash.values {
-      guard player.frame.intersects(node.frame) else { continue }
-    
-      if let ppio = platformPlayerIsOn {
-        print("found ppio")
-        // Isn't there a better way to just ensure that ppio is never found once set?
-        if ppio == node { continue }
-      }
-      else {
-        print("found not ppio")
-        hitEnemy = node
-        return node
-      }
-    }
-    // Base case:
-    return nil
-  }
-  
-  func collide(with node: SKSpriteNode) {
-    // if playerIsJumping { return }
-    // if playerIsOnPlatform { return }
-    
-    assert(node != platformPlayerIsOn) // handled in checker.
-    
-    if (player.position.y - player.size.height/2) > (node.position.y - node.size.height/2) {
-      putNodeOnTopOfAnother(put: player, on: node)
-      player.physicsBody = GameScene2.makePlayerPB(player: player)
-      platformPlayerIsOn = node // will stop calling collide on this node until jump.
-      playerIsOnPlatform = true
-    }
-    
-    else {
-      dead = true
-      // TODO: playDeathAnimation()
-    }
-    
-  }
-  
+
   func keepPlayerOnPlatform() {
     assert(playerIsOnPlatform, "wtf happened")
     guard let ppio = platformPlayerIsOn else { fatalError("why is this called") }
@@ -162,15 +123,10 @@ extension GameScene2 {
   }
   
   override func didEvaluateActions() {
+    if playerIsOnPlatform { keepPlayerOnPlatform() }
   }
   
   override func didSimulatePhysics() {
-    if let hitNode = checkCollision() {
-      collide(with: hitNode)
-    }
-    
-    if playerIsOnPlatform { keepPlayerOnPlatform() }
-
     keepPlayerInBounds()
   }
   
@@ -182,6 +138,7 @@ extension GameScene2 {
       physicsWorld.gravity = gravityDown
     }
     
+    // Reset game:
     if dead {
       view?.presentScene(GameScene2(size: size))
     }
