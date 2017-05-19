@@ -15,6 +15,11 @@ class Sprite: SKSpriteNode {
 
   var category = ""
   var contact  = ""
+  
+  override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+    guard let t = touches.first else { return }
+    self.position = t.location(in: self.scene!)
+  }
 }
 
 class GameScene: SKScene {
@@ -29,6 +34,7 @@ class GameScene: SKScene {
   
   lazy var player: Sprite = {
     let player = Sprite(color: .yellow, size: CGSize(width: 30, height: 30))
+    player.isUserInteractionEnabled = true
     player.name = "player"
     player.category = "player"
     player.contact  = "enemy"
@@ -38,6 +44,7 @@ class GameScene: SKScene {
   
   lazy var enemy: Sprite = {
     let enemy = Sprite(color: .black, size: CGSize(width: 30, height: 30))
+    enemy.isUserInteractionEnabled = true
     enemy.name = "enemy"
     enemy.category = "enemy"
     enemy.contact  = "player"
@@ -47,6 +54,7 @@ class GameScene: SKScene {
 
   lazy var missile: Sprite = {
     let missile = Sprite(color: .black, size: CGSize(width: 30, height: 30))
+    missile.isUserInteractionEnabled = true
     missile.name = "missile"
     missile.category = "missile"
     missile.contact  = "player"
@@ -68,7 +76,7 @@ class GameScene: SKScene {
       return true
     }
     
-    // var checkedKeys: [String] = []
+    var checkedKeys: [String] = []
     
     for key in categories.keys {
       
@@ -77,6 +85,7 @@ class GameScene: SKScene {
         for secondKey in categories.keys {
           
           if secondKey == key { continue }
+          if checkedKeys.contains(secondKey) { continue }
           
           if sprite.contact == secondKey {
             
@@ -93,14 +102,17 @@ class GameScene: SKScene {
         }
       }
     
-     // checkedKeys.append(key)
+     checkedKeys.append(key)
     }
     
+    // Check if any of our collided have collided (3+ collided):
+    
+    /*
     for l in collided {
       print(l.0)
       print(l.1)
       print("")
-    }
+    }*/
     
     return collided
   }
