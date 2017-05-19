@@ -25,12 +25,11 @@ class Sprite: SKSpriteNode {
 class GameScene: SKScene {
   typealias CollidedNodes = (bodyA: SKSpriteNode, bodyB: SKSpriteNode)
   
+  
+  // Proppy:
   var categories: [String: Set<Sprite>] = ["": Set<Sprite>()]
   
-  func addSpriteToCategory(_ sprite: Sprite) {
-    if categories[sprite.category] == nil { categories[sprite.category] = [sprite]      }
-    else                                  { categories[sprite.category]!.insert(sprite) }
-  }
+  var playerIsOnPlatform = true
   
   lazy var player: Sprite = {
     let player = Sprite(color: .yellow, size: CGSize(width: 30, height: 30))
@@ -40,6 +39,10 @@ class GameScene: SKScene {
     player.contact  = "enemy"
     self.addSpriteToCategory(player)
     return player
+  }()
+  
+  lazy var playerJumper: PlayerJumper = {
+    PlayerJumper(player: self.player, scene: self)
   }()
   
   lazy var enemy: Sprite = {
@@ -61,6 +64,11 @@ class GameScene: SKScene {
     self.addSpriteToCategory(missile)
     return missile
   }()
+  
+  func addSpriteToCategory(_ sprite: Sprite) {
+    if categories[sprite.category] == nil { categories[sprite.category] = [sprite]      }
+    else                                  { categories[sprite.category]!.insert(sprite) }
+  }
   
   func checkCollisions() -> [CollidedNodes] {
     
@@ -128,7 +136,30 @@ class GameScene: SKScene {
     let collidedNodes = checkCollisions()
     
     if collidedNodes.isEmpty { return }
-    else { print("hiii") }
-    
+    else {
+      print("hiii")
+    }
   }
+  
+  override func didSimulatePhysics() {
+    if player.position.y <= playerJumper.startingY || playerIsOnPlatform == true {
+      
+    }
+  }
+}
+
+class PlayerJumper {
+  
+  let scene:  GameScene
+  let player: Sprite
+  
+  var startingY: CGFloat { return self.scene.frame.minY             }
+  var maxHeight: CGFloat { return startingY + scene.size.height / 4 }
+  
+  let timeTomaxHeight = TimeInterval(0.5 )
+  let delayBeforeFall = TimeInterval(0.25)
+  let timeToMinHeight = TimeInterval(0.30)
+  
+  init(player: Sprite, scene: GameScene) { self.player = player; self.scene = scene }
+  
 }
