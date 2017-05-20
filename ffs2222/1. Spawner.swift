@@ -20,10 +20,12 @@ struct Spawner {
   
   func yellowNode() {
     let yellowNode = Player(color: .yellow, size: g.size30); do {
-      let newPB = SKPhysicsBody(rectangleOf: g.size30); do {
-        newPB.setMasks(cat: C.yellow, cont: C.black, col: C.zero)
-        newPB.affectedByGravity  = false
-      }
+      let newPB = SKPhysicsBody(
+        rectangleOf: g.size30,
+        affectedGravity: false,
+        category: C.yellow, collision: C.zero, contact: C.black
+      )
+            
       yellowNode.physicsBody = newPB
       yellowNode.position.x += 35
       yellowNode.position.y = localGS.frame.minY + 35
@@ -58,8 +60,8 @@ struct Spawner {
       
       let leftSide  = SKSpriteNode(color: .black, size: mySize ); do {
         leftSide.position    = emptyNode.position
-        leftSide.position.x -= emptyNode.size.width/2
-        leftSide.position.x -= leftSide.size.width/2
+        leftSide.position.x -= emptyNode.size.halfWidth
+        leftSide.position.x -= leftSide.size.halfWidth
         
         let leftPB  = SKPhysicsBody(rectangleOf: leftSide.size)
         leftPB.setMasks(cat: C.black, cont: C.yellow | C.death, col: C.zero)
@@ -68,8 +70,8 @@ struct Spawner {
       
       let rightSide = SKSpriteNode(color: .black, size: mySize); do {
         rightSide.position    = emptyNode.position
-        rightSide.position.x += emptyNode.size.width/2
-        rightSide.position.x += rightSide.size.width/2
+        rightSide.position.x += emptyNode.size.halfWidth
+        rightSide.position.x += rightSide.size.halfWidth
         
         let rightPB = SKPhysicsBody(rectangleOf: rightSide.size)
         rightPB.setMasks(cat: C.black, cont: C.yellow | C.death, col: C.zero)
@@ -116,8 +118,8 @@ struct Spawner {
   
   mutating func lineOfBlackBoxes(difficulty: (base: Int, mod: Int)) {
     // Data:
-    let yVal = (localGS.frame.maxY + g.size30.height/2) - nh
-    let numBoxes = difficulty.base + difficulty.mod
+    let yVal = (localGS.frame.maxY + g.size30.halfHeight) - nh
+    let numBoxes = (difficulty.base + difficulty.mod)
     var listOfXes: [CGFloat] = []
     
     // Helper:
@@ -196,8 +198,8 @@ struct Spawner {
                                 position: pos,
                                 physicsBody: SKPhysicsBody(rectangleOf: CGSize(width: localGS.frame.width, height: 1),
                                                            category:  C.line,
-                                                           contact:   C.yellow,
-                                                           collision: C.zero))
+                                                           collision: C.zero,
+                                                           contact:   C.yellow))
     localGS.addChild(lineNode)
   }
   
@@ -229,13 +231,15 @@ struct Spawner {
   mutating func scoreLabel() {
     
     let background = SKSpriteNode(color: .black, size: CGSize(width: localGS.size.width, height: nh)); do {
-      let newScoreLabel = SKLabelNode(text: "Score: \(g.score)")
-      newScoreLabel.fontName = "Chalkduster"
-      newScoreLabel.fontColor = .black
+      let newScoreLabel = SKLabelNode(
+        text: "Score: \(g.score)",
+        fontColor: .black,
+        fontNamed:  "Chalkduster"
+      )
       g.scoreLabel = newScoreLabel
       
       background.zPosition += 1
-      background.position.y = (localGS.frame.maxY - background.size.height/2)
+      background.position.y = (localGS.frame.maxY - background.size.halfHeight)
       if g.mode.score.value { background.addChild(newScoreLabel) }
     }
     localGS.addChild(background)

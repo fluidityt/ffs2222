@@ -165,5 +165,4 @@ class PlayerJumper {
   
 }
 
-print(CGPoint.topLeft)
 
