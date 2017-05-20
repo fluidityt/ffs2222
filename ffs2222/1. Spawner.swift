@@ -21,7 +21,7 @@ struct Spawner {
   func yellowNode() {
     let yellowNode = Player(color: .yellow, size: g.size30); do {
       let newPB = SKPhysicsBody(rectangleOf: g.size30); do {
-        setMasks(pb: newPB, cat: C.yellow, cont: C.black, col: C.zero)
+        newPB.setMasks(cat: C.yellow, cont: C.black, col: C.zero)
         newPB.affectedByGravity  = false
       }
       yellowNode.physicsBody = newPB
@@ -62,7 +62,7 @@ struct Spawner {
         leftSide.position.x -= leftSide.size.width/2
         
         let leftPB  = SKPhysicsBody(rectangleOf: leftSide.size)
-        setMasks(pb: leftPB , cat: C.black, cont: C.yellow | C.death, col: C.zero)
+        leftPB.setMasks(cat: C.black, cont: C.yellow | C.death, col: C.zero)
         leftSide.physicsBody = leftPB
       }
       
@@ -72,7 +72,7 @@ struct Spawner {
         rightSide.position.x += rightSide.size.width/2
         
         let rightPB = SKPhysicsBody(rectangleOf: rightSide.size)
-        setMasks(pb: rightPB, cat: C.black, cont: C.yellow | C.death, col: C.zero)
+        rightPB.setMasks(cat: C.black, cont: C.yellow | C.death, col: C.zero)
         rightSide.physicsBody = rightPB
       }
      
@@ -84,7 +84,7 @@ struct Spawner {
     
     let blackNode = SKSpriteNode(color: .black, size: g.size30); do {
       let newPB = SKPhysicsBody(rectangleOf: g.size30)
-      setMasks(pb: newPB, cat: C.black, cont: C.yellow | C.death, col: C.zero)
+      newPB.setMasks(cat: C.black, cont: C.yellow | C.death, col: C.zero)
       blackNode.physicsBody = newPB
       blackNode.name     = "black"
       blackNode.position = pos
@@ -191,14 +191,13 @@ struct Spawner {
   
   func scanline(pos: CGPoint) {
     
-    let lineNode = SKSpriteNode(color: .clear, size: CGSize(width: localGS.frame.width, height: 1)); do {
-      let newPB = SKPhysicsBody(rectangleOf: lineNode.size)
-      setMasks(pb: newPB, cat: C.line, cont: C.yellow | C.death, col: C.zero)
-      
-      lineNode.physicsBody = newPB
-      lineNode.position = pos
-    }
-    
+    let lineNode = SKSpriteNode(color: .clear,
+                                size: CGSize(width: localGS.frame.width, height: 1),
+                                position: pos,
+                                physicsBody: SKPhysicsBody(rectangleOf: CGSize(width: localGS.frame.width, height: 1),
+                                                           category:  C.line,
+                                                           contact:   C.yellow,
+                                                           collision: C.zero))
     localGS.addChild(lineNode)
   }
   
@@ -206,7 +205,7 @@ struct Spawner {
     
     let lineNode = SKSpriteNode(color: .orange, size: CGSize(width: localGS.frame.width + 1000, height: 2)); do {
       let newPB = SKPhysicsBody(rectangleOf: lineNode.size); do {
-        setMasks(pb: newPB, cat: C.death, cont: C.black, col: C.zero)
+        newPB.setMasks(cat: C.death, cont: C.black, col: C.zero)
         newPB.affectedByGravity = false
       }
       

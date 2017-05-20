@@ -26,7 +26,6 @@ struct g {
   scoreLabel:  SKLabelNode?,
   player:      Player?,
 
-  
   // Score:
   linesCleared   = 0,
   score          = 0,

@@ -20,6 +20,7 @@ class Sprite: SKSpriteNode {
     guard let t = touches.first else { return }
     self.position = t.location(in: self.scene!)
   }
+  
 }
 
 class GameScene: SKScene {
@@ -163,3 +164,6 @@ class PlayerJumper {
   init(player: Sprite, scene: GameScene) { self.player = player; self.scene = scene }
   
 }
+
+print(CGPoint.topLeft)
+
